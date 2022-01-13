@@ -52,6 +52,12 @@ using ReservaSitio.Abstraction.IService.Usuario;
 using ReservaSitio.Application.Usuario;
 using ReservaSitio.Services.Usuario;
 using ReservaSitio.Repository.Usuario;
+using ReservaSitio.Abstraction.IApplication.LogError;
+using ReservaSitio.Abstraction.IService.LogError;
+using ReservaSitio.Abstraction.IRepository.LogError;
+using ReservaSitio.Services.LogError;
+using ReservaSitio.Repository.Log_Error;
+using ReservaSitio.Application.LogError;
 
 namespace ReservaSitio.API
 {
@@ -136,7 +142,12 @@ namespace ReservaSitio.API
             services.AddScoped<ICustomConnection, CustomConnection>(_ => new CustomConnection(Configuration["ConnectionStrings:CS_ReservaSitio"]));
 
             /* */
-                   
+
+            
+            services.AddScoped<ILogErrorAplication, LogErrorAplication>();
+            services.AddScoped<ILogErrorServices, LogErrorServices>();
+            services.AddScoped<ILogErrorRepository, LogErrorRepository>();
+
             services.AddScoped<IModuloAplication, ModuloAplication>();
             services.AddScoped<IModuloServices, ModuloServices>();
             services.AddScoped<IModuloRepository, ModuloRepository>();

@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using ReservaSitio.Abstraction.IApplication.LogError;
 using ReservaSitio.Abstraction.IApplication.Usuario;
 using ReservaSitio.DTOs;
 using ReservaSitio.DTOs.Usuario;
@@ -15,10 +16,12 @@ namespace ReservaSitio.API.Controllers.Usuario
     public class UsuarioController : Controller
     {
         private readonly IUsuarioAplication iUsuarioAplication;
-
-        public UsuarioController(IUsuarioAplication IUsuarioAplication)
+        private readonly ILogErrorAplication iLogErrorAplication;
+        public UsuarioController(IUsuarioAplication IUsuarioAplication
+            , ILogErrorAplication ILogErrorAplication)
         {
             this.iUsuarioAplication = IUsuarioAplication;
+            this.iLogErrorAplication = ILogErrorAplication;
         }
 
 
@@ -35,6 +38,19 @@ namespace ReservaSitio.API.Controllers.Usuario
             catch(Exception e)
             {
                 res.InnerException = e.Message.ToString();
+
+                var sorigen = "";
+                foreach (object c in this.ControllerContext.RouteData.Values.Values)
+                {
+                    sorigen += c.ToString() + " | ";
+                }
+                LogErrorDTO lg = new LogErrorDTO();
+                lg.iid_usuario_registra = 0;
+                lg.vdescripcion = e.Message.ToString();
+                lg.vcodigo_mensaje = e.Message.ToString();
+                lg.vorigen = sorigen;
+                this.iLogErrorAplication.RegisterLogError(lg);
+
                 return BadRequest(res);
             }
         }
@@ -52,6 +68,19 @@ namespace ReservaSitio.API.Controllers.Usuario
             catch (Exception e)
             {
                 res.InnerException = e.Message.ToString();
+
+                var sorigen = "";
+                foreach (object c in this.ControllerContext.RouteData.Values.Values)
+                {
+                    sorigen += c.ToString() + " | ";
+                }
+                LogErrorDTO lg = new LogErrorDTO();
+                lg.iid_usuario_registra = 0;
+                lg.vdescripcion = e.Message.ToString();
+                lg.vcodigo_mensaje = e.Message.ToString();
+                lg.vorigen = sorigen;
+                this.iLogErrorAplication.RegisterLogError(lg);
+
                 return BadRequest(res);
             }
         }
@@ -71,6 +100,18 @@ namespace ReservaSitio.API.Controllers.Usuario
             catch (Exception e)
             {
                 res.InnerException = e.Message.ToString();
+
+                var sorigen = "";
+                foreach(object c in this.ControllerContext.RouteData.Values.Values) {
+                    sorigen += c.ToString()+" | ";
+                }
+                LogErrorDTO lg = new LogErrorDTO();
+                lg.iid_usuario_registra = 0;
+                lg.vdescripcion = e.Message.ToString();
+                lg.vcodigo_mensaje = e.Message.ToString();
+                lg.vorigen = sorigen;
+                this.iLogErrorAplication.RegisterLogError(lg);
+
                 return BadRequest(res);
             }
         }

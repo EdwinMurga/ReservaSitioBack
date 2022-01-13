@@ -1,5 +1,6 @@
 ﻿using Dapper;
 using Microsoft.Extensions.Configuration;
+using ReservaSitio.Abstraction.IRepository.LogError;
 using ReservaSitio.Abstraction.IRepository.Opciones;
 using ReservaSitio.DataAccess.CustomConnection;
 using ReservaSitio.DTOs;
@@ -21,8 +22,12 @@ namespace ReservaSitio.Repository.Opcion
     {
         private string _connectionString = "";
         private IConfiguration Configuration;
-        public ModuloRepository(ICustomConnection connection, IConfiguration configuration) : base(connection)
+        private readonly ILogErrorRepository iLogErrorRepository;
+        public ModuloRepository(ICustomConnection connection
+            , IConfiguration configuration
+             , ILogErrorRepository ILogErrorRepository) : base(connection)
         {
+            this.iLogErrorRepository = ILogErrorRepository;
             Configuration = configuration;
             _connectionString = Configuration.GetConnectionString("CS_ReservaSitio");
         }
@@ -67,6 +72,13 @@ namespace ReservaSitio.Repository.Opcion
                     res.IsSuccess = false;
                     res.Message = UtilMensajes.strInformnacionNoGrabada;
                     res.InnerException = e.Message.ToString();
+
+                    LogErrorDTO lg = new LogErrorDTO();
+                    lg.iid_usuario_registra = 0;
+                    lg.vdescripcion = e.Message.ToString();
+                    lg.vcodigo_mensaje = e.Message.ToString();
+                    lg.vorigen = this.ToString();
+                    this.iLogErrorRepository.RegisterLogError(lg);
                 }
             }
             return res;
@@ -106,6 +118,13 @@ namespace ReservaSitio.Repository.Opcion
                     res.IsSuccess = false;
                     res.Message = UtilMensajes.strInformnacionNoGrabada;
                     res.InnerException = e.Message.ToString();
+
+                    LogErrorDTO lg = new LogErrorDTO();
+                    lg.iid_usuario_registra = 0;
+                    lg.vdescripcion = e.Message.ToString();
+                    lg.vcodigo_mensaje = e.Message.ToString();
+                    lg.vorigen = this.ToString();
+                    this.iLogErrorRepository.RegisterLogError(lg);
                 }
             }
            
@@ -137,7 +156,14 @@ namespace ReservaSitio.Repository.Opcion
                     res.IsSuccess = false;
                     res.Message = UtilMensajes.strInformnacionNoGrabada;
                     res.InnerException = e.Message.ToString();
-                }
+
+                LogErrorDTO lg = new LogErrorDTO();
+                lg.iid_usuario_registra = 0;
+                lg.vdescripcion = e.Message.ToString();
+                lg.vcodigo_mensaje = e.Message.ToString();
+                lg.vorigen = this.ToString();
+                this.iLogErrorRepository.RegisterLogError(lg);
+            }
             
             return res;
         }
@@ -173,6 +199,13 @@ namespace ReservaSitio.Repository.Opcion
                 res.IsSuccess = false;
                 res.Message = UtilMensajes.strInformnacionNoGrabada;
                 res.InnerException = e.Message.ToString();
+
+                LogErrorDTO lg = new LogErrorDTO();
+                lg.iid_usuario_registra = 0;
+                lg.vdescripcion = e.Message.ToString();
+                lg.vcodigo_mensaje = e.Message.ToString();
+                lg.vorigen = this.ToString();
+                this.iLogErrorRepository.RegisterLogError(lg);
             }
             return res;
         }
