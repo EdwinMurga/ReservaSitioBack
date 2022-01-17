@@ -59,7 +59,7 @@ namespace ReservaSitio.Repository.Usuario
                 parameters.Add("@p_indice", request.pageNum);
                 parameters.Add("@p_limit", request.pageSize);
 
-                using (var cn = await mConnection.BeginConnection(true))
+                using (var cn = new SqlConnection(_connectionString))
                 {
                     list = (List<UsuarioDTO>)cn.Query<UsuarioDTO>("[dbo].[SP_USUARIO_LISTAR]", parameters, commandType: System.Data.CommandType.StoredProcedure);
                 }
@@ -92,7 +92,7 @@ namespace ReservaSitio.Repository.Usuario
             try
             {
                 var parameters = new DynamicParameters();
-                parameters.Add("@p_iid_usuario1", request.iid_perfil);
+                parameters.Add("@p_iid_usuario", request.iid_usuario);
                 using (var cn = new SqlConnection(_connectionString))
                 {
 
@@ -129,7 +129,7 @@ namespace ReservaSitio.Repository.Usuario
                 try
                 {
 
-                    using (var cn = new SqlConnection(_connectionString))
+                    using (var cn = await mConnection.BeginConnection(true))
                     {
                         var parameters = new DynamicParameters();
                         parameters.Add("@p_iid_usuario", request.iid_usuario);

@@ -86,9 +86,8 @@ namespace ReservaSitio.Repository.Opcion
                 parameters.Add("@p_indice", request.pageNum);
                 parameters.Add("@p_limit", request.pageSize);
 
-                using (var cn = await mConnection.BeginConnection(true))
+                using (var cn = new SqlConnection(_connectionString))
                 {
-
                     list = (List<PerfilDTO>)cn.Query<PerfilDTO>("[dbo].[SP_PERFIL_LISTAR]", parameters, commandType: System.Data.CommandType.StoredProcedure);
                 }
                 res.IsSuccess = (list.ToList().Count > 0 ? true : false);
@@ -99,7 +98,7 @@ namespace ReservaSitio.Repository.Opcion
             catch (Exception e)
             {
                 res.IsSuccess = false;
-                res.Message = UtilMensajes.strInformnacionNoGrabada;
+                res.Message = UtilMensajes.strInformnacionNoEncontrada;
                 res.InnerException = e.Message.ToString();
 
                 LogErrorDTO lg = new LogErrorDTO();
@@ -127,15 +126,15 @@ namespace ReservaSitio.Repository.Opcion
                     item = (PerfilDTO)query.FirstOrDefault();
                 }
                // await mConnection.Complete();
-                res.IsSuccess = true;
-                res.Message = UtilMensajes.strInformnacionGrabada;
+                res.IsSuccess = (item!=null?true:false) ;
+                res.Message = (item!= null ? UtilMensajes.strInformnacionEncontrada : UtilMensajes.strInformnacionNoEncontrada) ;
                 res.item = item;
             }
             catch (Exception e)
             {
 
                 res.IsSuccess = false;
-                res.Message = UtilMensajes.strInformnacionNoGrabada;
+                res.Message = UtilMensajes.strInformnacionNoEncontrada;
                 res.InnerException = e.Message.ToString();
 
                 LogErrorDTO lg = new LogErrorDTO();
@@ -155,8 +154,7 @@ namespace ReservaSitio.Repository.Opcion
             {
                 try
                 {
-
-                    using (var cn = new SqlConnection(_connectionString))
+                    using (var cn = await mConnection.BeginConnection(true))
                     {
                         var parameters = new DynamicParameters();
                         parameters.Add("@p_iid_perfil", request.iid_perfil);
@@ -176,8 +174,6 @@ namespace ReservaSitio.Repository.Opcion
                         }
                         await mConnection.Complete();
                     }
-
-
                     scope.Complete();
                 }
                 catch (Exception e)

@@ -71,7 +71,7 @@ namespace ReservaSitio.Repository.Log_Error
                     scope.Dispose();
                     res.IsSuccess = false;
                     res.Message = UtilMensajes.strInformnacionNoGrabada;
-                    res.InnerException = e.Message.ToString();
+                    res.InnerException = "Log => "+  e.Message.ToString();
                 }
             }
             return res;

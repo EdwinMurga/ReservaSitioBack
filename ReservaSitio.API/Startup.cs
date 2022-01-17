@@ -55,9 +55,15 @@ using ReservaSitio.Repository.Usuario;
 using ReservaSitio.Abstraction.IApplication.LogError;
 using ReservaSitio.Abstraction.IService.LogError;
 using ReservaSitio.Abstraction.IRepository.LogError;
+using ReservaSitio.Application.LogError;
 using ReservaSitio.Services.LogError;
 using ReservaSitio.Repository.Log_Error;
-using ReservaSitio.Application.LogError;
+using ReservaSitio.Abstraction.IApplication.Empresa;
+using ReservaSitio.Abstraction.IService.Empresa;
+using ReservaSitio.Application.Empresa;
+using ReservaSitio.Services.Empresa;
+using ReservaSitio.Repository.Empresa;
+using ReservaSitio.Abstraction.IRepository.Empresa;
 
 namespace ReservaSitio.API
 {
@@ -141,12 +147,21 @@ namespace ReservaSitio.API
             services.AddScoped(typeof(IAutenticacion), typeof(autenticacionLogic));
             services.AddScoped<ICustomConnection, CustomConnection>(_ => new CustomConnection(Configuration["ConnectionStrings:CS_ReservaSitio"]));
 
-            /* */
+         
 
             
             services.AddScoped<ILogErrorAplication, LogErrorAplication>();
             services.AddScoped<ILogErrorServices, LogErrorServices>();
             services.AddScoped<ILogErrorRepository, LogErrorRepository>();
+
+   /* */
+            services.AddScoped<IEmpresaAplication, EmpresaAplication>();
+            services.AddScoped<IEmpresaServices, EmpresaServices>();
+            services.AddScoped<IEmpresaRepository, EmpresaRepository>();
+
+            services.AddScoped<ILocalAplication, LocalAplication>();
+            services.AddScoped<ILocalServices, LocalServices>();
+            services.AddScoped<ILocalRepository, LocalRepository>();
 
             services.AddScoped<IModuloAplication, ModuloAplication>();
             services.AddScoped<IModuloServices, ModuloServices>();
