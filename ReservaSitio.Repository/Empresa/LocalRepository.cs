@@ -56,7 +56,7 @@ namespace ReservaSitio.Repository.Empresa
                 parameters.Add("@p_indice", request.pageNum);
                 parameters.Add("@p_limit", request.pageSize);
 
-                using (var cn = await mConnection.BeginConnection(true))
+                using (var cn = new SqlConnection(_connectionString))
                 {
                     list = (List<LocalDTO>)cn.Query<LocalDTO>("[dbo].[SP_LOCAL_LISTAR]", parameters, commandType: System.Data.CommandType.StoredProcedure);
                 }
@@ -89,8 +89,8 @@ namespace ReservaSitio.Repository.Empresa
                 {
                     var parameters = new DynamicParameters();
                     parameters.Add("@p_iid_local", request.iid_local);
-                    using (var cn = new SqlConnection(_connectionString))
-                    {
+                using (var cn = new SqlConnection(_connectionString))
+                {
 
                         var query = await cn.QueryAsync<LocalDTO>("[dbo].[SP_LOCAL_BY_ID]", parameters, commandType: System.Data.CommandType.StoredProcedure);
                         item = (LocalDTO)query.FirstOrDefault();
@@ -124,8 +124,8 @@ namespace ReservaSitio.Repository.Empresa
                     try
                     {
 
-                        using (var cn = new SqlConnection(_connectionString))
-                        {
+                    using (var cn = await mConnection.BeginConnection(true))
+                    {
                             var parameters = new DynamicParameters();
                             parameters.Add("@p_iid_local", request.iid_local);
                             parameters.Add("@p_vdescripcion", request.vdescripcion);
