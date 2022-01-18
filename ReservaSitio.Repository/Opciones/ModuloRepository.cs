@@ -91,7 +91,7 @@ namespace ReservaSitio.Repository.Opcion
                 try
                 {
 
-                    using (var cn = await mConnection.BeginConnection(true))
+                    using (var cn = new SqlConnection(_connectionString))
                     {
                         var parameters = new DynamicParameters();
                         parameters.Add("@p_vcodigo_cliente", request.iid_modulo);

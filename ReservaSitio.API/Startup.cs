@@ -64,6 +64,12 @@ using ReservaSitio.Application.Empresa;
 using ReservaSitio.Services.Empresa;
 using ReservaSitio.Repository.Empresa;
 using ReservaSitio.Abstraction.IRepository.Empresa;
+using ReservaSitio.Abstraction.IApplication.ParametrosAplicacion;
+using ReservaSitio.Services.ParametrosAplicacion;
+using ReservaSitio.Application.ParametrosAplicacion;
+using ReservaSitio.Repository.ParametrosAplicacion;
+using ReservaSitio.Abstraction.IService.ParametrosAplicacion;
+using ReservaSitio.Abstraction.IRepository.ParametroAplicacion;
 
 namespace ReservaSitio.API
 {
@@ -171,16 +177,28 @@ namespace ReservaSitio.API
             services.AddScoped<IPerfilServices, PerfilServices>();
             services.AddScoped<IPerfilRespository, PerfilRespository>();
 
+            services.AddScoped<IPerfilOpcionAplication, PerfilOpcionAplication>();
+            services.AddScoped<IPerfilOpcionServices, PerfilOpcionServices>();
+            services.AddScoped<IPerfilOpcionRepository, PerfilOpcionRepository>();
+
             services.AddScoped<IOpcionAplication, OpcionAplication>();
             services.AddScoped<IOpcionServices, OpcionServices>();
             services.AddScoped<IOpcionRepository, OpcionRepository>();
-
 
             services.AddScoped<IUsuarioAplication, UsuarioAplication>();
             services.AddScoped<IUsuarioServices, UsuarioServices>();
             services.AddScoped<IUsuarioRepository, UsuarioRepository>();
 
-            
+
+            services.AddScoped<IPlantillaCorreoAplication, PlantillaCorreoAplication>();
+            services.AddScoped<IPlantillaCorreoServices, PlantillaCorreoServices>();
+            services.AddScoped<IPlantillaCorreoRepository, PlantillaCorreoRepository>();
+
+            services.AddScoped<IParametroAplication, ParametroAplication>();
+            services.AddScoped<IParametroServices, ParametroServices>();
+            services.AddScoped<IParametroRepository, ParametroRepository>();
+
+
 
 
             services.AddScoped<IAuthenticationRepository, AuthenticationRepository>();

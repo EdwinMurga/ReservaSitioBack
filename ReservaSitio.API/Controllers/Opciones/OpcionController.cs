@@ -17,11 +17,15 @@ namespace ReservaSitio.API.Controllers.Opciones
         // GET: OpcionController
 
         private readonly IOpcionAplication iOpcionAplication;
-
-        public OpcionController(IOpcionAplication IOpcionAplication)
+      
+        public OpcionController(IOpcionAplication IOpcionAplication
+            , IPerfilOpcionAplication IPerfilOpcionAplication)
         {
             this.iOpcionAplication = IOpcionAplication;
+        
         }
+
+        #region "Opcion"
 
 
         [HttpPost]
@@ -77,5 +81,10 @@ namespace ReservaSitio.API.Controllers.Opciones
             }
         }
 
+
+        #endregion
+
+
+       
     }
 }

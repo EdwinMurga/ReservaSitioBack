@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace ReservaSitio.Abstraction.IRepository.ParametroAplicacion
 {
-  public  interface IParametroRespository
+  public  interface IParametroRepository
     {
 
         public Task<ResultDTO<ParametroAplicacionDTO>> RegisterParametro(ParametroAplicacionDTO request);

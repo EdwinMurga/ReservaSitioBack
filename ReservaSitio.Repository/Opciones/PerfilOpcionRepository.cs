@@ -18,13 +18,13 @@ using static ReservaSitio.Entities.Enum;
 
 namespace ReservaSitio.Repository.Opcion
 {
-   public  class PerfilOpcionRespository: BaseRepository, IPerfilOpcionRespository
+   public  class PerfilOpcionRepository: BaseRepository, IPerfilOpcionRepository
     {
 
         private string _connectionString = "";
         private IConfiguration Configuration;
         private readonly ILogErrorRepository iLogErrorRepository;
-        public  PerfilOpcionRespository(ICustomConnection connection
+        public  PerfilOpcionRepository(ICustomConnection connection
             , IConfiguration configuration
                , ILogErrorRepository ILogErrorRepository) : base(connection)
         {
@@ -95,7 +95,7 @@ namespace ReservaSitio.Repository.Opcion
                 try
                 {
 
-                    using (var cn = await mConnection.BeginConnection(true))
+                    using (var cn = new SqlConnection(_connectionString))
                     {
                         var parameters = new DynamicParameters();
                         parameters.Add("@p_vcodigo_cliente", request.iid_perfil_opcion);

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace ReservaSitio.Abstraction.IRepository.Opciones
 {
-    public interface IPerfilOpcionRespository
+    public interface IPerfilOpcionRepository
     {
         public Task<ResultDTO<PerfilOpcionDTO>> RegisterPerfilOpcion(PerfilOpcionDTO request);
         public Task<ResultDTO<PerfilOpcionDTO>> DeletePerfilOpcion(PerfilOpcionDTO request);

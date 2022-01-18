@@ -1,4 +1,5 @@
 ﻿using ReservaSitio.Abstraction.IRepository.ParametroAplicacion;
+using ReservaSitio.Abstraction.IService.ParametrosAplicacion;
 using ReservaSitio.DTOs;
 using ReservaSitio.DTOs.ParametroAplicacion;
 using System;
@@ -7,31 +8,34 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ReservaSitio.Repository.ParametrosAplicacion
+namespace ReservaSitio.Services.ParametrosAplicacion
 {
-    public class ParametroRespository: IParametroRespository
+    public class ParametroServices : IParametroServices
     {
-
-        public ParametroRespository() { }
+        private readonly IParametroRepository iParametroRepository;
+        public ParametroServices(IParametroRepository IParametroRespository) 
+        {
+            this.iParametroRepository = IParametroRespository;
+        }
 
         public Task<ResultDTO<ParametroAplicacionDTO>> DeleteParametro(ParametroAplicacionDTO request)
         {
-            throw new NotImplementedException();
+            return this.iParametroRepository.DeleteParametro(request);
         }
 
         public Task<ResultDTO<ParametroAplicacionDTO>> GetListParametro(ParametroAplicacionDTO request)
         {
-            throw new NotImplementedException();
+            return this.iParametroRepository.GetListParametro(request);
         }
 
         public Task<ResultDTO<ParametroAplicacionDTO>> GetParametro(ParametroAplicacionDTO request)
         {
-            throw new NotImplementedException();
+            return this.iParametroRepository.GetParametro(request);
         }
 
         public Task<ResultDTO<ParametroAplicacionDTO>> RegisterParametro(ParametroAplicacionDTO request)
         {
-            throw new NotImplementedException();
+            return this.iParametroRepository.RegisterParametro(request);
         }
     }
 }
