@@ -17,12 +17,17 @@ namespace ReservaSitio.API.Controllers.Local
     {
         private readonly ILocalAplication iLocalAplication;
         private readonly ILogErrorAplication iLogErrorAplication;
+        private readonly IPisoAplication iIPisoAplication;
         public  LocalController (ILocalAplication ILocalAplication
-           , ILogErrorAplication ILogErrorAplication)
+           , ILogErrorAplication ILogErrorAplication
+            , IPisoAplication IPisoAplication)
         {
             this.iLocalAplication = ILocalAplication;
             this.iLogErrorAplication = ILogErrorAplication;
+            this.iIPisoAplication = IPisoAplication;
         }
+
+        #region "Local"
 
         [HttpPost]
         [Route("RegisterLocal")]
@@ -115,6 +120,108 @@ namespace ReservaSitio.API.Controllers.Local
                 return BadRequest(res);
             }
         }
+
+        #endregion
+
+
+        #region "Piso"
+
+
+
+        [HttpPost]
+        [Route("RegisterPiso")]
+        public async Task<ActionResult> RegisterPiso([FromBody] PisoDTO request)
+        {
+            ResultDTO<PisoDTO> res = new ResultDTO<PisoDTO>();
+            try
+            {
+                res = await this.iIPisoAplication.RegisterPiso(request);
+                return Ok(res);
+            }
+            catch (Exception e)
+            {
+                res.InnerException = e.Message.ToString();
+
+                var sorigen = "";
+                foreach (object c in this.ControllerContext.RouteData.Values.Values)
+                {
+                    sorigen += c.ToString() + " | ";
+                }
+                LogErrorDTO lg = new LogErrorDTO();
+                lg.iid_usuario_registra = 0;
+                lg.vdescripcion = e.Message.ToString();
+                lg.vcodigo_mensaje = e.Message.ToString();
+                lg.vorigen = sorigen;
+                this.iLogErrorAplication.RegisterLogError(lg);
+
+                return BadRequest(res);
+            }
+        }
+
+        [HttpPost]
+        [Route("GetListPiso")]
+        public async Task<ActionResult> GetListPiso([FromBody] PisoDTO request)
+        {
+            ResultDTO<PisoDTO> res = new ResultDTO<PisoDTO>();
+            try
+            {
+                res = await this.iIPisoAplication.GetListPiso(request);
+                return Ok(res);
+            }
+            catch (Exception e)
+            {
+                res.InnerException = e.Message.ToString();
+
+                var sorigen = "";
+                foreach (object c in this.ControllerContext.RouteData.Values.Values)
+                {
+                    sorigen += c.ToString() + " | ";
+                }
+                LogErrorDTO lg = new LogErrorDTO();
+                lg.iid_usuario_registra = 0;
+                lg.vdescripcion = e.Message.ToString();
+                lg.vcodigo_mensaje = e.Message.ToString();
+                lg.vorigen = sorigen;
+                this.iLogErrorAplication.RegisterLogError(lg);
+
+                return BadRequest(res);
+            }
+        }
+
+        [HttpGet]
+        [Route("GetPiso")]
+        public async Task<ActionResult> GetPiso([FromQuery] int request)
+        {
+            ResultDTO<PisoDTO> res = new ResultDTO<PisoDTO>();
+            try
+            {
+                PisoDTO item = new PisoDTO();
+                item.iid_piso = request;
+                res = await this.iIPisoAplication.GetPiso(item);
+                return Ok(res);
+            }
+            catch (Exception e)
+            {
+                res.InnerException = e.Message.ToString();
+
+                var sorigen = "";
+                foreach (object c in this.ControllerContext.RouteData.Values.Values)
+                {
+                    sorigen += c.ToString() + " | ";
+                }
+                LogErrorDTO lg = new LogErrorDTO();
+                lg.iid_usuario_registra = 0;
+                lg.vdescripcion = e.Message.ToString();
+                lg.vcodigo_mensaje = e.Message.ToString();
+                lg.vorigen = sorigen;
+                this.iLogErrorAplication.RegisterLogError(lg);
+
+                return BadRequest(res);
+            }
+        }
+
+
+        #endregion
 
 
     }

@@ -169,6 +169,11 @@ namespace ReservaSitio.API
             services.AddScoped<ILocalServices, LocalServices>();
             services.AddScoped<ILocalRepository, LocalRepository>();
 
+            services.AddScoped<IPisoAplication, PisoAplication>();
+            services.AddScoped<IPisoServices, PisoServices>();
+            services.AddScoped<IPisoRepository, PisoRepository>();
+            
+
             services.AddScoped<IModuloAplication, ModuloAplication>();
             services.AddScoped<IModuloServices, ModuloServices>();
             services.AddScoped<IModuloRepository, ModuloRepository>();

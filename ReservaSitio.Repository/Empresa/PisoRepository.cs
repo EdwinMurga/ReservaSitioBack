@@ -1,10 +1,10 @@
 ﻿using Dapper;
 using Microsoft.Extensions.Configuration;
+using ReservaSitio.Abstraction.IRepository.Empresa;
 using ReservaSitio.Abstraction.IRepository.LogError;
-using ReservaSitio.Abstraction.IRepository.ParametroAplicacion;
 using ReservaSitio.DataAccess.CustomConnection;
 using ReservaSitio.DTOs;
-using ReservaSitio.DTOs.ParametroAplicacion;
+using ReservaSitio.DTOs.Empresa;
 using ReservaSitio.Repository.Base;
 using System;
 using System.Collections.Generic;
@@ -16,52 +16,51 @@ using System.Threading.Tasks;
 using System.Transactions;
 using static ReservaSitio.Entities.Enum;
 
-namespace ReservaSitio.Repository.ParametrosAplicacion
+namespace ReservaSitio.Repository.Empresa
 {
-    public class PlantillaCorreoRepository : BaseRepository,IPlantillaCorreoRepository
+    public class PisoRepository : BaseRepository,IPisoRepository
     {
 
         private string _connectionString = "";
         private IConfiguration Configuration;
         private readonly ILogErrorRepository iLogErrorRepository;
-        public PlantillaCorreoRepository(ICustomConnection connection,
+        public PisoRepository(ICustomConnection connection,
             IConfiguration configuration
             , ILogErrorRepository ILogErrorRepository) : base(connection)
         {
             this.iLogErrorRepository = ILogErrorRepository;
             Configuration = configuration;
             _connectionString = Configuration.GetConnectionString("CS_ReservaSitio");
-        }
 
-        public async Task<ResultDTO<PlantillaCorreoDTO>> DeletePlantillaCorreo(PlantillaCorreoDTO request)
+        }
+            public async Task<ResultDTO<PisoDTO>> DeletePiso(PisoDTO request)
         {
             throw new NotImplementedException();
         }
 
-        public async Task<ResultDTO<PlantillaCorreoDTO>> GetListPlantillaCorreo(PlantillaCorreoDTO request)
+        public async Task<ResultDTO<PisoDTO>> GetListPiso(PisoDTO request)
         {
-            ResultDTO<PlantillaCorreoDTO> res = new ResultDTO<PlantillaCorreoDTO>();
-            List<PlantillaCorreoDTO> list = new List<PlantillaCorreoDTO>();
+            ResultDTO<PisoDTO> res = new ResultDTO<PisoDTO>();
+            List<PisoDTO> list = new List<PisoDTO>();
             try
             {
                 var parameters = new DynamicParameters();
-                parameters.Add("@p_iid_plantilla_correo", request.iid_plantilla_correo);
-                parameters.Add("@p_vnombre_plantilla", request.vnombre_plantilla);
-                parameters.Add("@p_vtitulo_correo", request.vtitulo_correo);
+                parameters.Add("@p_iid_piso", request.iid_piso);
+                parameters.Add("@p_iid_local", request.iid_local);
+                parameters.Add("@p_vdescipcion", request.vdescipcion);
+                parameters.Add("@p_iid_nivel", request.iid_nivel);
+                parameters.Add("@p_iid_estado_registro", request.iid_estado_registro);
+
                 parameters.Add("@p_iid_usuario_registra", request.iid_usuario_registra);
                 parameters.Add("@p_dfecha_registra_ini", request.dfecha_registra);
                 parameters.Add("@p_dfecha_registra_fin", request.dfecha_registra);
-
-                parameters.Add("@p_vdescripcion_plantilla", request.vdescripcion_plantilla);
-                parameters.Add("@p_iid_estado_registro", request.iid_estado_registro);
-       
 
                 parameters.Add("@p_indice", request.pageNum);
                 parameters.Add("@p_limit", request.pageSize);
 
                 using (var cn = new SqlConnection(_connectionString))
                 {
-                    list = (List<PlantillaCorreoDTO>)cn.Query<PlantillaCorreoDTO>("[dbo].[SP_PLANTILLA_CORREO_LISTAR]", parameters, commandType: System.Data.CommandType.StoredProcedure);
+                    list = (List<PisoDTO>)cn.Query<PisoDTO>("[dbo].[SP_PISOS_LISTAR]", parameters, commandType: System.Data.CommandType.StoredProcedure);
                 }
                 res.IsSuccess = (list.ToList().Count > 0 ? true : false);
                 res.Message = (list.ToList().Count > 0 ? UtilMensajes.strInformnacionEncontrada : UtilMensajes.strInformnacionNoEncontrada);
@@ -84,21 +83,20 @@ namespace ReservaSitio.Repository.ParametrosAplicacion
             return res;
         }
 
-        public async Task<ResultDTO<PlantillaCorreoDTO>> GetPlantillaCorreo(PlantillaCorreoDTO request)
+        public async Task<ResultDTO<PisoDTO>> GetPiso(PisoDTO request)
         {
-
-            ResultDTO<PlantillaCorreoDTO> res = new ResultDTO<PlantillaCorreoDTO>();
-            PlantillaCorreoDTO item = new PlantillaCorreoDTO();
+            ResultDTO<PisoDTO> res = new ResultDTO<PisoDTO>();
+            PisoDTO item = new PisoDTO();
 
             try
             {
                 var parameters = new DynamicParameters();
-                parameters.Add("@p_iid_plantilla_correo", request.iid_plantilla_correo);
+                parameters.Add("@p_iid_piso", request.iid_piso);
                 using (var cn = new SqlConnection(_connectionString))
                 {
 
-                    var query = await cn.QueryAsync<PlantillaCorreoDTO>("[dbo].[SP_PLANTILLA_CORREO_BY_ID]", parameters, commandType: System.Data.CommandType.StoredProcedure);
-                    item = (PlantillaCorreoDTO)query.FirstOrDefault();
+                    var query = await cn.QueryAsync<PisoDTO>("[dbo].[SP_PISOS_BY_ID]", parameters, commandType: System.Data.CommandType.StoredProcedure);
+                    item = (PisoDTO)query.FirstOrDefault();
                     res.IsSuccess = (query.Any() == true ? true : false);
                 }
                 // await mConnection.Complete();
@@ -122,31 +120,27 @@ namespace ReservaSitio.Repository.ParametrosAplicacion
             return res;
         }
 
-        public async Task<ResultDTO<PlantillaCorreoDTO>> RegisterPlantillaCorreo(PlantillaCorreoDTO request)
+        public async Task<ResultDTO<PisoDTO>> RegisterPiso(PisoDTO request)
         {
-            ResultDTO<PlantillaCorreoDTO> res = new ResultDTO<PlantillaCorreoDTO>();
+            ResultDTO<PisoDTO> res = new ResultDTO<PisoDTO>();
             using (TransactionScope scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
             {
                 try
                 {
+
                     using (var cn = await mConnection.BeginConnection(true))
                     {
                         var parameters = new DynamicParameters();
-                        parameters.Add("@p_iid_plantilla_correo", request.iid_plantilla_correo);
-                        parameters.Add("@p_vnombre_plantilla", request.vnombre_plantilla);
-                        parameters.Add("@p_vrol_para", request.vrol_para);
-                        parameters.Add("@p_vrol_cc", request.vrol_cc);
-                        parameters.Add("@p_vrol_cco", request.vrol_cco);
-                        parameters.Add("@p_vtitulo_correo", request.vtitulo_correo);
-                        parameters.Add("@p_vcuerpo_correo", request.vcuerpo_correo);
-                        parameters.Add("@p_iid_empresa", request.iid_empresa);
-                        parameters.Add("@p_vdescripcion_plantilla", request.vdescripcion_plantilla);
-
+                        parameters.Add("@p_iid_piso", request.iid_piso);
+                        parameters.Add("@p_iid_local", request.iid_local);
+                        parameters.Add("@p_vdescipcion", request.vdescipcion);
+                        parameters.Add("@p_iid_nivel", request.iid_nivel);
                         parameters.Add("@p_iid_estado_registro", request.iid_estado_registro);
                         parameters.Add("@p_iid_usuario_registra", request.iid_usuario_registra);
+         
 
 
-                        using (var lector = await cn.ExecuteReaderAsync("[dbo].[SP_PLANTILLA_CORREO_REGISTRAR]", parameters, commandType: CommandType.StoredProcedure, transaction: mConnection.GetTransaction()))
+                        using (var lector = await cn.ExecuteReaderAsync("[dbo].[SP_PISOS_REGISTRAR]", parameters, commandType: CommandType.StoredProcedure, transaction: mConnection.GetTransaction()))
                         {
                             while (lector.Read())
                             {

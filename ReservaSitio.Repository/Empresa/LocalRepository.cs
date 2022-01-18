@@ -49,9 +49,7 @@ namespace ReservaSitio.Repository.Empresa
                 parameters.Add("@p_vdescripcion", request.vdescripcion);
                 parameters.Add("@p_icantidad_pisos", request.icantidad_pisos);
                 parameters.Add("@p_iid_distrito", request.iid_distrito);
-                parameters.Add("@p_iid_empresa", request.iid_empresa);
-    
-   
+                parameters.Add("@p_iid_empresa", request.iid_empresa);   
 
                 parameters.Add("@p_indice", request.pageNum);
                 parameters.Add("@p_limit", request.pageSize);
@@ -89,9 +87,8 @@ namespace ReservaSitio.Repository.Empresa
                 {
                     var parameters = new DynamicParameters();
                     parameters.Add("@p_iid_local", request.iid_local);
-                using (var cn = new SqlConnection(_connectionString))
-                {
-
+                    using (var cn = new SqlConnection(_connectionString))
+                    {
                         var query = await cn.QueryAsync<LocalDTO>("[dbo].[SP_LOCAL_BY_ID]", parameters, commandType: System.Data.CommandType.StoredProcedure);
                         item = (LocalDTO)query.FirstOrDefault();
                         res.IsSuccess = (query.Any() == true ? true : false);

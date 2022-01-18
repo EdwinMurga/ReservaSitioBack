@@ -14,7 +14,7 @@ namespace ReservaSitio.DTOs.ParametroAplicacion
 		public string vrol_para { get; set; }
 		public string vrol_cc { get; set; }
 		public string vrol_cco { get; set; }
-		public string _vtitulo_correo { get; set; }
+		public string vtitulo_correo { get; set; }
 		public string vcuerpo_correo { get; set; }
 
 

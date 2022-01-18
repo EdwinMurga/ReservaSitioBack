@@ -13,7 +13,6 @@ namespace ReservaSitio.DTOs.ParametroAplicacion
 		public string vvalor_cadena { get; set; }
 		public string ivalor_entero { get; set; }
 		public decimal  nvalor_decimal { get; set; }
-		public int  iid_estado_registro { get; set; }
 		public int  iid_empresa { get; set; }
 
 	}

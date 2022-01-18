@@ -47,10 +47,11 @@ namespace ReservaSitio.Repository.ParametrosAplicacion
                 parameters.Add("@p_iid_parametro", request.iid_parametro);
                 parameters.Add("@p_vdescripcion", request.vdescripcion);
                 parameters.Add("@p_vvalor_cadena", request.vvalor_cadena);
-                parameters.Add("@p_ivalor_entero", request.ivalor_entero);
-                parameters.Add("@p_nvalor_decimal", request.nvalor_decimal);
+                //parameters.Add("@p_ivalor_entero", request.ivalor_entero);
+                //parameters.Add("@p_nvalor_decimal", request.nvalor_decimal);
                 parameters.Add("@p_iid_empresa", request.iid_empresa);
 
+                parameters.Add("@p_iid_estado_registro", request.iid_estado_registro);
                 parameters.Add("@p_iid_usuario_registra", request.iid_usuario_registra);
                 parameters.Add("@p_dfecha_registra_ini", request.dfecha_registra);
                 parameters.Add("@p_dfecha_registra_fin", request.dfecha_registra);

@@ -20,7 +20,7 @@ namespace ReservaSitio.API.Controllers.ParametroAplicacion
         private readonly IParametroAplication iParametroAplication;
         private readonly ILogErrorAplication iLogErrorAplication;
 
-        public ParametroAplicacionController(ParametroAplication _iIPerfilAplication,
+        public ParametroAplicacionController(IParametroAplication _iIPerfilAplication,
             ILogErrorAplication ILogErrorAplication)
         {
             this.iParametroAplication = _iIPerfilAplication;

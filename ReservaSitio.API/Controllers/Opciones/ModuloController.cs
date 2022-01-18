@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using ReservaSitio.Abstraction.IApplication.LogError;
 using ReservaSitio.Abstraction.IApplication.Opciones;
 using ReservaSitio.DTOs;
 using ReservaSitio.DTOs.Opciones;
@@ -15,13 +16,13 @@ namespace ReservaSitio.API.Controllers.Opciones
     public class ModuloController : Controller
     {
         // GET: ModuloController
-
-
         private readonly IModuloAplication iModuloAplication;
-
-        public ModuloController(IModuloAplication _iIPerfilAplication)
+        private readonly ILogErrorAplication iLogErrorAplication;
+        public ModuloController(IModuloAplication _iIPerfilAplication
+            , ILogErrorAplication ILogErrorAplication)
         {
             this.iModuloAplication = _iIPerfilAplication;
+            this.iLogErrorAplication = ILogErrorAplication;
         }
 
 
@@ -38,6 +39,19 @@ namespace ReservaSitio.API.Controllers.Opciones
             catch (Exception e)
             {
                 res.InnerException = e.Message.ToString();
+
+                var sorigen = "";
+                foreach (object c in this.ControllerContext.RouteData.Values.Values)
+                {
+                    sorigen += c.ToString() + " | ";
+                }
+                LogErrorDTO lg = new LogErrorDTO();
+                lg.iid_usuario_registra = 0;
+                lg.vdescripcion = e.Message.ToString();
+                lg.vcodigo_mensaje = e.Message.ToString();
+                lg.vorigen = sorigen;
+                this.iLogErrorAplication.RegisterLogError(lg);
+
                 return BadRequest(res);
             }
         }
@@ -55,6 +69,19 @@ namespace ReservaSitio.API.Controllers.Opciones
             catch (Exception e)
             {
                 res.InnerException = e.Message.ToString();
+
+                var sorigen = "";
+                foreach (object c in this.ControllerContext.RouteData.Values.Values)
+                {
+                    sorigen += c.ToString() + " | ";
+                }
+                LogErrorDTO lg = new LogErrorDTO();
+                lg.iid_usuario_registra = 0;
+                lg.vdescripcion = e.Message.ToString();
+                lg.vcodigo_mensaje = e.Message.ToString();
+                lg.vorigen = sorigen;
+                this.iLogErrorAplication.RegisterLogError(lg);
+
                 return BadRequest(res);
             }
         }
@@ -74,6 +101,19 @@ namespace ReservaSitio.API.Controllers.Opciones
             catch (Exception e)
             {
                 res.InnerException = e.Message.ToString();
+
+                var sorigen = "";
+                foreach (object c in this.ControllerContext.RouteData.Values.Values)
+                {
+                    sorigen += c.ToString() + " | ";
+                }
+                LogErrorDTO lg = new LogErrorDTO();
+                lg.iid_usuario_registra = 0;
+                lg.vdescripcion = e.Message.ToString();
+                lg.vcodigo_mensaje = e.Message.ToString();
+                lg.vorigen = sorigen;
+                this.iLogErrorAplication.RegisterLogError(lg);
+
                 return BadRequest(res);
             }
 
