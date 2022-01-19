@@ -203,8 +203,9 @@ namespace ReservaSitio.API
             services.AddScoped<IParametroServices, ParametroServices>();
             services.AddScoped<IParametroRepository, ParametroRepository>();
 
-
-
+            services.AddScoped<ITablaParametroAplication, TablaParametroAplication>();
+            services.AddScoped<ITablaParametroServices, TablaParametroServices>();
+            services.AddScoped<ITablaParametroRepository, TablaParametroRepository>();
 
             services.AddScoped<IAuthenticationRepository, AuthenticationRepository>();
 

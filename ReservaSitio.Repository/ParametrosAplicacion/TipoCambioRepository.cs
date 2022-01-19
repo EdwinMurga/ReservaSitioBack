@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace ReservaSitio.Repository.ParametrosAplicacion
 {
- public   class TablaRespository
+    public class TipoCambioRepository
     {
 
-        public TablaRespository() { }
 
+        public TipoCambioRepository() { }
 
     }
 }
