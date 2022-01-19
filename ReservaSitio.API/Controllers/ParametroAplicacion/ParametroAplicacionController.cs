@@ -287,15 +287,15 @@ namespace ReservaSitio.API.Controllers.ParametroAplicacion
         }
 
         [HttpGet]
-        [Route("GetListTablaDetalleParametro")]
-        public async Task<ActionResult> GetListTablaDetalleParametro([FromQuery] int request)
+        [Route("GetTablaDetalleParametro")]
+        public async Task<ActionResult> GetTablaDetalleParametro([FromQuery] int request)
         {
             ResultDTO<TablaDetalleParametroDTO> res = new ResultDTO<TablaDetalleParametroDTO>();
             try
             {
                 TablaDetalleParametroDTO item = new TablaDetalleParametroDTO();
-                item.iid_tabla_auxiliar = request;
-                res = await this.iITablaParametroAplication.GetListTablaDetalleParametro(item);
+                item.iid_tabla_detalle = request;
+                res = await this.iITablaParametroAplication.GetTablaDetalleParametro(item);
                 return Ok(res);
             }
             catch (Exception e)

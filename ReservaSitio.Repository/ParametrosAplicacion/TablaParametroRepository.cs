@@ -191,7 +191,7 @@ namespace ReservaSitio.Repository.ParametrosAplicacion
                     using (var cn = await mConnection.BeginConnection(true))
                     {
                         var parameters = new DynamicParameters();
-                        parameters.Add("@p_iid_tabla_detalle", request.iid_tabla_auxiliar);
+                        parameters.Add("@p_iid_tabla_detalle", request.iid_tabla_detalle);
                         parameters.Add("@p_iid_tabla_auxiliar", request.iid_tabla_auxiliar);
                         parameters.Add("@p_iid_registro_tabla", request.iid_registro_tabla);
                         parameters.Add("@p_iid_codigo_descripcion", request.iid_codigo_descripcion);
@@ -250,7 +250,7 @@ namespace ReservaSitio.Repository.ParametrosAplicacion
             try
             {
                 var parameters = new DynamicParameters();
-                parameters.Add("@p_iid_tabla_detalle", request.iid_tabla_auxiliar);
+                parameters.Add("@p_iid_tabla_detalle", request.iid_tabla_detalle);
                 using (var cn = new SqlConnection(_connectionString))
                 {
 
