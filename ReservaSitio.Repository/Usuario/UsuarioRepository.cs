@@ -37,7 +37,6 @@ namespace ReservaSitio.Repository.Usuario
         {
             throw new NotImplementedException();
         }
-
         public async Task<ResultDTO<UsuarioDTO>> GetListUsuario(UsuarioListDTO request)
         {
             ResultDTO<UsuarioDTO> res = new ResultDTO<UsuarioDTO>();
@@ -83,7 +82,6 @@ namespace ReservaSitio.Repository.Usuario
             }
             return res;
         }
-
         public async Task<ResultDTO<UsuarioDTO>> GetUsuario(UsuarioDTO request)
         {
             ResultDTO<UsuarioDTO> res = new ResultDTO<UsuarioDTO>();
@@ -120,7 +118,48 @@ namespace ReservaSitio.Repository.Usuario
             }
             return res;
         }
+        public async Task<ResultDTO<UsuarioDTO>> GetUsuarioParameter(UsuarioDTO request)
+        {
+            ResultDTO<UsuarioDTO> res = new ResultDTO<UsuarioDTO>();
+            UsuarioDTO item = new UsuarioDTO();
 
+            try
+            {
+                var parameters = new DynamicParameters();
+                parameters.Add("@p_vnro_documento", request.vnro_documento);
+                parameters.Add("@p_vnombres", request.vnombres);
+                parameters.Add("@p_vapellido_paterno", request.vapellido_paterno);
+                parameters.Add("@p_vapellido_materno", request.vapellido_materno);
+                parameters.Add("@p_vcorreo_electronico", request.vcorreo_electronico);
+
+                using (var cn = new SqlConnection(_connectionString))
+                {
+
+                    var query = await cn.QueryAsync<UsuarioDTO>("[dbo].[SP_USUARIO_BY_PARAMETER]", parameters, commandType: System.Data.CommandType.StoredProcedure);
+                    item = (UsuarioDTO)query.FirstOrDefault();
+                    res.IsSuccess = (query.Any() == true ? true : false);
+                }
+                // await mConnection.Complete();
+                res.Message = (res.IsSuccess ? UtilMensajes.strInformnacionGrabada : UtilMensajes.strInformnacionNoEncontrada);
+                res.item = item;
+            }
+            catch (Exception e)
+            {
+
+                res.IsSuccess = false;
+                res.Message = UtilMensajes.strInformnacionNoGrabada;
+                res.InnerException = e.Message.ToString();
+
+                LogErrorDTO lg = new LogErrorDTO();
+                lg.iid_usuario_registra = request.iid_usuario_registra;
+                lg.vdescripcion = e.Message.ToString();
+                lg.vcodigo_mensaje = e.Message.ToString();
+                lg.vorigen = this.ToString();
+                this.iLogErrorRepository.RegisterLogError(lg);
+            }
+            return res;
+        }
+       
         public async Task<ResultDTO<UsuarioDTO>> RegisterUsuario(UsuarioDTO request)
         {
             ResultDTO<UsuarioDTO> res = new ResultDTO<UsuarioDTO>();
@@ -187,6 +226,8 @@ namespace ReservaSitio.Repository.Usuario
             }
             return res;
         }
+       
+        
         #endregion
 
         #region "usuario Acceso"

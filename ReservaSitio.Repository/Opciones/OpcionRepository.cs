@@ -44,7 +44,7 @@ namespace ReservaSitio.Repository.Opcion
                     using (var cn = await mConnection.BeginConnection(true))
                     {
                         var parameters = new DynamicParameters();
-                        parameters.Add("@p_opcic_iid_opcion", request.iid_opcion);
+                        parameters.Add("@p_iid_opcion", request.iid_opcion);
                         parameters.Add("@p_iid_modulo", request.iid_modulo);
                         parameters.Add("@p_vtitulo", request.vtitulo);
                         parameters.Add("@p_vurl", request.vurl);

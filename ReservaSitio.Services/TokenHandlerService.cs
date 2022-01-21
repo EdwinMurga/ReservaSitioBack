@@ -15,20 +15,25 @@ namespace ReservaSitio.Services
 {
     public interface ITokenHandlerService
     {
-        string GenerateJwtTokenLogin(ITokenParameters pars);
-        ITokenParameters GetObjectTokenLogin(string token);
+        string GenerateToken(ITokenParameters pars);
+        ITokenParameters GetObjectToken(string token);
         string GenerateJwtTokenPasswordRecover(ITokenParameters pars);
         ITokenParameters GetObjectTokenPasswordRecover(string token);
+
+        Boolean IsTokenValido { set; get; }
     }
     public class TokenHandlerService : ITokenHandlerService
     {
         private readonly JwtConfig _jwtConfig;
+
+        public bool IsTokenValido { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+
         public TokenHandlerService(IOptionsMonitor<JwtConfig> optionsMonitor)
         {
             _jwtConfig = optionsMonitor.CurrentValue;
         }
 
-        public string GenerateJwtTokenLogin(ITokenParameters pars)
+        public string GenerateToken(ITokenParameters pars)
         {
             //pars = new ITokenParameters();
             var jwtTokenHandler = new JwtSecurityTokenHandler();
@@ -53,7 +58,7 @@ namespace ReservaSitio.Services
             return jwtToken;
         }
 
-        public ITokenParameters GetObjectTokenLogin(string token)
+        public ITokenParameters GetObjectToken(string token)
         {
             ITokenParameters pars = new ITokenParameters();
             var key = Encoding.ASCII.GetBytes(_jwtConfig.Secret);

@@ -30,9 +30,6 @@ namespace ReservaSitio.Services.Auth
 
         }
     
-        public bool CheckPasswordAsync(string existingUserPasswordHash, string userPassword)
-        {
-            return _authRepository.CheckPasswordAsync(existingUserPasswordHash, userPassword);
-        }
+    
     }
 }

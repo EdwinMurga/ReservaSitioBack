@@ -19,8 +19,10 @@ namespace ReservaSitio.Repository.Auth
     {
         private AuthenticationResponse pp = new AuthenticationResponse();
         private static HttpClient client = new HttpClient();
-    
 
+        public AuthenticationRepository(ICustomConnection connection) : base(connection)
+        {
+        }
         private async Task<ResultDTO<AuthenticationResponse>> InsertLogLogeo(AuthenticationResponse request)
         {
             ResultDTO<AuthenticationResponse> res = new ResultDTO<AuthenticationResponse>();
@@ -50,27 +52,5 @@ namespace ReservaSitio.Repository.Auth
             return res;
         }
 
-        private async Task<Uri> GetUserAD(string userUserName)
-        {
-            HttpResponseMessage response = await client.GetFromJsonAsync<object>("http://kmmp-webprd1:8086/api/ActiveDirectory/PBLAuthenticateUser?SamAccountName=" + userUserName) as HttpResponseMessage;
-            response.EnsureSuccessStatusCode();
-            return response.Headers.Location;
-        }
-
-    
-
-        private async  Task<string> EncriptString(string txtEncript)
-        {
-            return await client.GetStringAsync("http://kmmp-webprd1:8086/api/ActiveDirectory/EncryptString?cadena="+ txtEncript);
-        }
-
-        public bool CheckPasswordAsync(string Password, string userPassword)
-        {
-            return (Password == userPassword);
-        }
-
-        public AuthenticationRepository(ICustomConnection connection) : base(connection)
-        {
-        }
     }
 }

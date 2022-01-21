@@ -25,7 +25,10 @@ using ReservaSitio.DTOs.Auth;
 using RestSharp;
 using ReservaSitio.Application;
 using Microsoft.Extensions.Logging;
-
+using ReservaSitio.DTOs;
+using ReservaSitio.Abstraction.IApplication.LogError;
+using ReservaSitio.DTOs.Usuario;
+using ReservaSitio.Abstraction.IApplication.Usuario;
 
 namespace ReservaSitio.API.Controllers
 {
@@ -41,14 +44,26 @@ namespace ReservaSitio.API.Controllers
         private IAuthenticationApplication _authApplication;
         private static HttpClient client = new HttpClient();
         private AuthenticationResponse existingUser = new AuthenticationResponse();
-        public ResponseDTO _ResponseDTO;
+     
         private HttpClient _httpClient = new HttpClient();
 
         public int intEstadoBloqueado = 4;
        private ILogger<AuthController> _logger;
-        public AuthController(UserManager<IdentityUser> userManager, ITokenHandlerService service,
-            IAutenticacion autenticacion, IAuthenticationApplication authApplication,
-            IAuthenticationService authService, IConfiguration configuration, ILogger<AuthController> logger)
+
+        private readonly ILogErrorAplication iLogErrorAplication;
+        private readonly IUsuarioAplication iIUsuarioAplication;
+        public AuthController(
+            UserManager<IdentityUser> userManager, 
+            ITokenHandlerService service,
+            IAutenticacion autenticacion, 
+            IAuthenticationApplication authApplication,
+            IAuthenticationService authService, 
+            IConfiguration configuration, 
+            ILogger<AuthController> logger,
+
+            ILogErrorAplication ILogErrorAplication,
+            IUsuarioAplication IUsuarioAplication
+            )
         {
             this.Configuration = configuration;
             _userManager = userManager;
@@ -57,16 +72,19 @@ namespace ReservaSitio.API.Controllers
             _authApplication = authApplication;
             _authService = authService;
             _logger = logger;
+
+            this.iLogErrorAplication = ILogErrorAplication;
+            this.iIUsuarioAplication = IUsuarioAplication;
         }
 
  
-        [HttpPost]
-        [Route("GenerateTokenLogin")]
-        public IActionResult GenerateJwtTokenLogin([FromBody] ITokenParameters pars)
+        //[HttpPost]
+        //[Route("GenerateTokenLogin")]
+       /* public IActionResult GenerateJwtTokenLogin([FromBody] ITokenParameters pars)
         {
             try
             {
-                string jwtToken = _service.GenerateJwtTokenLogin(pars);
+                string jwtToken = _service.GenerateToken(pars);
                 _logger.LogInformation("This is an INFORMATION message.");
                 return Ok(jwtToken);
             }
@@ -75,27 +93,27 @@ namespace ReservaSitio.API.Controllers
                 _logger.LogError("This is an ERROR message.");
                 return BadRequest(e.Message);
             }
-        }
+        }*/
 
-        [HttpPost]
-        [Route("DesencriptTokenLogin/{token}")]
-        public IActionResult GetObjectToken(string token)
+        //[HttpPost]
+        //[Route("DesencriptTokenLogin/{token}")]
+        /*public IActionResult GetObjectToken(string token)
         {
             try
             {
                 ITokenParameters pars = new ITokenParameters();
-                pars = _service.GetObjectTokenLogin(token);
+                pars = _service.GetObjectToken(token);
                 return Ok(pars);
             }
             catch (Exception e)
             {
                 return BadRequest(e.Message);
             }
-        }
+        }*/
 
-        [HttpPost]
-        [Route("GenerateTokenPasswordRecover")]
-        public IActionResult GenerateJwtTokenPasswordRecover([FromBody] ITokenParameters pars)
+        //[HttpPost]
+        //[Route("GenerateTokenPasswordRecover")]
+       /* public IActionResult GenerateJwtTokenPasswordRecover([FromBody] ITokenParameters pars)
         {
             try
             {
@@ -106,11 +124,11 @@ namespace ReservaSitio.API.Controllers
             {
                 return BadRequest(e.Message);
             }
-        }
+        }*/
 
-        [HttpPost]
-        [Route("DesencriptTokenPassword/{token}")]
-        public IActionResult GetObjectTokenPasswordRecover(string token)
+        //[HttpPost]
+       // [Route("DesencriptTokenPassword/{token}")]
+        /*public IActionResult GetObjectTokenPasswordRecover(string token)
         {
             try
             {
@@ -122,10 +140,61 @@ namespace ReservaSitio.API.Controllers
             {
                 return BadRequest(e.Message);
             }
+        }*/
+
+        [HttpPost]
+        [Route("Login")]
+        public async Task<IActionResult> Login([FromBody] LoginDTO resquest) 
+        {
+
+            LoginResponseDTO<string> resLogin = new LoginResponseDTO<string>();
+            ResultDTO<UsuarioDTO> res = new ResultDTO<UsuarioDTO>();
+            UsuarioDTO resUser = new UsuarioDTO();
+            resUser.vcorreo_electronico = resquest.usuario;
+            resUser.vclave = resquest.clave;
+
+            try
+            {
+                res = await this.iIUsuarioAplication.GetUsuarioParameter(resUser);
+                if (res.IsSuccess && res.item != null)
+                {
+
+
+                    resLogin.IsSuccess = true;
+                    resLogin.Message = "Acceso Correcto";
+                    resLogin.Token = "";
+
+                }
+                else {
+                    resLogin.Informacion = " Usuario no Encontrado";
+                }
+
+
+
+                return Ok(resLogin);
+            }
+            catch (Exception e)
+            {
+                res.InnerException = e.Message.ToString();
+
+                var sorigen = "";
+                foreach (object c in this.ControllerContext.RouteData.Values.Values)
+                {
+                    sorigen += c.ToString() + " | ";
+                }
+                LogErrorDTO lg = new LogErrorDTO();
+                lg.iid_usuario_registra = 0;
+                lg.vdescripcion = e.Message.ToString();
+                lg.vcodigo_mensaje = e.Message.ToString();
+                lg.vorigen = sorigen;
+                this.iLogErrorAplication.RegisterLogError(lg);
+
+                return BadRequest(res);
+            }
+
         }
 
-  
 
- 
+
     }
 }

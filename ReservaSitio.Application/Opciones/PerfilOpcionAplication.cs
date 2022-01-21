@@ -32,6 +32,11 @@ namespace ReservaSitio.Application.Opciones
             return this.iPerfilOpcionServices.GetPerfilOpcion(request);
         }
 
+        public Task<ResultDTO<PerfilUsuarioDTO>> GetPerfilOpcionUsuario(PerfilUsuarioDTO request)
+        {
+            return this.iPerfilOpcionServices.GetPerfilOpcionUsuario(request);
+        }
+
         public Task<ResultDTO<PerfilOpcionDTO>> RegisterPerfilOpcion(PerfilOpcionDTO request)
         {
             return this.iPerfilOpcionServices.RegisterPerfilOpcion(request);

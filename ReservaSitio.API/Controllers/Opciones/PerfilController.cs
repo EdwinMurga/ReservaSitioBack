@@ -140,5 +140,28 @@ namespace ReservaSitio.API.Controllers.Perfiles
 
         #endregion
 
+        #region ""
+
+        [HttpPost]
+        [Route("GetPerfilOpcionUsuario")]
+        public async Task<ActionResult> GetPerfilOpcionUsuario([FromQuery] int request)
+        {
+            ResultDTO<PerfilUsuarioDTO> res = new ResultDTO<PerfilUsuarioDTO>();
+            PerfilUsuarioDTO pfusuario = new PerfilUsuarioDTO();
+            pfusuario.iid_usuario = request;
+            try
+            {
+                res = await this.iPerfilOpcionAplication.GetPerfilOpcionUsuario(pfusuario);
+                return Ok(res);
+            }
+            catch (Exception e)
+            {
+                res.InnerException = e.Message.ToString();
+                return BadRequest(res);
+            }
+        }
+
+        #endregion
+
     }
 }

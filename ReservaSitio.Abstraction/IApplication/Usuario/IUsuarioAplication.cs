@@ -14,5 +14,9 @@ namespace ReservaSitio.Abstraction.IApplication.Usuario
         public Task<ResultDTO<UsuarioDTO>> DeleteUsuario(UsuarioDTO request);
         public Task<ResultDTO<UsuarioDTO>> GetUsuario(UsuarioDTO request);
         public Task<ResultDTO<UsuarioDTO>> GetListUsuario(UsuarioListDTO request);
+
+
+
+        public Task<ResultDTO<UsuarioDTO>> GetUsuarioParameter(UsuarioDTO request);
     }
 }

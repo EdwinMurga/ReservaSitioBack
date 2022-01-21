@@ -11,7 +11,7 @@ namespace ReservaSitio.Abstraction.IRepository.Auth
     public interface IAuthenticationRepository
     {
         
-        bool CheckPasswordAsync(string Password, string userPassword);
-        //Task<ResultDTO<AuthenticationResponse>> InsertLogLogeo(AuthenticationResponse request);
+       // bool CheckPasswordAsync(string Password, string userPassword);
+      //  Task<ResultDTO<AuthenticationResponse>> InsertLogLogeo(AuthenticationResponse request);
     }
 }

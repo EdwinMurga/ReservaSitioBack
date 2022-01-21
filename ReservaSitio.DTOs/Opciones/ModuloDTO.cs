@@ -19,5 +19,7 @@ namespace ReservaSitio.DTOs.Opciones
 		public int iindica_visible{ get; set; }
 		public int iorden{ get; set; }
 
+		public List<OpcionDTO> opcion { set; get; }
+
 	}
 }

@@ -16,7 +16,46 @@ namespace ReservaSitio.DTOs.Opciones
 		public int iacceso_actualizar { get; set; }
 		public int iacceso_eliminar { get; set; }
 		public int iacceso_visualizar { get; set; }
-
+		//public  OpcionDTO opcion { get; set; }
 
 	}
+
+	public class PerfilUsuarioDTO 
+	{
+		public int iid_usuario { get; set; }
+
+		public List<ModuloDTO> modulo { set; get; }
+	
+		public List<PerfilOpcionDTO> perfilOpcion { get; set; }
+
+	}
+
+	public class PerfilUsuarioResponseDTO
+	{
+		public int iid_usuario { get; set; }
+		
+		public int iid_perfil_opcion { set; get; }
+		public int iid_perfil { set; get; }
+
+		public string vnombre_perfil { get; set; }
+		//public int iid_opcion { get; set; }
+		public int iacceso_crear { get; set; }
+		public int iacceso_actualizar { get; set; }
+		public int iacceso_eliminar { get; set; }
+		public int iacceso_visualizar { get; set; }
+
+		public int iid_sistema { get; set; }
+		public int iid_modulo { get; set; }
+		public string vtitulo_modulo { get; set; }
+		public int iorden_modulo { get; set; }
+		public int iindica_visible_modulo { get; set; }
+
+		public int iid_opcion { get; set; }
+		public string vtitulo_opcion { get; set; }
+		public int iindica_visible_opcion { get; set; }
+		public int iorden_opcion { get; set; }
+		public string vicono_opcion { get; set; }
+		public string vurl_opcion { get; set; }
+	}
+
 }
