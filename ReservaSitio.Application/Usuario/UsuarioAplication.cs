@@ -45,9 +45,15 @@ namespace ReservaSitio.Application.Usuario
             return this.iIUsuarioServices.GetUsuarioParameter(request);
         }
 
+        public Task<ResultDTO<UsuarioDTO>> RegisterUsuarioAcceso(UsuarioDTO request)
+        {
+            return this.iIUsuarioServices.RegisterUsuarioAcceso(request);
+        }
 
-
-
+        public Task<ResultDTO<UsuarioDTO>> RegisterUsuarioIntentoLogeo(UsuarioDTO request)
+        {
+            return this.iIUsuarioServices.RegisterUsuarioIntentoLogeo(request);
+        }
     }
     
     

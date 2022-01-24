@@ -1,17 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace ReservaSitio.API.DTOs
 {
-    public class LoginDTO
-    {
-        public string usuario { set; get; }
-        public string clave { set; get; }
-        public string tokenRecaptcha { set; get; }
-    }
-
+  
 
     public class LoginResponseDTO<T>
     {

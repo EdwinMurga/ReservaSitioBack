@@ -41,5 +41,16 @@ namespace ReservaSitio.Services.Usuario
         {
             return this.iUsuarioRespository.RegisterUsuario(request);
         }
+
+
+        public Task<ResultDTO<UsuarioDTO>> RegisterUsuarioAcceso(UsuarioDTO request)
+        {
+            return this.iUsuarioRespository.RegisterUsuarioAcceso(request);
+        }
+
+        public Task<ResultDTO<UsuarioDTO>> RegisterUsuarioIntentoLogeo(UsuarioDTO request)
+        {
+            return this.iUsuarioRespository.RegisterUsuarioIntentoLogeo(request);
+        }
     }
 }

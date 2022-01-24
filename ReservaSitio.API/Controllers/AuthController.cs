@@ -20,15 +20,16 @@ using Newtonsoft.Json;
 using ReservaSitio.Abstraction.IApplication.Auth;
 
 using ReservaSitio.Abstraction.IService.Auth;
-using ReservaSitio.DTOs.Auth;
+
 
 using RestSharp;
 using ReservaSitio.Application;
 using Microsoft.Extensions.Logging;
-using ReservaSitio.DTOs;
+
 using ReservaSitio.Abstraction.IApplication.LogError;
 using ReservaSitio.DTOs.Usuario;
 using ReservaSitio.Abstraction.IApplication.Usuario;
+using ReservaSitio.DTOs;
 
 namespace ReservaSitio.API.Controllers
 {
@@ -38,14 +39,14 @@ namespace ReservaSitio.API.Controllers
     {
         private readonly UserManager<IdentityUser> _userManager;
         private ITokenHandlerService _service;
-        private IAuthenticationService _authService;
+        //private IAuthenticationService _authService;
         private readonly IConfiguration Configuration;
-        private IAutenticacion _autenticacion;
+       // private IAutenticacion _autenticacion;
         private IAuthenticationApplication _authApplication;
-        private static HttpClient client = new HttpClient();
-        private AuthenticationResponse existingUser = new AuthenticationResponse();
+     //   private static HttpClient client = new HttpClient();
+      //  private AuthenticationResponse existingUser = new AuthenticationResponse();
      
-        private HttpClient _httpClient = new HttpClient();
+        //private HttpClient _httpClient = new HttpClient();
 
         public int intEstadoBloqueado = 4;
        private ILogger<AuthController> _logger;
@@ -67,10 +68,10 @@ namespace ReservaSitio.API.Controllers
         {
             this.Configuration = configuration;
             _userManager = userManager;
-            _autenticacion = autenticacion;
+           // _autenticacion = autenticacion;
          _service = service;
             _authApplication = authApplication;
-            _authService = authService;
+           // _authService = authService;
             _logger = logger;
 
             this.iLogErrorAplication = ILogErrorAplication;
@@ -150,30 +151,146 @@ namespace ReservaSitio.API.Controllers
             LoginResponseDTO<string> resLogin = new LoginResponseDTO<string>();
             ResultDTO<UsuarioDTO> res = new ResultDTO<UsuarioDTO>();
             UsuarioDTO resUser = new UsuarioDTO();
-            resUser.vcorreo_electronico = resquest.usuario;
-            resUser.vclave = resquest.clave;
+            resUser.vcorreo_electronico = resquest.UserName;
+            resUser.vclave = resquest.Password;
+            string contrasena = String.Empty;
 
             try
             {
+                var validCaptcha = _authApplication.validarGoogleCaptcha(resquest);
                 res = await this.iIUsuarioAplication.GetUsuarioParameter(resUser);
-                if (res.IsSuccess && res.item != null)
+
+                /*if (!validCaptcha)
                 {
-
-
-                    resLogin.IsSuccess = true;
-                    resLogin.Message = "Acceso Correcto";
+                    resLogin.IsSuccess = false;
+                    resLogin.Message = "Error : token Recatcha!";
+                    return Ok(resLogin);
+                }               
+                else*/ if (!res.IsSuccess && res.item == null)
+                {
+                    resLogin.IsSuccess = false;
+                    resLogin.Message = "Usuario No Registrado";
                     resLogin.Token = "";
 
+                    /** registra intento de logeo **/
+                    resUser.iid_usuario = res.item.iid_usuario;
+                    //await this.iIUsuarioAplication.RegisterUsuarioIntentoLogeo(resUser);
+
+                    return Ok(resLogin);
                 }
-                else {
-                    resLogin.Informacion = " Usuario no Encontrado";
+                else if  (res.IsSuccess && res.item == null && res.item.cantidad_intentos < 4) // && contrasena != res.item.vclave 
+                {
+                    resLogin.IsSuccess = false;
+                    resLogin.Message = "Usuario, "+ (res.item.cantidad_intentos < 4 ? " bloqueado excedio el intento de logeo " : " intento de logeo  " + res.item.cantidad_intentos.ToString())  ;
+                    resLogin.Token = "";
+
+                    /** registra intento de logeo **/
+                    resUser.iid_usuario = res.item.iid_usuario;
+                    await this.iIUsuarioAplication.RegisterUsuarioIntentoLogeo(resUser);
+
+                    return Ok(resLogin);
                 }
 
+                else if (res.IsSuccess && res.item == null && res.item.iid_indica_bloqueo == 1 )  
+                {
+                    resLogin.IsSuccess = false;
+                    resLogin.Message = "Usuario, "+ res.item.vcorreo_electronico + " actualmente bloqueado";
+                    resLogin.Token = "";
 
+                    /** registra intento de logeo **/
+                    //resUser.iid_usuario = res.item.iid_usuario;
+                    //await this.iIUsuarioAplication.RegisterUsuarioIntentoLogeo(resUser);
 
-                return Ok(resLogin);
+                    return Ok(resLogin);
+
+                }
+
+                else
+                {
+
+                    await this.iIUsuarioAplication.RegisterUsuario(resUser);
+
+                    resLogin.IsSuccess = true;
+                    resLogin.Message = "Usuario, Logeado ";
+                    resLogin.Token = "";
+
+                    /** registra intento de logeo **/
+                    //resUser.iid_usuario = res.item.iid_usuario;
+                    //await this.iIUsuarioAplication.RegisterUsuarioIntentoLogeo(resUser);
+
+                    return Ok(resLogin);
+
+                }    
+
+               
             }
             catch (Exception e)
+            {
+                res.InnerException = e.Message.ToString();
+
+                var sorigen = "";
+                foreach (object c in this.ControllerContext.RouteData.Values.Values)
+                {
+                    sorigen += c.ToString() + " | ";
+                }
+                LogErrorDTO lg = new LogErrorDTO();
+                lg.iid_usuario_registra = 0;
+                lg.vdescripcion = e.Message.ToString();
+                lg.vcodigo_mensaje = e.Message.ToString();
+                lg.vorigen = sorigen;
+                this.iLogErrorAplication.RegisterLogError(lg);
+
+                return BadRequest(res);
+            }
+
+        }
+
+        [HttpPost]
+        [Route("RecuperaContrasena")]
+        public async Task<IActionResult> RecuperaContrasena([FromBody] LoginRecuperacionDTO request) 
+        {
+            LoginResponseDTO<string> resLogin = new LoginResponseDTO<string>();
+            ResultDTO<UsuarioDTO> res = new ResultDTO<UsuarioDTO>();
+            try 
+            {
+               
+                UsuarioDTO resUser = new UsuarioDTO();
+                LoginDTO lgdto = new LoginDTO();
+                lgdto.GoogleToken = request.GoogleToken;
+                resUser.vcorreo_electronico = request.UserName;
+                //resUser.vclave = request.Password;
+                var validCaptcha = _authApplication.validarGoogleCaptcha(lgdto);
+                res = await this.iIUsuarioAplication.GetUsuarioParameter(resUser);
+                /*if (!validCaptcha)
+                {
+                    resLogin.IsSuccess = false;
+                    resLogin.Message = "Error : token Recatcha!";
+                    return Ok(resLogin);
+                }               
+                else*/  if (!res.IsSuccess && res.item == null)
+                {
+                    resLogin.IsSuccess = false;
+                    resLogin.Message = "Usuario No Registrado";
+                    resLogin.Token = "";
+                    return Ok(resLogin);
+                }
+                else {
+
+                    resLogin.IsSuccess = true;
+                    resLogin.Message = "Usuario, su clave fue recuperada ";
+                    resLogin.Token = "";
+
+                    /** registra intento de logeo **/
+                    //resUser.iid_usuario = res.item.iid_usuario;
+                    //await this.iIUsuarioAplication.RegisterUsuarioIntentoLogeo(resUser);
+
+                    return Ok(resLogin);
+
+                }
+
+              
+            }
+            catch(Exception e) 
             {
                 res.InnerException = e.Message.ToString();
 

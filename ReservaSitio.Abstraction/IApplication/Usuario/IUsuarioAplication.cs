@@ -18,5 +18,9 @@ namespace ReservaSitio.Abstraction.IApplication.Usuario
 
 
         public Task<ResultDTO<UsuarioDTO>> GetUsuarioParameter(UsuarioDTO request);
+
+
+        public Task<ResultDTO<UsuarioDTO>> RegisterUsuarioAcceso(UsuarioDTO request);
+        public Task<ResultDTO<UsuarioDTO>> RegisterUsuarioIntentoLogeo(UsuarioDTO request);
     }
 }

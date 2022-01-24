@@ -19,7 +19,8 @@ namespace ReservaSitio.Abstraction.IService.Usuario
 
 
 
-
+        public Task<ResultDTO<UsuarioDTO>> RegisterUsuarioAcceso(UsuarioDTO request);
+        public Task<ResultDTO<UsuarioDTO>> RegisterUsuarioIntentoLogeo(UsuarioDTO request);
 
     }
 }

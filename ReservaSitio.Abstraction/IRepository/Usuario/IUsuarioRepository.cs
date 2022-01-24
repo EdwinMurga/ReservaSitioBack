@@ -16,5 +16,8 @@ namespace ReservaSitio.Abstraction.IRepository
         public Task<ResultDTO<UsuarioDTO>> GetListUsuario(UsuarioListDTO request);
 
         public Task<ResultDTO<UsuarioDTO>> GetUsuarioParameter(UsuarioDTO request);
+
+        public Task<ResultDTO<UsuarioDTO>> RegisterUsuarioAcceso(UsuarioDTO request);
+        public Task<ResultDTO<UsuarioDTO>> RegisterUsuarioIntentoLogeo(UsuarioDTO request);
     }
 }

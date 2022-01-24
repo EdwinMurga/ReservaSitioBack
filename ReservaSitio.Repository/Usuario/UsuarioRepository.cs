@@ -277,6 +277,103 @@ namespace ReservaSitio.Repository.Usuario
             }
             return res;
         }
+
+        public async Task<ResultDTO<UsuarioDTO>> RegisterUsuarioIntentoLogeo(UsuarioDTO request)
+        {
+            ResultDTO<UsuarioDTO> res = new ResultDTO<UsuarioDTO>();
+            using (TransactionScope scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
+            {
+                try
+                {
+
+                    using (var cn = new SqlConnection(_connectionString))
+                    {
+                        var parameters = new DynamicParameters();
+                        parameters.Add("@p_iid_usuario", request.iid_usuario);
+
+
+                        using (var lector = await cn.ExecuteReaderAsync("[dbo].[SP_USUARIO_INTENTO_LOGEO_ACTUALIZA]", parameters, commandType: CommandType.StoredProcedure, transaction: mConnection.GetTransaction()))
+                        {
+                            while (lector.Read())
+                            {
+                                res.Codigo = Convert.ToInt32(lector["id"].ToString());
+                                res.IsSuccess = true;
+                                res.Message = UtilMensajes.strInformnacionGrabada;
+                            }
+                        }
+                        await mConnection.Complete();
+                    }
+
+
+                    scope.Complete();
+                }
+                catch (Exception e)
+                {
+                    scope.Dispose();
+                    res.IsSuccess = false;
+                    res.Message = UtilMensajes.strInformnacionNoGrabada;
+                    res.InnerException = e.Message.ToString();
+
+                    LogErrorDTO lg = new LogErrorDTO();
+                    lg.iid_usuario_registra = request.iid_usuario_registra;
+                    lg.vdescripcion = e.Message.ToString();
+                    lg.vcodigo_mensaje = e.Message.ToString();
+                    lg.vorigen = this.ToString();
+                    this.iLogErrorRepository.RegisterLogError(lg);
+                }
+            }
+            return res;
+        }
+        #endregion
+
+        #region "usuario  Seguridad"
+        public async Task<ResultDTO<UsuarioDTO>> RegisterUsuarioSeguridadInserta(UsuarioDTO request)
+        {
+            ResultDTO<UsuarioDTO> res = new ResultDTO<UsuarioDTO>();
+            using (TransactionScope scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
+            {
+                try
+                {
+
+                    using (var cn = new SqlConnection(_connectionString))
+                    {
+                        var parameters = new DynamicParameters();
+                        parameters.Add("@p_iid_usuario", request.iid_usuario);
+                        parameters.Add("@p_vclave", request.vclave);
+                        parameters.Add("@p_iid_usuario_registra", request.iid_usuario);
+
+                        using (var lector = await cn.ExecuteReaderAsync("[dbo].[SP_USUARIO_SEGURIDAD_INSERTAR]", parameters, commandType: CommandType.StoredProcedure, transaction: mConnection.GetTransaction()))
+                        {
+                            while (lector.Read())
+                            {
+                                res.Codigo = Convert.ToInt32(lector["id"].ToString());
+                                res.IsSuccess = true;
+                                res.Message = UtilMensajes.strInformnacionGrabada;
+                            }
+                        }
+                        await mConnection.Complete();
+                    }
+
+
+                    scope.Complete();
+                }
+                catch (Exception e)
+                {
+                    scope.Dispose();
+                    res.IsSuccess = false;
+                    res.Message = UtilMensajes.strInformnacionNoGrabada;
+                    res.InnerException = e.Message.ToString();
+
+                    LogErrorDTO lg = new LogErrorDTO();
+                    lg.iid_usuario_registra = request.iid_usuario_registra;
+                    lg.vdescripcion = e.Message.ToString();
+                    lg.vcodigo_mensaje = e.Message.ToString();
+                    lg.vorigen = this.ToString();
+                    this.iLogErrorRepository.RegisterLogError(lg);
+                }
+            }
+            return res;
+        }
         #endregion
 
         #region "usuario Recuperar Clave"
@@ -292,7 +389,7 @@ namespace ReservaSitio.Repository.Usuario
                     {
                         var parameters = new DynamicParameters();
                         parameters.Add("@p_iid_usuario", request.iid_usuario);
-                        parameters.Add("@p_usrec_vtoken", request.iid_usuario);
+                        parameters.Add("@p_vtoken", request.iid_usuario);
                         parameters.Add("@p_iid_usuario_registra", request.iid_usuario_registra);
 
                         using (var lector = await cn.ExecuteReaderAsync("[dbo].[SP_USUARIO_RECUPERA_CLAVE_INSERTAR]", parameters, commandType: CommandType.StoredProcedure, transaction: mConnection.GetTransaction()))
