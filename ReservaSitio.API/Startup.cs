@@ -153,9 +153,16 @@ namespace ReservaSitio.API
             services.AddScoped(typeof(IAutenticacion), typeof(autenticacionLogic));
             services.AddScoped<ICustomConnection, CustomConnection>(_ => new CustomConnection(Configuration["ConnectionStrings:CS_ReservaSitio"]));
 
-         
 
+            services.AddScoped<IAuthenticationApplication, AuthenticationApplication>();
+            services.AddScoped<ICaptchaGoogleApplication, CaptchaGoogleApplication>();
+            services.AddScoped<ICaptchaGoogleService, CaptchaGoogleService>();
             
+            services.AddScoped<IUsuarioAplication, UsuarioAplication>();
+            services.AddScoped<IUsuarioServices, UsuarioServices>();
+            services.AddScoped<IUsuarioRepository, UsuarioRepository>();
+
+
             services.AddScoped<ILogErrorAplication, LogErrorAplication>();
             services.AddScoped<ILogErrorServices, LogErrorServices>();
             services.AddScoped<ILogErrorRepository, LogErrorRepository>();
@@ -190,9 +197,7 @@ namespace ReservaSitio.API
             services.AddScoped<IOpcionServices, OpcionServices>();
             services.AddScoped<IOpcionRepository, OpcionRepository>();
 
-            services.AddScoped<IUsuarioAplication, UsuarioAplication>();
-            services.AddScoped<IUsuarioServices, UsuarioServices>();
-            services.AddScoped<IUsuarioRepository, UsuarioRepository>();
+
 
 
             services.AddScoped<IPlantillaCorreoAplication, PlantillaCorreoAplication>();

@@ -8,9 +8,7 @@ using ReservaSitio.API.DTOs;
 namespace ReservaSitio.Abstraction.IApplication.Auth
 {
     public interface IAuthenticationApplication
-    {
-       
+    {       
         Boolean validarGoogleCaptcha(LoginDTO user);
-       // bool registrarIntentoBloqueo(string strNumeroDocumento, int op);
     }
 }

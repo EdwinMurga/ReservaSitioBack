@@ -50,7 +50,7 @@ namespace ReservaSitio.API.Controllers.Opciones
                 lg.vdescripcion = e.Message.ToString();
                 lg.vcodigo_mensaje = e.Message.ToString();
                 lg.vorigen = sorigen;
-                this.iLogErrorAplication.RegisterLogError(lg);
+                await this.iLogErrorAplication.RegisterLogError(lg);
 
                 return BadRequest(res);
             }
@@ -80,7 +80,7 @@ namespace ReservaSitio.API.Controllers.Opciones
                 lg.vdescripcion = e.Message.ToString();
                 lg.vcodigo_mensaje = e.Message.ToString();
                 lg.vorigen = sorigen;
-                this.iLogErrorAplication.RegisterLogError(lg);
+                await this.iLogErrorAplication.RegisterLogError(lg);
 
                 return BadRequest(res);
             }
@@ -112,7 +112,7 @@ namespace ReservaSitio.API.Controllers.Opciones
                 lg.vdescripcion = e.Message.ToString();
                 lg.vcodigo_mensaje = e.Message.ToString();
                 lg.vorigen = sorigen;
-                this.iLogErrorAplication.RegisterLogError(lg);
+                await this.iLogErrorAplication.RegisterLogError(lg);
 
                 return BadRequest(res);
             }

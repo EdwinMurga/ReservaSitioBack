@@ -74,7 +74,7 @@ namespace ReservaSitio.Repository.Empresa
                 lg.vdescripcion = e.Message.ToString();
                 lg.vcodigo_mensaje = e.Message.ToString();
                 lg.vorigen = this.ToString();
-                this.iLogErrorRepository.RegisterLogError(lg);
+                await this.iLogErrorRepository.RegisterLogError(lg);
             }
             return res;
         }
@@ -109,7 +109,7 @@ namespace ReservaSitio.Repository.Empresa
                     lg.vdescripcion = e.Message.ToString();
                     lg.vcodigo_mensaje = e.Message.ToString();
                     lg.vorigen = this.ToString();
-                    this.iLogErrorRepository.RegisterLogError(lg);
+                await this.iLogErrorRepository.RegisterLogError(lg);
                 }
                 return res;
             }
@@ -164,7 +164,7 @@ namespace ReservaSitio.Repository.Empresa
                         lg.vdescripcion = e.Message.ToString();
                         lg.vcodigo_mensaje = e.Message.ToString();
                         lg.vorigen = this.ToString();
-                        this.iLogErrorRepository.RegisterLogError(lg);
+                    await this.iLogErrorRepository.RegisterLogError(lg);
                     }
                 }
                 return res;

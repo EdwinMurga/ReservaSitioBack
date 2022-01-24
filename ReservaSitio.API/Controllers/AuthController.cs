@@ -19,7 +19,7 @@ using System.Net.Http.Json;
 using Newtonsoft.Json;
 using ReservaSitio.Abstraction.IApplication.Auth;
 
-using ReservaSitio.Abstraction.IService.Auth;
+
 
 
 using RestSharp;
@@ -37,64 +37,63 @@ namespace ReservaSitio.API.Controllers
     [ApiController]
     public class AuthController : ControllerBase
     {
-        private readonly UserManager<IdentityUser> _userManager;
-        private ITokenHandlerService _service;
-        //private IAuthenticationService _authService;
+        //private readonly UserManager<IdentityUser> _userManager;
+        private readonly ITokenHandlerService iITokenHandlerService;     
         private readonly IConfiguration Configuration;
-       // private IAutenticacion _autenticacion;
-        private IAuthenticationApplication _authApplication;
-     //   private static HttpClient client = new HttpClient();
-      //  private AuthenticationResponse existingUser = new AuthenticationResponse();
-     
-        //private HttpClient _httpClient = new HttpClient();
-
-        public int intEstadoBloqueado = 4;
-       private ILogger<AuthController> _logger;
-
+        private readonly IAutenticacion iIAutenticacion;
+        private readonly IAuthenticationApplication iIAuthenticationApplication;
+        private readonly ILogger<AuthController> _logger;
         private readonly ILogErrorAplication iLogErrorAplication;
         private readonly IUsuarioAplication iIUsuarioAplication;
-        public AuthController(
-            UserManager<IdentityUser> userManager, 
-            ITokenHandlerService service,
-            IAutenticacion autenticacion, 
-            IAuthenticationApplication authApplication,
-            IAuthenticationService authService, 
-            IConfiguration configuration, 
-            ILogger<AuthController> logger,
 
+        //   private static HttpClient client = new HttpClient();
+        //  private AuthenticationResponse existingUser = new AuthenticationResponse();
+        //private IAuthenticationService _authService;
+        // private IAutenticacion _autenticacion;
+        //private HttpClient _httpClient = new HttpClient();
+        public AuthController(
+       
+            ITokenHandlerService ITokenHandlerService,
+            IConfiguration configuration,
+            IAutenticacion autenticacion, 
+            IAuthenticationApplication IAuthenticationApplication,           
+            ILogger<AuthController> logger,
             ILogErrorAplication ILogErrorAplication,
             IUsuarioAplication IUsuarioAplication
+            // UserManager<IdentityUser> userManager, 
+            // IAuthenticationService authService, 
             )
         {
-            this.Configuration = configuration;
-            _userManager = userManager;
-           // _autenticacion = autenticacion;
-         _service = service;
-            _authApplication = authApplication;
-           // _authService = authService;
-            _logger = logger;
+            this.Configuration = configuration;          
+            this.iITokenHandlerService = ITokenHandlerService;
+            this.iIAuthenticationApplication = IAuthenticationApplication;
+            this._logger = logger;
 
             this.iLogErrorAplication = ILogErrorAplication;
             this.iIUsuarioAplication = IUsuarioAplication;
+
+            // _userManager = userManager;
+            // _autenticacion = autenticacion;
+            // _authService = authService;
         }
 
- 
+
         //[HttpPost]
         //[Route("GenerateTokenLogin")]
-       /* public IActionResult GenerateJwtTokenLogin([FromBody] ITokenParameters pars)
-        {
-            try
-            {
-                string jwtToken = _service.GenerateToken(pars);
-                _logger.LogInformation("This is an INFORMATION message.");
-                return Ok(jwtToken);
-            }
-            catch (Exception e)
-            {
-                _logger.LogError("This is an ERROR message.");
-                return BadRequest(e.Message);
-            }
-        }*/
+        /* public IActionResult GenerateJwtTokenLogin([FromBody] ITokenParameters pars)
+         {
+             try
+             {
+                 string jwtToken = _service.GenerateToken(pars);
+                 _logger.LogInformation("This is an INFORMATION message.");
+                 return Ok(jwtToken);
+             }
+             catch (Exception e)
+             {
+                 _logger.LogError("This is an ERROR message.");
+                 return BadRequest(e.Message);
+             }
+         }*/
 
         //[HttpPost]
         //[Route("DesencriptTokenLogin/{token}")]
@@ -114,21 +113,21 @@ namespace ReservaSitio.API.Controllers
 
         //[HttpPost]
         //[Route("GenerateTokenPasswordRecover")]
-       /* public IActionResult GenerateJwtTokenPasswordRecover([FromBody] ITokenParameters pars)
-        {
-            try
-            {
-                string jwtToken = _service.GenerateJwtTokenPasswordRecover(pars);
-                return Ok(jwtToken);
-            }
-            catch (Exception e)
-            {
-                return BadRequest(e.Message);
-            }
-        }*/
+        /* public IActionResult GenerateJwtTokenPasswordRecover([FromBody] ITokenParameters pars)
+         {
+             try
+             {
+                 string jwtToken = _service.GenerateJwtTokenPasswordRecover(pars);
+                 return Ok(jwtToken);
+             }
+             catch (Exception e)
+             {
+                 return BadRequest(e.Message);
+             }
+         }*/
 
         //[HttpPost]
-       // [Route("DesencriptTokenPassword/{token}")]
+        // [Route("DesencriptTokenPassword/{token}")]
         /*public IActionResult GetObjectTokenPasswordRecover(string token)
         {
             try
@@ -157,7 +156,7 @@ namespace ReservaSitio.API.Controllers
 
             try
             {
-                var validCaptcha = _authApplication.validarGoogleCaptcha(resquest);
+                var validCaptcha = iIAuthenticationApplication.validarGoogleCaptcha(resquest);
                 res = await this.iIUsuarioAplication.GetUsuarioParameter(resUser);
 
                 /*if (!validCaptcha)
@@ -208,7 +207,7 @@ namespace ReservaSitio.API.Controllers
                 else
                 {
 
-                    await this.iIUsuarioAplication.RegisterUsuario(resUser);
+                   // await this.iIUsuarioAplication.RegisterUsuario(resUser);
 
                     resLogin.IsSuccess = true;
                     resLogin.Message = "Usuario, Logeado ";
@@ -238,7 +237,7 @@ namespace ReservaSitio.API.Controllers
                 lg.vdescripcion = e.Message.ToString();
                 lg.vcodigo_mensaje = e.Message.ToString();
                 lg.vorigen = sorigen;
-                this.iLogErrorAplication.RegisterLogError(lg);
+                await this.iLogErrorAplication.RegisterLogError(lg);
 
                 return BadRequest(res);
             }
@@ -259,7 +258,7 @@ namespace ReservaSitio.API.Controllers
                 lgdto.GoogleToken = request.GoogleToken;
                 resUser.vcorreo_electronico = request.UserName;
                 //resUser.vclave = request.Password;
-                var validCaptcha = _authApplication.validarGoogleCaptcha(lgdto);
+                var validCaptcha = iIAuthenticationApplication.validarGoogleCaptcha(lgdto);
                 res = await this.iIUsuarioAplication.GetUsuarioParameter(resUser);
                 /*if (!validCaptcha)
                 {
@@ -304,7 +303,7 @@ namespace ReservaSitio.API.Controllers
                 lg.vdescripcion = e.Message.ToString();
                 lg.vcodigo_mensaje = e.Message.ToString();
                 lg.vorigen = sorigen;
-                this.iLogErrorAplication.RegisterLogError(lg);
+                await this.iLogErrorAplication.RegisterLogError(lg);
 
                 return BadRequest(res);
             }

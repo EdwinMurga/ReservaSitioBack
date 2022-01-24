@@ -78,7 +78,7 @@ namespace ReservaSitio.Repository.Usuario
                 lg.vdescripcion = e.Message.ToString();
                 lg.vcodigo_mensaje = e.Message.ToString();
                 lg.vorigen = this.ToString();
-                this.iLogErrorRepository.RegisterLogError(lg);
+                await this.iLogErrorRepository.RegisterLogError(lg);
             }
             return res;
         }
@@ -114,7 +114,7 @@ namespace ReservaSitio.Repository.Usuario
                 lg.vdescripcion = e.Message.ToString();
                 lg.vcodigo_mensaje = e.Message.ToString();
                 lg.vorigen = this.ToString();
-                this.iLogErrorRepository.RegisterLogError(lg);
+                await this.iLogErrorRepository.RegisterLogError(lg);
             }
             return res;
         }
@@ -155,7 +155,7 @@ namespace ReservaSitio.Repository.Usuario
                 lg.vdescripcion = e.Message.ToString();
                 lg.vcodigo_mensaje = e.Message.ToString();
                 lg.vorigen = this.ToString();
-                this.iLogErrorRepository.RegisterLogError(lg);
+                await this.iLogErrorRepository.RegisterLogError(lg);
             }
             return res;
         }
@@ -221,7 +221,7 @@ namespace ReservaSitio.Repository.Usuario
                     lg.vdescripcion = e.Message.ToString();
                     lg.vcodigo_mensaje = e.Message.ToString();
                     lg.vorigen = this.ToString();
-                    this.iLogErrorRepository.RegisterLogError(lg);
+                    await this.iLogErrorRepository.RegisterLogError(lg);
                 }
             }
             return res;
@@ -272,7 +272,7 @@ namespace ReservaSitio.Repository.Usuario
                     lg.vdescripcion = e.Message.ToString();
                     lg.vcodigo_mensaje = e.Message.ToString();
                     lg.vorigen = this.ToString();
-                    this.iLogErrorRepository.RegisterLogError(lg);
+                    await this.iLogErrorRepository.RegisterLogError(lg);
                 }
             }
             return res;
@@ -319,7 +319,7 @@ namespace ReservaSitio.Repository.Usuario
                     lg.vdescripcion = e.Message.ToString();
                     lg.vcodigo_mensaje = e.Message.ToString();
                     lg.vorigen = this.ToString();
-                    this.iLogErrorRepository.RegisterLogError(lg);
+                    await this.iLogErrorRepository.RegisterLogError(lg);
                 }
             }
             return res;
@@ -369,7 +369,7 @@ namespace ReservaSitio.Repository.Usuario
                     lg.vdescripcion = e.Message.ToString();
                     lg.vcodigo_mensaje = e.Message.ToString();
                     lg.vorigen = this.ToString();
-                    this.iLogErrorRepository.RegisterLogError(lg);
+                    await this.iLogErrorRepository.RegisterLogError(lg);
                 }
             }
             return res;
@@ -419,7 +419,7 @@ namespace ReservaSitio.Repository.Usuario
                     lg.vdescripcion = e.Message.ToString();
                     lg.vcodigo_mensaje = e.Message.ToString();
                     lg.vorigen = this.ToString();
-                    this.iLogErrorRepository.RegisterLogError(lg);
+                    await this.iLogErrorRepository.RegisterLogError(lg);
                 }
             }
             return res;

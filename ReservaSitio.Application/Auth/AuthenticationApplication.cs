@@ -13,27 +13,18 @@ namespace ReservaSitio.Application.Auth
 {
     public class AuthenticationApplication : IAuthenticationApplication
     {
-        private IAuthenticationService _authService;
-        private ICaptchaGoogleApplication _captchaGoogleApp;
+        private readonly ICaptchaGoogleApplication _captchaGoogleApp;
        
         
-        public AuthenticationApplication(
-            IAuthenticationService authService, 
-            ICaptchaGoogleApplication captchaGoogleApp)
-        {
-            _authService = authService;       
+        public AuthenticationApplication(   ICaptchaGoogleApplication captchaGoogleApp)
+        {        
             _captchaGoogleApp = captchaGoogleApp;
         }
   
         public  Boolean validarGoogleCaptcha(LoginDTO user)
         {
-            bool validate =  _captchaGoogleApp.ValidateCaptcha(user.GoogleToken);
-            return validate;
+            return _captchaGoogleApp.ValidateCaptcha(user.GoogleToken);           
         }
 
-       /* public bool registrarIntentoBloqueo(string strNumeroDocumento, int op)
-        {
-            return _usuarioService.ActualizarIntentoBloqueo(strNumeroDocumento, op);
-        }*/
     }
 }

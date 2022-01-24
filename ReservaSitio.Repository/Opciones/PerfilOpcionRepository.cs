@@ -83,7 +83,7 @@ namespace ReservaSitio.Repository.Opcion
                     lg.vdescripcion = e.Message.ToString();
                     lg.vcodigo_mensaje = e.Message.ToString();
                     lg.vorigen = this.ToString();
-                    this.iLogErrorRepository.RegisterLogError(lg);
+                    await this.iLogErrorRepository.RegisterLogError(lg);
                 }
             }
             return res;
@@ -123,6 +123,13 @@ namespace ReservaSitio.Repository.Opcion
                     res.IsSuccess = false;
                     res.Message = UtilMensajes.strInformnacionNoGrabada;
                     res.InnerException = e.Message.ToString();
+
+                    LogErrorDTO lg = new LogErrorDTO();
+                    lg.iid_usuario_registra = 0;
+                    lg.vdescripcion = e.Message.ToString();
+                    lg.vcodigo_mensaje = e.Message.ToString();
+                    lg.vorigen = this.ToString();
+                    await this.iLogErrorRepository.RegisterLogError(lg);
                 }
             }
             return res;
@@ -159,7 +166,7 @@ namespace ReservaSitio.Repository.Opcion
                 lg.vdescripcion = e.Message.ToString();
                 lg.vcodigo_mensaje = e.Message.ToString();
                 lg.vorigen = this.ToString();
-                this.iLogErrorRepository.RegisterLogError(lg);
+                await this.iLogErrorRepository.RegisterLogError(lg);
             }
             return res;
         }
@@ -199,7 +206,7 @@ namespace ReservaSitio.Repository.Opcion
                 lg.vdescripcion = e.Message.ToString();
                 lg.vcodigo_mensaje = e.Message.ToString();
                 lg.vorigen = this.ToString();
-                this.iLogErrorRepository.RegisterLogError(lg);
+                await this.iLogErrorRepository.RegisterLogError(lg);
             }
             return res;
         }
@@ -290,7 +297,7 @@ namespace ReservaSitio.Repository.Opcion
                 lg.vdescripcion = e.Message.ToString();
                 lg.vcodigo_mensaje = e.Message.ToString();
                 lg.vorigen = this.ToString();
-                this.iLogErrorRepository.RegisterLogError(lg);
+                await this.iLogErrorRepository.RegisterLogError(lg);
             }
             return res;
         }
