@@ -7,18 +7,25 @@ using System.Threading.Tasks;
 namespace ReservaSitio.DTOs.Auth
 {
     public class AuthenticationResponse
-    {
-        public int Id { get; set; }
-        public string PasswordHash { get; set; }
-        public string UserName { get; set; }
-        public int idPerfil { get; set; }
-        public string nombreCompleto { get; set; }
-        public string vcodigo { get; set; }
-        public string vcodigoCentro { get; set; }
-        public string vcodigoAlmacen { get; set; }
-        public string vcorreoElectronico { get; set; }
-        public int iestado_registro { get; set; }
-        public int minutoBloqueo { get; set; }
-        public List<string> Errors { get; set; }
-    }
+	{
+		public int iid_usuario { get; set; }
+		public int iid_perfil { get; set; }
+		public string perfil { get; set; }
+		public int iid_tipo_documento { get; set; }
+		public string tipo_documento { get; set; }
+		public string vnro_documento { get; set; }
+		public string vnombres { get; set; }
+		public string vapellido_paterno { get; set; }
+		public string vapellido_materno { get; set; }
+		public string vcorreo_electronico { get; set; }
+		public string vnumero_telefonico { get; set; }
+	 
+		public DateTime dfecha_caduca_clave { get; set; }
+		//public DateTime dfecha_cambio_clave { get; set; }
+		//public int cantidad_intentos { get; set; }
+		//public int iid_indica_bloqueo { get; set; }
+		public DateTime dfecha_ultimo_acceso { get; set; }
+		public int iid_empresa { get; set; }
+		public string empresa { get; set; }
+	}
 }

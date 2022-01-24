@@ -28,11 +28,9 @@ using ReservaSitio.DataAccess.CustomConnection;
 using ReservaSitio.Abstraction.IRepository;
 
 using ReservaSitio.Abstraction.IApplication.Auth;
-using ReservaSitio.Abstraction.IRepository.Auth;
 using ReservaSitio.Abstraction.IService.Auth;
 
 using ReservaSitio.Application.Auth;
-using ReservaSitio.Repository.Auth;
 using ReservaSitio.Services.Auth;
 
 
@@ -212,7 +210,7 @@ namespace ReservaSitio.API
             services.AddScoped<ITablaParametroServices, TablaParametroServices>();
             services.AddScoped<ITablaParametroRepository, TablaParametroRepository>();
 
-            services.AddScoped<IAuthenticationRepository, AuthenticationRepository>();
+            //services.AddScoped<IAuthenticationRepository, AuthenticationRepository>();
 
 
             services.AddScoped<ICaptchaGoogleApplication, CaptchaGoogleApplication>();

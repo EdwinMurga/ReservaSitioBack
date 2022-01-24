@@ -14,4 +14,8 @@
     <ProjectReference Include="..\ReservaSitio.Entities\ReservaSitio.Entities.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Auth\" />
+  </ItemGroup>
+
 </Project>

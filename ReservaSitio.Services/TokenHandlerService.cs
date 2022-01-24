@@ -7,15 +7,18 @@ using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using ReservaSitio.Abstraction;
+using ReservaSitio.Abstraction.IService.ParametrosAplicacion;
+using ReservaSitio.DTOs.ParametroAplicacion;
 
 namespace ReservaSitio.Services
 {
     public interface ITokenHandlerService
     {
-        string GenerateToken(ITokenParameters pars);
+       public string GenerateToken(ITokenParameters pars);
         ITokenParameters GetObjectToken(string token);
         string GenerateJwtTokenPasswordRecover(ITokenParameters pars);
         ITokenParameters GetObjectTokenPasswordRecover(string token);
@@ -25,16 +28,23 @@ namespace ReservaSitio.Services
     public class TokenHandlerService : ITokenHandlerService
     {
         private readonly JwtConfig _jwtConfig;
-
+        private readonly IParametroServices iIParametroServices;
+        private readonly IConfiguration iIConfiguration;
         public bool IsTokenValido { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
 
-        public TokenHandlerService(IOptionsMonitor<JwtConfig> optionsMonitor)
+        public TokenHandlerService(IOptionsMonitor<JwtConfig> optionsMonitor
+            , IParametroServices IParametroServices
+            , IConfiguration IConfiguration)
         {
-            _jwtConfig = optionsMonitor.CurrentValue;
+            this._jwtConfig = optionsMonitor.CurrentValue;
+            this.iIParametroServices = IParametroServices;
+            this.iIConfiguration = IConfiguration;
         }
 
         public string GenerateToken(ITokenParameters pars)
         {
+        
+
             //pars = new ITokenParameters();
             var jwtTokenHandler = new JwtSecurityTokenHandler();
             var key= Encoding.ASCII.GetBytes(_jwtConfig.Secret);
@@ -48,7 +58,7 @@ namespace ReservaSitio.Services
                     new Claim(JwtRegisteredClaimNames.Email, pars.UserName)
                 }),
 
-                Expires = DateTime.UtcNow.AddHours(1),
+                Expires = DateTime.UtcNow.AddHours(Convert.ToInt32(this.iIConfiguration["JwtTimeExpire"])),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             };
 

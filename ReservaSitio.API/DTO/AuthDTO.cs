@@ -14,7 +14,7 @@ namespace ReservaSitio.API.DTOs
         public string Message { get; set; }
         public string MessageExeption { get; set; }
         public string Informacion { get; set; }
-        public List<T> data { get; set; }
+        public T data { get; set; }
         public string Token{get;set;}
     }
 

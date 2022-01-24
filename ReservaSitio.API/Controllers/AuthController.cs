@@ -30,6 +30,9 @@ using ReservaSitio.Abstraction.IApplication.LogError;
 using ReservaSitio.DTOs.Usuario;
 using ReservaSitio.Abstraction.IApplication.Usuario;
 using ReservaSitio.DTOs;
+using ReservaSitio.DTOs.Auth;
+using ReservaSitio.Abstraction.IApplication.Perfiles;
+using ReservaSitio.Abstraction.IApplication.Empresa;
 
 namespace ReservaSitio.API.Controllers
 {
@@ -45,6 +48,8 @@ namespace ReservaSitio.API.Controllers
         private readonly ILogger<AuthController> _logger;
         private readonly ILogErrorAplication iLogErrorAplication;
         private readonly IUsuarioAplication iIUsuarioAplication;
+        private readonly IPerfilAplication iIPerfilAplication;
+        private readonly IEmpresaAplication iIEmpresaAplicacion;
 
         //   private static HttpClient client = new HttpClient();
         //  private AuthenticationResponse existingUser = new AuthenticationResponse();
@@ -56,10 +61,14 @@ namespace ReservaSitio.API.Controllers
             ITokenHandlerService ITokenHandlerService,
             IConfiguration configuration,
             IAutenticacion autenticacion, 
-            IAuthenticationApplication IAuthenticationApplication,           
+            IAuthenticationApplication IAuthenticationApplication,     
+            
             ILogger<AuthController> logger,
             ILogErrorAplication ILogErrorAplication,
-            IUsuarioAplication IUsuarioAplication
+
+            IUsuarioAplication IUsuarioAplication,
+            IPerfilAplication IPerfilAplication,
+            IEmpresaAplication IEmpresaAplication
             // UserManager<IdentityUser> userManager, 
             // IAuthenticationService authService, 
             )
@@ -71,7 +80,8 @@ namespace ReservaSitio.API.Controllers
 
             this.iLogErrorAplication = ILogErrorAplication;
             this.iIUsuarioAplication = IUsuarioAplication;
-
+            this.iIPerfilAplication = IPerfilAplication;
+            this.iIEmpresaAplicacion = IEmpresaAplication;
             // _userManager = userManager;
             // _autenticacion = autenticacion;
             // _authService = authService;
@@ -147,7 +157,7 @@ namespace ReservaSitio.API.Controllers
         public async Task<IActionResult> Login([FromBody] LoginDTO resquest) 
         {
 
-            LoginResponseDTO<string> resLogin = new LoginResponseDTO<string>();
+            LoginResponseDTO<AuthenticationResponse> resLogin = new LoginResponseDTO<AuthenticationResponse>();
             ResultDTO<UsuarioDTO> res = new ResultDTO<UsuarioDTO>();
             UsuarioDTO resUser = new UsuarioDTO();
             resUser.vcorreo_electronico = resquest.UserName;
@@ -177,7 +187,7 @@ namespace ReservaSitio.API.Controllers
 
                     return Ok(resLogin);
                 }
-                else if  (res.IsSuccess && res.item == null && res.item.cantidad_intentos < 4) // && contrasena != res.item.vclave 
+                else if  (res.IsSuccess && res.item == null && res.item.cantidad_intentos < 4) // && resquest.Password != res.item.vclave 
                 {
                     resLogin.IsSuccess = false;
                     resLogin.Message = "Usuario, "+ (res.item.cantidad_intentos < 4 ? " bloqueado excedio el intento de logeo " : " intento de logeo  " + res.item.cantidad_intentos.ToString())  ;
@@ -207,11 +217,44 @@ namespace ReservaSitio.API.Controllers
                 else
                 {
 
-                   // await this.iIUsuarioAplication.RegisterUsuario(resUser);
-
                     resLogin.IsSuccess = true;
                     resLogin.Message = "Usuario, Logeado ";
-                    resLogin.Token = "";
+                    // await this.iIUsuarioAplication.RegisterUsuario(resUser);
+                    /*********info usuario ************/
+
+                    var resperf = await this.iIPerfilAplication.GetPerfil(new ReservaSitio.DTOs.Opciones.PerfilDTO { iid_perfil = res.item.iid_perfil });
+                    var resempr = await this.iIEmpresaAplicacion.GetEmpresa(new ReservaSitio.DTOs.Empresa.EmpresaDTO { iid_empresa = res.item.iid_empresa });
+
+                
+                    AuthenticationResponse usrRespon = new AuthenticationResponse();
+                    usrRespon.iid_usuario = res.item.iid_usuario;
+                    usrRespon.vnombres = res.item.vnombres;
+                    usrRespon.vapellido_materno = res.item.vapellido_materno;
+                    usrRespon.vapellido_paterno = res.item.vapellido_paterno;
+                    usrRespon.vcorreo_electronico = res.item.vcorreo_electronico;
+                    usrRespon.iid_perfil = res.item.iid_perfil;
+                    usrRespon.perfil = resperf.item.vnombre_perfil;
+                    usrRespon.iid_tipo_documento = res.item.iid_tipo_documento;
+                    usrRespon.vnumero_telefonico = res.item.vnumero_telefonico;
+                    usrRespon.vnombres = res.item.vnombres;
+                    usrRespon.vnro_documento = res.item.vnro_documento;
+                    usrRespon.dfecha_caduca_clave = res.item.dfecha_caduca_clave;
+                    usrRespon.dfecha_ultimo_acceso = res.item.dfecha_ultimo_acceso;
+                    usrRespon.iid_empresa = res.item.iid_empresa;
+                    usrRespon.empresa = resempr.item.vnombre_completo;
+
+
+                    resLogin.data = usrRespon;
+                    /********* info usuario ************/
+
+                    /********* token usuario ************/
+                    ITokenParameters tparm = new ITokenParameters();
+                    tparm.UserName = res.item.vcorreo_electronico;
+                    tparm.PasswordHash = res.item.vclave;
+                    tparm.Id = res.item.iid_usuario.ToString();
+                    tparm.FechaCaduca = DateTime.Now;// res.item.dfecha_caduca_clave;
+
+                    resLogin.Token =   this.iITokenHandlerService.GenerateToken(tparm);
 
                     /** registra intento de logeo **/
                     //resUser.iid_usuario = res.item.iid_usuario;
