@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using ReservaSitio.Abstraction.IApplication.LogError;
 using ReservaSitio.Abstraction.IApplication.ParametrosAplicacion;
@@ -13,6 +14,7 @@ namespace ReservaSitio.API.Controllers.ParametroAplicacion
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class PlantillaCorreoController : Controller
     {
         // GET: PlantillaCorreoController

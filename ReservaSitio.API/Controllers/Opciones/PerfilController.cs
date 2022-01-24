@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using ReservaSitio.Abstraction.IApplication.Opciones;
 using ReservaSitio.Abstraction.IApplication.Perfiles;
@@ -13,6 +14,7 @@ namespace ReservaSitio.API.Controllers.Perfiles
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class PerfilController : Controller
     {
         private readonly IPerfilAplication iIPerfilAplication;

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using ReservaSitio.Abstraction.IApplication.Empresa;
 using ReservaSitio.Abstraction.IApplication.LogError;
@@ -13,6 +14,7 @@ namespace ReservaSitio.API.Controllers.Empresa
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class EmpresaController : Controller
     {
         private readonly IEmpresaAplication iEmpresaAplication;

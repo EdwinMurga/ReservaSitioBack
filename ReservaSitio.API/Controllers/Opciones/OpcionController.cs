@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using ReservaSitio.Abstraction.IApplication.Opciones;
 using ReservaSitio.DTOs;
@@ -12,6 +13,7 @@ namespace ReservaSitio.API.Controllers.Opciones
 {
      [Route("api/[controller]")]
      [ApiController]
+    [Authorize]
     public class OpcionController : Controller
     {
         // GET: OpcionController

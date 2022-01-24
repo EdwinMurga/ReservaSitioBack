@@ -239,7 +239,7 @@ namespace ReservaSitio.Repository.Usuario
                 try
                 {
 
-                    using (var cn = new SqlConnection(_connectionString))
+                    using (var cn = await mConnection.BeginConnection(true))
                     {
                         var parameters = new DynamicParameters();
                         parameters.Add("@p_iid_usuario", request.iid_usuario);
@@ -286,8 +286,9 @@ namespace ReservaSitio.Repository.Usuario
                 try
                 {
 
-                    using (var cn = new SqlConnection(_connectionString))
+                    using (var cn = await mConnection.BeginConnection(true))
                     {
+                       
                         var parameters = new DynamicParameters();
                         parameters.Add("@p_iid_usuario", request.iid_usuario);
 
@@ -335,7 +336,7 @@ namespace ReservaSitio.Repository.Usuario
                 try
                 {
 
-                    using (var cn = new SqlConnection(_connectionString))
+                    using (var cn = await mConnection.BeginConnection(true))
                     {
                         var parameters = new DynamicParameters();
                         parameters.Add("@p_iid_usuario", request.iid_usuario);
@@ -385,7 +386,7 @@ namespace ReservaSitio.Repository.Usuario
                 try
                 {
 
-                    using (var cn = new SqlConnection(_connectionString))
+                    using (var cn = await mConnection.BeginConnection(true))
                     {
                         var parameters = new DynamicParameters();
                         parameters.Add("@p_iid_usuario", request.iid_usuario);

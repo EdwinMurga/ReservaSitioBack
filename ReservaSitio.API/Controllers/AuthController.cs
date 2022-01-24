@@ -219,6 +219,10 @@ namespace ReservaSitio.API.Controllers
 
                     resLogin.IsSuccess = true;
                     resLogin.Message = "Usuario, Logeado ";
+
+
+                    /********registra acceso****/
+                    await this.iIUsuarioAplication.RegisterUsuarioAcceso(res.item);
                     // await this.iIUsuarioAplication.RegisterUsuario(resUser);
                     /*********info usuario ************/
 
@@ -322,9 +326,8 @@ namespace ReservaSitio.API.Controllers
                     resLogin.Message = "Usuario, su clave fue recuperada ";
                     resLogin.Token = "";
 
-                    /** registra intento de logeo **/
-                    //resUser.iid_usuario = res.item.iid_usuario;
-                    //await this.iIUsuarioAplication.RegisterUsuarioIntentoLogeo(resUser);
+                    
+                
 
                     return Ok(resLogin);
 
