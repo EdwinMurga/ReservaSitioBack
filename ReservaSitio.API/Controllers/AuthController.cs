@@ -33,6 +33,7 @@ using ReservaSitio.DTOs;
 using ReservaSitio.DTOs.Auth;
 using ReservaSitio.Abstraction.IApplication.Perfiles;
 using ReservaSitio.Abstraction.IApplication.Empresa;
+using System.Security.Claims;
 
 namespace ReservaSitio.API.Controllers
 {
@@ -182,15 +183,15 @@ namespace ReservaSitio.API.Controllers
                     resLogin.Token = "";
 
                     /** registra intento de logeo **/
-                    resUser.iid_usuario = res.item.iid_usuario;
+                   // resUser.iid_usuario = res.item.iid_usuario;
                     //await this.iIUsuarioAplication.RegisterUsuarioIntentoLogeo(resUser);
 
                     return Ok(resLogin);
                 }
-                else if  (res.IsSuccess && res.item == null && res.item.cantidad_intentos < 4) // && resquest.Password != res.item.vclave 
+                else if  (res.IsSuccess && res.item != null  && resquest.Password != res.item.vclave  && res.item.iid_indica_bloqueo == 0) // && res.item.cantidad_intentos >=3
                 {
                     resLogin.IsSuccess = false;
-                    resLogin.Message = "Usuario, "+ (res.item.cantidad_intentos < 4 ? " bloqueado excedio el intento de logeo " : " intento de logeo  " + res.item.cantidad_intentos.ToString())  ;
+                    resLogin.Message = "Usuario, "+ (res.item.cantidad_intentos >= 3 ? " bloqueado excedio los intentos de logeo " : " intento de logeo  " + (res.item.cantidad_intentos==0? "": res.item.cantidad_intentos.ToString()))  ;
                     resLogin.Token = "";
 
                     /** registra intento de logeo **/
@@ -200,7 +201,7 @@ namespace ReservaSitio.API.Controllers
                     return Ok(resLogin);
                 }
 
-                else if (res.IsSuccess && res.item == null && res.item.iid_indica_bloqueo == 1 )  
+                else if (res.IsSuccess && res.item != null && res.item.iid_indica_bloqueo == 1 )  
                 {
                     resLogin.IsSuccess = false;
                     resLogin.Message = "Usuario, "+ res.item.vcorreo_electronico + " actualmente bloqueado";
@@ -222,6 +223,8 @@ namespace ReservaSitio.API.Controllers
 
 
                     /********registra acceso****/
+                    res.item.iid_usuario_registra = res.item.iid_usuario;
+
                     await this.iIUsuarioAplication.RegisterUsuarioAcceso(res.item);
                     // await this.iIUsuarioAplication.RegisterUsuario(resUser);
                     /*********info usuario ************/

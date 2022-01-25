@@ -136,7 +136,7 @@ namespace ReservaSitio.Repository.Usuario
                 {
 
                     var query = await cn.QueryAsync<UsuarioDTO>("[dbo].[SP_USUARIO_BY_PARAMETER]", parameters, commandType: System.Data.CommandType.StoredProcedure);
-                    item = (UsuarioDTO)query.FirstOrDefault();
+                    item = (query.Any() == true ? (UsuarioDTO)query.FirstOrDefault() : null);
                     res.IsSuccess = (query.Any() == true ? true : false);
                 }
                 // await mConnection.Complete();
