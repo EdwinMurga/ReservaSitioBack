@@ -8,6 +8,7 @@ using ReservaSitio.DTOs.Usuario;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace ReservaSitio.API.Controllers.Usuario
@@ -34,6 +35,9 @@ namespace ReservaSitio.API.Controllers.Usuario
             ResultDTO<UsuarioDTO> res= new ResultDTO<UsuarioDTO>();
             try
             {
+               
+                request.iid_usuario_registra = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+
                 res = await this.iUsuarioAplication.RegisterUsuario(request);
                 return Ok(res);
             }

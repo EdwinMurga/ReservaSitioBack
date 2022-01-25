@@ -55,7 +55,8 @@ namespace ReservaSitio.Services
                     //new Claim("Id", pars.Id),
                     new Claim(JwtRegisteredClaimNames.NameId,pars.Id),
                     new Claim(JwtRegisteredClaimNames.Sub, pars.PasswordHash),
-                    new Claim(JwtRegisteredClaimNames.Email, pars.UserName)
+                    new Claim(JwtRegisteredClaimNames.Email, pars.UserName),
+                   // new Claim("idUsuario", pars.Id.ToString())
                 }),
 
                 Expires = DateTime.UtcNow.AddHours(Convert.ToInt32(this.iIConfiguration["JwtTimeExpire"])),

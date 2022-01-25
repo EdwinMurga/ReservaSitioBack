@@ -8,6 +8,7 @@ using ReservaSitio.DTOs.Empresa;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace ReservaSitio.API.Controllers.Local
@@ -38,6 +39,8 @@ namespace ReservaSitio.API.Controllers.Local
             ResultDTO<LocalDTO> res = new ResultDTO<LocalDTO>();
             try
             {
+                request.iid_usuario_registra = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+
                 res = await this.iLocalAplication.RegisterLocal(request);
                 return Ok(res);
             }
@@ -137,6 +140,8 @@ namespace ReservaSitio.API.Controllers.Local
             ResultDTO<PisoDTO> res = new ResultDTO<PisoDTO>();
             try
             {
+                request.iid_usuario_registra = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+
                 res = await this.iIPisoAplication.RegisterPiso(request);
                 return Ok(res);
             }

@@ -8,6 +8,7 @@ using ReservaSitio.DTOs.Opciones;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace ReservaSitio.API.Controllers.Perfiles
@@ -36,6 +37,8 @@ namespace ReservaSitio.API.Controllers.Perfiles
             ResultDTO<PerfilDTO> res = new ResultDTO<PerfilDTO>();
             try
             {
+                request.iid_usuario_registra = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+
                 res = await this.iIPerfilAplication.RegisterPerfil(request);
                 return Ok(res);
             }
@@ -113,6 +116,8 @@ namespace ReservaSitio.API.Controllers.Perfiles
             ResultDTO<PerfilOpcionDTO> res = new ResultDTO<PerfilOpcionDTO>();
             try
             {
+                request.iid_usuario_registra = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+
                 res = await this.iPerfilOpcionAplication.RegisterPerfilOpcion(request);
                 return Ok(res);
             }
@@ -142,7 +147,7 @@ namespace ReservaSitio.API.Controllers.Perfiles
 
         #endregion
 
-        #region ""
+        #region "Perfil Opcion "
 
         [HttpPost]
         [Route("GetPerfilOpcionUsuario")]

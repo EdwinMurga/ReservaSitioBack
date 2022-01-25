@@ -8,6 +8,7 @@ using ReservaSitio.DTOs.ParametroAplicacion;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace ReservaSitio.API.Controllers.ParametroAplicacion
@@ -36,6 +37,8 @@ namespace ReservaSitio.API.Controllers.ParametroAplicacion
             ResultDTO<PlantillaCorreoDTO> res = new ResultDTO<PlantillaCorreoDTO>();
             try
             {
+                request.iid_usuario_registra = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+
                 res = await this.iPlantillaCorreoAplication.RegisterPlantillaCorreo(request);
                 return Ok(res);
             }

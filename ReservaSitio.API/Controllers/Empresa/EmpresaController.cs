@@ -8,6 +8,7 @@ using ReservaSitio.DTOs.Empresa;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace ReservaSitio.API.Controllers.Empresa
@@ -33,6 +34,8 @@ namespace ReservaSitio.API.Controllers.Empresa
             ResultDTO<EmpresaDTO> res = new ResultDTO<EmpresaDTO>();
             try
             {
+                request.iid_usuario_registra = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+
                 res = await this.iEmpresaAplication.RegisterEmpresa(request);
                 return Ok(res);
             }

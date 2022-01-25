@@ -7,6 +7,7 @@ using ReservaSitio.DTOs.Opciones;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace ReservaSitio.API.Controllers.Opciones
@@ -37,6 +38,8 @@ namespace ReservaSitio.API.Controllers.Opciones
             ResultDTO<OpcionDTO> res = new ResultDTO<OpcionDTO>();
             try
             {
+                request.iid_usuario_registra = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+
                 res = await this.iOpcionAplication.RegisterOpcion(request);
                 return Ok(res);
             }
