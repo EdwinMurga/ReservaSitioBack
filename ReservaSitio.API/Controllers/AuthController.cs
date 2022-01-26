@@ -34,6 +34,7 @@ using ReservaSitio.DTOs.Auth;
 using ReservaSitio.Abstraction.IApplication.Perfiles;
 using ReservaSitio.Abstraction.IApplication.Empresa;
 using System.Security.Claims;
+using ReservaSitio.Abstraction.IApplication.Util;
 
 namespace ReservaSitio.API.Controllers
 {
@@ -43,14 +44,18 @@ namespace ReservaSitio.API.Controllers
     {
         //private readonly UserManager<IdentityUser> _userManager;
         private readonly ITokenHandlerService iITokenHandlerService;     
+
         private readonly IConfiguration Configuration;
         private readonly IAutenticacion iIAutenticacion;
         private readonly IAuthenticationApplication iIAuthenticationApplication;
         private readonly ILogger<AuthController> _logger;
+
         private readonly ILogErrorAplication iLogErrorAplication;
         private readonly IUsuarioAplication iIUsuarioAplication;
         private readonly IPerfilAplication iIPerfilAplication;
         private readonly IEmpresaAplication iIEmpresaAplicacion;
+
+        private readonly IUtilAplication iIUtilAplication;
 
         //   private static HttpClient client = new HttpClient();
         //  private AuthenticationResponse existingUser = new AuthenticationResponse();
@@ -69,7 +74,9 @@ namespace ReservaSitio.API.Controllers
 
             IUsuarioAplication IUsuarioAplication,
             IPerfilAplication IPerfilAplication,
-            IEmpresaAplication IEmpresaAplication
+            IEmpresaAplication IEmpresaAplication,
+
+            IUtilAplication IUtilAplication
             // UserManager<IdentityUser> userManager, 
             // IAuthenticationService authService, 
             )
@@ -83,6 +90,8 @@ namespace ReservaSitio.API.Controllers
             this.iIUsuarioAplication = IUsuarioAplication;
             this.iIPerfilAplication = IPerfilAplication;
             this.iIEmpresaAplicacion = IEmpresaAplication;
+
+            this.iIUtilAplication = IUtilAplication;
             // _userManager = userManager;
             // _autenticacion = autenticacion;
             // _authService = authService;
@@ -315,8 +324,16 @@ namespace ReservaSitio.API.Controllers
                     resLogin.Message = "Usuario, su clave fue recuperada ";
                     resLogin.Token = "";
 
-                    
-                
+                    /***********generar token o coigo de reset contraseña**********/
+
+
+                    /***********enviar mail al usuario**********/
+                    int paramPlantilla = 1;
+                    ResultDTO<bool> resmail = await  this.iIUtilAplication.envioMailPlantilla(paramPlantilla, new int[res.item.iid_usuario]);
+
+                    resLogin.IsSuccess = resmail.IsSuccess;
+                    resLogin.Message = resmail.Message;
+                    resLogin.MessageExeption = resmail.MessageExeption;
 
                     return Ok(resLogin);
 

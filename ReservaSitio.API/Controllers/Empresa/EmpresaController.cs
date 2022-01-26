@@ -49,7 +49,8 @@ namespace ReservaSitio.API.Controllers.Empresa
                     sorigen += c.ToString() + " | ";
                 }
                 LogErrorDTO lg = new LogErrorDTO();
-                lg.iid_usuario_registra = 0;
+                lg.iid_usuario_registra = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+                lg.iid_opcion = 1;
                 lg.vdescripcion = e.Message.ToString();
                 lg.vcodigo_mensaje = e.Message.ToString();
                 lg.vorigen = sorigen;
@@ -66,6 +67,7 @@ namespace ReservaSitio.API.Controllers.Empresa
             ResultDTO<EmpresaDTO> res = new ResultDTO<EmpresaDTO>();
             try
             {
+                request.iid_usuario_registra = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
                 res = await this.iEmpresaAplication.GetListEmpresa(request);
                 return Ok(res);
             }
@@ -79,7 +81,8 @@ namespace ReservaSitio.API.Controllers.Empresa
                     sorigen += c.ToString() + " | ";
                 }
                 LogErrorDTO lg = new LogErrorDTO();
-                lg.iid_usuario_registra = 0;
+                lg.iid_usuario_registra = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+                lg.iid_opcion = 1;
                 lg.vdescripcion = e.Message.ToString();
                 lg.vcodigo_mensaje = e.Message.ToString();
                 lg.vorigen = sorigen;
@@ -98,6 +101,7 @@ namespace ReservaSitio.API.Controllers.Empresa
             {
                 EmpresaDTO item = new EmpresaDTO();
                 item.iid_empresa = request;
+                item.iid_usuario_registra = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
                 res = await this.iEmpresaAplication.GetEmpresa(item);
                 return Ok(res);
             }
@@ -111,7 +115,8 @@ namespace ReservaSitio.API.Controllers.Empresa
                     sorigen += c.ToString() + " | ";
                 }
                 LogErrorDTO lg = new LogErrorDTO();
-                lg.iid_usuario_registra = 0;
+                lg.iid_usuario_registra = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+                lg.iid_opcion = 1;
                 lg.vdescripcion = e.Message.ToString();
                 lg.vcodigo_mensaje = e.Message.ToString();
                 lg.vorigen = sorigen;
@@ -120,5 +125,41 @@ namespace ReservaSitio.API.Controllers.Empresa
                 return BadRequest(res);
             }
         }
+
+
+        [HttpDelete]
+        //[Route("DeleteEmpresa")]
+        public async Task<ActionResult> DeleteEmpresa([FromQuery] int request)
+        {
+            ResultDTO<EmpresaDTO> res = new ResultDTO<EmpresaDTO>();
+            try
+            {
+                EmpresaDTO item = new EmpresaDTO();
+                item.iid_empresa = request;
+                item.iid_usuario_registra = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+                res = await this.iEmpresaAplication.DeleteEmpresa(item);
+                return Ok(res);
+            }
+            catch (Exception e)
+            {
+                res.InnerException = e.Message.ToString();
+
+                var sorigen = "";
+                foreach (object c in this.ControllerContext.RouteData.Values.Values)
+                {
+                    sorigen += c.ToString() + " | ";
+                }
+                LogErrorDTO lg = new LogErrorDTO();
+                lg.iid_usuario_registra = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+                lg.iid_opcion = 1;
+                lg.vdescripcion = e.Message.ToString();
+                lg.vcodigo_mensaje = e.Message.ToString();
+                lg.vorigen = sorigen;
+                await this.iLogErrorAplication.RegisterLogError(lg);
+
+                return BadRequest(res);
+            }
+        }
+
     }   
 }

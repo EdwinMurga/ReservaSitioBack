@@ -34,9 +34,50 @@ namespace ReservaSitio.Repository.Empresa
         }
 
 
-        public Task<ResultDTO<EmpresaDTO>> DeleteEmpresa(EmpresaDTO request)
+        public async Task<ResultDTO<EmpresaDTO>> DeleteEmpresa(EmpresaDTO request)
         {
-            throw new NotImplementedException();
+            ResultDTO<EmpresaDTO> res = new ResultDTO<EmpresaDTO>();
+            using (TransactionScope scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
+            {
+                try
+                {
+                    using (var cn = await mConnection.BeginConnection(true))
+                    {
+                        var parameters = new DynamicParameters();
+                        parameters.Add("@p_iid_empresa", request.iid_empresa);
+                        parameters.Add("@p_iid_usuario_registra", request.iid_usuario_registra);
+
+                        using (var lector = await cn.ExecuteReaderAsync("[dbo].[SP_EMPRESA_ELIMINAR]", parameters, commandType: CommandType.StoredProcedure, transaction: mConnection.GetTransaction()))
+                        {
+                            while (lector.Read())
+                            {
+                                res.Codigo = Convert.ToInt32(lector["id"].ToString());
+                                res.IsSuccess = true;
+                                res.Message = UtilMensajes.strInformnacionGrabada;
+                            }
+                        }
+                        await mConnection.Complete();
+                    }
+                    scope.Complete();
+                }
+                catch (Exception e)
+                {
+                    scope.Dispose();
+                    res.IsSuccess = false;
+                    res.Message = UtilMensajes.strInformnacionNoGrabada;
+                    res.InnerException = e.Message.ToString();
+
+                    LogErrorDTO lg = new LogErrorDTO();
+                    lg.iid_usuario_registra = request.iid_usuario_registra;
+                    lg.iid_opcion = 1;
+
+                    lg.vdescripcion = e.Message.ToString();
+                    lg.vcodigo_mensaje = e.Message.ToString();
+                    lg.vorigen = this.ToString();
+                    await this.iLogErrorRepository.RegisterLogError(lg);
+                }
+            }
+            return res;
         }
 
         public async Task<ResultDTO<EmpresaDTO>> GetEmpresa(EmpresaDTO request)
@@ -68,6 +109,7 @@ namespace ReservaSitio.Repository.Empresa
 
                 LogErrorDTO lg = new LogErrorDTO();
                 lg.iid_usuario_registra = request.iid_usuario_registra;
+                lg.iid_opcion = 1;
                 lg.vdescripcion = e.Message.ToString();
                 lg.vcodigo_mensaje = e.Message.ToString();
                 lg.vorigen = this.ToString();
@@ -111,7 +153,8 @@ namespace ReservaSitio.Repository.Empresa
                 res.InnerException = e.Message.ToString();
 
                 LogErrorDTO lg = new LogErrorDTO();
-                lg.iid_usuario_registra = 0;
+                lg.iid_usuario_registra = request.iid_usuario_registra;
+                lg.iid_opcion = 1;
                 lg.vdescripcion = e.Message.ToString();
                 lg.vcodigo_mensaje = e.Message.ToString();
                 lg.vorigen = this.ToString();
@@ -165,6 +208,7 @@ namespace ReservaSitio.Repository.Empresa
 
                     LogErrorDTO lg = new LogErrorDTO();
                     lg.iid_usuario_registra = request.iid_usuario_registra;
+                    lg.iid_opcion = 1;
                     lg.vdescripcion = e.Message.ToString();
                     lg.vcodigo_mensaje = e.Message.ToString();
                     lg.vorigen = this.ToString();

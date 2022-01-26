@@ -51,7 +51,8 @@ namespace ReservaSitio.API.Controllers.Opciones
                     sorigen += c.ToString() + " | ";
                 }
                 LogErrorDTO lg = new LogErrorDTO();
-                lg.iid_usuario_registra = 0;
+                lg.iid_usuario_registra = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+                lg.iid_opcion = 1;
                 lg.vdescripcion = e.Message.ToString();
                 lg.vcodigo_mensaje = e.Message.ToString();
                 lg.vorigen = sorigen;
@@ -68,6 +69,7 @@ namespace ReservaSitio.API.Controllers.Opciones
             ResultDTO<ModuloDTO> res = new ResultDTO<ModuloDTO>();
             try
             {
+                request.iid_usuario_registra = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
                 res = await this.iModuloAplication.GetListModulo(request);
                 return Ok(res);
             }
@@ -81,7 +83,8 @@ namespace ReservaSitio.API.Controllers.Opciones
                     sorigen += c.ToString() + " | ";
                 }
                 LogErrorDTO lg = new LogErrorDTO();
-                lg.iid_usuario_registra = 0;
+                lg.iid_usuario_registra = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+                lg.iid_opcion = 1;
                 lg.vdescripcion = e.Message.ToString();
                 lg.vcodigo_mensaje = e.Message.ToString();
                 lg.vorigen = sorigen;
@@ -100,6 +103,7 @@ namespace ReservaSitio.API.Controllers.Opciones
             {
                 ModuloDTO item = new ModuloDTO();
                 item.iid_modulo = request;
+                item.iid_usuario_registra = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
                 res = await this.iModuloAplication.GetModulo(item);
                 return Ok(res);
             }
@@ -113,7 +117,8 @@ namespace ReservaSitio.API.Controllers.Opciones
                     sorigen += c.ToString() + " | ";
                 }
                 LogErrorDTO lg = new LogErrorDTO();
-                lg.iid_usuario_registra = 0;
+                lg.iid_usuario_registra = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+                lg.iid_opcion = 1;
                 lg.vdescripcion = e.Message.ToString();
                 lg.vcodigo_mensaje = e.Message.ToString();
                 lg.vorigen = sorigen;

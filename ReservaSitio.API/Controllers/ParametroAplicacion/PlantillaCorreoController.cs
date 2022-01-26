@@ -52,7 +52,8 @@ namespace ReservaSitio.API.Controllers.ParametroAplicacion
                     sorigen += c.ToString() + " | ";
                 }
                 LogErrorDTO lg = new LogErrorDTO();
-                lg.iid_usuario_registra = 0;
+                lg.iid_usuario_registra = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+                lg.iid_opcion = 1;
                 lg.vdescripcion = e.Message.ToString();
                 lg.vcodigo_mensaje = e.Message.ToString();
                 lg.vorigen = sorigen;
@@ -69,6 +70,7 @@ namespace ReservaSitio.API.Controllers.ParametroAplicacion
             ResultDTO<PlantillaCorreoDTO> res = new ResultDTO<PlantillaCorreoDTO>();
             try
             {
+                request.iid_usuario_registra = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
                 res = await this.iPlantillaCorreoAplication.GetListPlantillaCorreo(request);
                 return Ok(res);
             }
@@ -82,7 +84,8 @@ namespace ReservaSitio.API.Controllers.ParametroAplicacion
                     sorigen += c.ToString() + " | ";
                 }
                 LogErrorDTO lg = new LogErrorDTO();
-                lg.iid_usuario_registra = 0;
+                lg.iid_usuario_registra = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+                lg.iid_opcion = 1;
                 lg.vdescripcion = e.Message.ToString();
                 lg.vcodigo_mensaje = e.Message.ToString();
                 lg.vorigen = sorigen;
@@ -101,6 +104,7 @@ namespace ReservaSitio.API.Controllers.ParametroAplicacion
             {
                 PlantillaCorreoDTO item = new PlantillaCorreoDTO();
                 item.iid_plantilla_correo = request;
+                item.iid_usuario_registra = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
                 res = await this.iPlantillaCorreoAplication.GetPlantillaCorreo(item);
                 return Ok(res);
             }
@@ -114,7 +118,44 @@ namespace ReservaSitio.API.Controllers.ParametroAplicacion
                     sorigen += c.ToString() + " | ";
                 }
                 LogErrorDTO lg = new LogErrorDTO();
-                lg.iid_usuario_registra = 0;
+                lg.iid_usuario_registra = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+                lg.iid_opcion = 1;
+                lg.vdescripcion = e.Message.ToString();
+                lg.vcodigo_mensaje = e.Message.ToString();
+                lg.vorigen = sorigen;
+                await this.iLogErrorAplication.RegisterLogError(lg);
+
+                return BadRequest(res);
+            }
+
+        }
+
+        [HttpDelete]
+       // [Route("DeletePlantillaCorreo")]
+        public async Task<ActionResult> DeletePlantillaCorreo([FromQuery] int request)
+        {
+            ResultDTO<PlantillaCorreoDTO> res = new ResultDTO<PlantillaCorreoDTO>();
+            try
+            {
+                PlantillaCorreoDTO item = new PlantillaCorreoDTO();
+                item.iid_plantilla_correo = request;
+                item.iid_usuario_registra = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+
+                res = await this.iPlantillaCorreoAplication.DeletePlantillaCorreo(item);
+                return Ok(res);
+            }
+            catch (Exception e)
+            {
+                res.InnerException = e.Message.ToString();
+
+                var sorigen = "";
+                foreach (object c in this.ControllerContext.RouteData.Values.Values)
+                {
+                    sorigen += c.ToString() + " | ";
+                }
+                LogErrorDTO lg = new LogErrorDTO();
+                lg.iid_usuario_registra = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+                lg.iid_opcion = 1;
                 lg.vdescripcion = e.Message.ToString();
                 lg.vcodigo_mensaje = e.Message.ToString();
                 lg.vorigen = sorigen;

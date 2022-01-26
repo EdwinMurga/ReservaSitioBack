@@ -103,10 +103,11 @@ namespace ReservaSitio.Repository.Opcion
                     using (var cn = new SqlConnection(_connectionString))
                     {
                         var parameters = new DynamicParameters();
-                        parameters.Add("@p_vcodigo_cliente", request.iid_perfil_opcion);
+                        parameters.Add("@p_iid_perfil_opcion", request.iid_perfil_opcion);
+                        parameters.Add("@p_iid_usuario_registra", request.iid_usuario_registra);
 
 
-                        using (var lector = await cn.ExecuteReaderAsync("[dbo].[]", parameters, commandType: CommandType.StoredProcedure, transaction: mConnection.GetTransaction()))
+                        using (var lector = await cn.ExecuteReaderAsync("[dbo].[SP_PERFIL_OPCION_ELIMINAR]", parameters, commandType: CommandType.StoredProcedure, transaction: mConnection.GetTransaction()))
                         {
                             while (lector.Read())
                             {

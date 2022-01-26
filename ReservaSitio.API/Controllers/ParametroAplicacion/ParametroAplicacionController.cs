@@ -57,7 +57,8 @@ namespace ReservaSitio.API.Controllers.ParametroAplicacion
                     sorigen += c.ToString() + " | ";
                 }
                 LogErrorDTO lg = new LogErrorDTO();
-                lg.iid_usuario_registra = 0;
+                lg.iid_usuario_registra = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+                lg.iid_opcion = 1;
                 lg.vdescripcion = e.Message.ToString();
                 lg.vcodigo_mensaje = e.Message.ToString();
                 lg.vorigen = sorigen;
@@ -74,6 +75,7 @@ namespace ReservaSitio.API.Controllers.ParametroAplicacion
             ResultDTO<ParametroAplicacionDTO> res = new ResultDTO<ParametroAplicacionDTO>();
             try
             {
+                request.iid_usuario_registra = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
                 res = await this.iParametroAplication.GetListParametro(request);
                 return Ok(res);
             }
@@ -87,7 +89,8 @@ namespace ReservaSitio.API.Controllers.ParametroAplicacion
                     sorigen += c.ToString() + " | ";
                 }
                 LogErrorDTO lg = new LogErrorDTO();
-                lg.iid_usuario_registra = 0;
+                lg.iid_usuario_registra = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+                lg.iid_opcion = 1;
                 lg.vdescripcion = e.Message.ToString();
                 lg.vcodigo_mensaje = e.Message.ToString();
                 lg.vorigen = sorigen;
@@ -106,6 +109,7 @@ namespace ReservaSitio.API.Controllers.ParametroAplicacion
             {
                 ParametroAplicacionDTO item = new ParametroAplicacionDTO();
                 item.iid_parametro = request;
+                item.iid_usuario_registra = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
                 res = await this.iParametroAplication.GetParametro(item);
                 return Ok(res);
             }
@@ -119,7 +123,8 @@ namespace ReservaSitio.API.Controllers.ParametroAplicacion
                     sorigen += c.ToString() + " | ";
                 }
                 LogErrorDTO lg = new LogErrorDTO();
-                lg.iid_usuario_registra = 0;
+                lg.iid_usuario_registra = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+                lg.iid_opcion = 1;
                 lg.vdescripcion = e.Message.ToString();
                 lg.vcodigo_mensaje = e.Message.ToString();
                 lg.vorigen = sorigen;
@@ -155,7 +160,8 @@ namespace ReservaSitio.API.Controllers.ParametroAplicacion
                     sorigen += c.ToString() + " | ";
                 }
                 LogErrorDTO lg = new LogErrorDTO();
-                lg.iid_usuario_registra = 0;
+                lg.iid_usuario_registra = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+                lg.iid_opcion = 1;
                 lg.vdescripcion = e.Message.ToString();
                 lg.vcodigo_mensaje = e.Message.ToString();
                 lg.vorigen = sorigen;
@@ -172,6 +178,7 @@ namespace ReservaSitio.API.Controllers.ParametroAplicacion
             ResultDTO<TablaParametroDTO> res = new ResultDTO<TablaParametroDTO>();
             try
             {
+                request.iid_usuario_registra = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
                 res = await this.iITablaParametroAplication.GetListTablaParametro(request);
                 return Ok(res);
             }
@@ -185,7 +192,8 @@ namespace ReservaSitio.API.Controllers.ParametroAplicacion
                     sorigen += c.ToString() + " | ";
                 }
                 LogErrorDTO lg = new LogErrorDTO();
-                lg.iid_usuario_registra = 0;
+                lg.iid_usuario_registra = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+                lg.iid_opcion = 1;
                 lg.vdescripcion = e.Message.ToString();
                 lg.vcodigo_mensaje = e.Message.ToString();
                 lg.vorigen = sorigen;
@@ -204,6 +212,7 @@ namespace ReservaSitio.API.Controllers.ParametroAplicacion
             {
                 TablaParametroDTO item = new TablaParametroDTO();
                 item.iid_tabla_auxiliar = request;
+                item.iid_usuario_registra = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
                 res = await this.iITablaParametroAplication.GetTablaParametro(item);
                 return Ok(res);
             }
@@ -217,7 +226,8 @@ namespace ReservaSitio.API.Controllers.ParametroAplicacion
                     sorigen += c.ToString() + " | ";
                 }
                 LogErrorDTO lg = new LogErrorDTO();
-                lg.iid_usuario_registra = 0;
+                lg.iid_usuario_registra = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+                lg.iid_opcion = 1;
                 lg.vdescripcion = e.Message.ToString();
                 lg.vcodigo_mensaje = e.Message.ToString();
                 lg.vorigen = sorigen;
@@ -255,7 +265,8 @@ namespace ReservaSitio.API.Controllers.ParametroAplicacion
                     sorigen += c.ToString() + " | ";
                 }
                 LogErrorDTO lg = new LogErrorDTO();
-                lg.iid_usuario_registra = 0;
+                lg.iid_usuario_registra = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+                lg.iid_opcion = 1;
                 lg.vdescripcion = e.Message.ToString();
                 lg.vcodigo_mensaje = e.Message.ToString();
                 lg.vorigen = sorigen;
@@ -272,6 +283,7 @@ namespace ReservaSitio.API.Controllers.ParametroAplicacion
             ResultDTO<TablaDetalleParametroDTO> res = new ResultDTO<TablaDetalleParametroDTO>();
             try
             {
+                request.iid_usuario_registra = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
                 res = await this.iITablaParametroAplication.GetListTablaDetalleParametro(request);
                 return Ok(res);
             }
@@ -285,7 +297,8 @@ namespace ReservaSitio.API.Controllers.ParametroAplicacion
                     sorigen += c.ToString() + " | ";
                 }
                 LogErrorDTO lg = new LogErrorDTO();
-                lg.iid_usuario_registra = 0;
+                lg.iid_usuario_registra = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+                lg.iid_opcion = 1;
                 lg.vdescripcion = e.Message.ToString();
                 lg.vcodigo_mensaje = e.Message.ToString();
                 lg.vorigen = sorigen;
@@ -304,6 +317,7 @@ namespace ReservaSitio.API.Controllers.ParametroAplicacion
             {
                 TablaDetalleParametroDTO item = new TablaDetalleParametroDTO();
                 item.iid_tabla_detalle = request;
+                item.iid_usuario_registra = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
                 res = await this.iITablaParametroAplication.GetTablaDetalleParametro(item);
                 return Ok(res);
             }
@@ -317,7 +331,8 @@ namespace ReservaSitio.API.Controllers.ParametroAplicacion
                     sorigen += c.ToString() + " | ";
                 }
                 LogErrorDTO lg = new LogErrorDTO();
-                lg.iid_usuario_registra = 0;
+                lg.iid_usuario_registra = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+                lg.iid_opcion = 1;
                 lg.vdescripcion = e.Message.ToString();
                 lg.vcodigo_mensaje = e.Message.ToString();
                 lg.vorigen = sorigen;

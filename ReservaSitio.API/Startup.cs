@@ -68,6 +68,8 @@ using ReservaSitio.Application.ParametrosAplicacion;
 using ReservaSitio.Repository.ParametrosAplicacion;
 using ReservaSitio.Abstraction.IService.ParametrosAplicacion;
 using ReservaSitio.Abstraction.IRepository.ParametroAplicacion;
+using ReservaSitio.Abstraction.IApplication.Util;
+using ReservaSitio.Application.Util;
 
 namespace ReservaSitio.API
 {
@@ -227,6 +229,7 @@ namespace ReservaSitio.API
             services.AddScoped<ICaptchaGoogleApplication, CaptchaGoogleApplication>();
             services.AddScoped<ICaptchaGoogleService, CaptchaGoogleService>();
 
+            services.AddScoped<IUtilAplication, UtilAplication>();
 
             services.AddScoped<IAzureBlobClientService, AzureBlobClientService>();
 

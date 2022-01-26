@@ -42,14 +42,15 @@ namespace ReservaSitio.Repository.Opcion
                     using (var cn = await mConnection.BeginConnection(true))
                     {
                         var parameters = new DynamicParameters();
-                        parameters.Add("@p_vcodigo_cliente", request.vdescripcion_perfil);
+                        parameters.Add("@p_iid_perfil", request.iid_perfil);                      
+                        parameters.Add("@p_iid_usuario_registra", request.iid_usuario_registra);
 
 
-                        using (var lector = await cn.ExecuteReaderAsync("[dbo].[]", parameters, commandType: CommandType.StoredProcedure, transaction: mConnection.GetTransaction()))
+                        using (var lector = await cn.ExecuteReaderAsync("[dbo].[SP_PERFIL_ELIMINAR]", parameters, commandType: CommandType.StoredProcedure, transaction: mConnection.GetTransaction()))
                         {
                             while (lector.Read())
                             {
-                                res.Codigo = Convert.ToInt32(lector["iid"].ToString());
+                                res.Codigo = Convert.ToInt32(lector["id"].ToString());
                                 res.IsSuccess = true;
                                 res.Message = UtilMensajes.strInformnacionGrabada;
                             }

@@ -51,7 +51,8 @@ namespace ReservaSitio.API.Controllers.Usuario
                     sorigen += c.ToString() + " | ";
                 }
                 LogErrorDTO lg = new LogErrorDTO();
-                lg.iid_usuario_registra = 0;
+                lg.iid_usuario_registra = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+                lg.iid_opcion = 1;
                 lg.vdescripcion = e.Message.ToString();
                 lg.vcodigo_mensaje = e.Message.ToString();
                 lg.vorigen = sorigen;
@@ -68,6 +69,7 @@ namespace ReservaSitio.API.Controllers.Usuario
             ResultDTO<UsuarioDTO> res = new ResultDTO<UsuarioDTO>();
             try
             {
+                request.iid_usuario_registra = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
                 res = await this.iUsuarioAplication.GetListUsuario(request);
                 return Ok(res);
             }
@@ -81,7 +83,8 @@ namespace ReservaSitio.API.Controllers.Usuario
                     sorigen += c.ToString() + " | ";
                 }
                 LogErrorDTO lg = new LogErrorDTO();
-                lg.iid_usuario_registra = 0;
+                lg.iid_usuario_registra = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+                lg.iid_opcion = 1;
                 lg.vdescripcion = e.Message.ToString();
                 lg.vcodigo_mensaje = e.Message.ToString();
                 lg.vorigen = sorigen;
@@ -100,6 +103,7 @@ namespace ReservaSitio.API.Controllers.Usuario
             {
                 UsuarioDTO item = new UsuarioDTO();
                 item.iid_usuario = request;
+                item.iid_usuario_registra = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
                 res = await this.iUsuarioAplication.GetUsuario(item);
                 return Ok(res);
             }
@@ -108,11 +112,48 @@ namespace ReservaSitio.API.Controllers.Usuario
                 res.InnerException = e.Message.ToString();
 
                 var sorigen = "";
-                foreach(object c in this.ControllerContext.RouteData.Values.Values) {
-                    sorigen += c.ToString()+" | ";
+                foreach (object c in this.ControllerContext.RouteData.Values.Values)
+                {
+                    sorigen += c.ToString() + " | ";
                 }
                 LogErrorDTO lg = new LogErrorDTO();
-                lg.iid_usuario_registra = 0;
+                lg.iid_usuario_registra = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+                lg.iid_opcion = 1;
+                lg.vdescripcion = e.Message.ToString();
+                lg.vcodigo_mensaje = e.Message.ToString();
+                lg.vorigen = sorigen;
+                await this.iLogErrorAplication.RegisterLogError(lg);
+
+                return BadRequest(res);
+            }
+        }
+
+        [HttpDelete]
+        //[Route("EliminarUsuario")]
+        public async Task<ActionResult> EliminarUsuario([FromQuery] int request)
+        {
+            ResultDTO<UsuarioDTO> res = new ResultDTO<UsuarioDTO>();
+            try
+            {
+                UsuarioDTO item = new UsuarioDTO();
+                item.iid_usuario = request;
+                item.iid_usuario_registra = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+
+                res = await this.iUsuarioAplication.DeleteUsuario(item);
+                return Ok(res);
+            }
+            catch (Exception e)
+            {
+                res.InnerException = e.Message.ToString();
+
+                var sorigen = "";
+                foreach (object c in this.ControllerContext.RouteData.Values.Values)
+                {
+                    sorigen += c.ToString() + " | ";
+                }
+                LogErrorDTO lg = new LogErrorDTO();
+                lg.iid_usuario_registra = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+                lg.iid_opcion = 1;
                 lg.vdescripcion = e.Message.ToString();
                 lg.vcodigo_mensaje = e.Message.ToString();
                 lg.vorigen = sorigen;

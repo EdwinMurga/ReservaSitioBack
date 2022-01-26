@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using ReservaSitio.Abstraction.IApplication.LogError;
 using ReservaSitio.Abstraction.IApplication.Opciones;
 using ReservaSitio.DTOs;
 using ReservaSitio.DTOs.Opciones;
@@ -20,12 +21,13 @@ namespace ReservaSitio.API.Controllers.Opciones
         // GET: OpcionController
 
         private readonly IOpcionAplication iOpcionAplication;
-      
+        private readonly ILogErrorAplication iLogErrorAplication;
         public OpcionController(IOpcionAplication IOpcionAplication
-            , IPerfilOpcionAplication IPerfilOpcionAplication)
+            , IPerfilOpcionAplication IPerfilOpcionAplication
+               , ILogErrorAplication ILogErrorAplication)
         {
             this.iOpcionAplication = IOpcionAplication;
-        
+            this.iLogErrorAplication = ILogErrorAplication;
         }
 
         #region "Opcion"
@@ -46,6 +48,19 @@ namespace ReservaSitio.API.Controllers.Opciones
             catch (Exception e)
             {
                 res.InnerException = e.Message.ToString();
+
+                var sorigen = "";
+                foreach (object c in this.ControllerContext.RouteData.Values.Values)
+                {
+                    sorigen += c.ToString() + " | ";
+                }
+                LogErrorDTO lg = new LogErrorDTO();
+                lg.iid_usuario_registra = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+                lg.iid_opcion = 1;
+                lg.vdescripcion = e.Message.ToString();
+                lg.vcodigo_mensaje = e.Message.ToString();
+                lg.vorigen = sorigen;
+                await this.iLogErrorAplication.RegisterLogError(lg);
                 return BadRequest(res);
             }
         }
@@ -57,12 +72,26 @@ namespace ReservaSitio.API.Controllers.Opciones
             ResultDTO<OpcionDTO> res = new ResultDTO<OpcionDTO>();
             try
             {
+                request.iid_usuario_registra = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
                 res = await this.iOpcionAplication.GetListOpcion(request);
                 return Ok(res);
             }
             catch (Exception e)
             {
                 res.InnerException = e.Message.ToString();
+
+                var sorigen = "";
+                foreach (object c in this.ControllerContext.RouteData.Values.Values)
+                {
+                    sorigen += c.ToString() + " | ";
+                }
+                LogErrorDTO lg = new LogErrorDTO();
+                lg.iid_usuario_registra = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+                lg.iid_opcion = 1;
+                lg.vdescripcion = e.Message.ToString();
+                lg.vcodigo_mensaje = e.Message.ToString();
+                lg.vorigen = sorigen;
+                await this.iLogErrorAplication.RegisterLogError(lg);
                 return BadRequest(res);
             }
         }
@@ -76,20 +105,66 @@ namespace ReservaSitio.API.Controllers.Opciones
             {
                 OpcionDTO item = new OpcionDTO();
                 item.iid_opcion = request;
+                item.iid_usuario_registra = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
                 res = await this.iOpcionAplication.GetOpcion(item);
                 return Ok(res);
             }
             catch (Exception e)
             {
                 res.InnerException = e.Message.ToString();
+
+                var sorigen = "";
+                foreach (object c in this.ControllerContext.RouteData.Values.Values)
+                {
+                    sorigen += c.ToString() + " | ";
+                }
+                LogErrorDTO lg = new LogErrorDTO();
+                lg.iid_usuario_registra = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+                lg.iid_opcion = 1;
+                lg.vdescripcion = e.Message.ToString();
+                lg.vcodigo_mensaje = e.Message.ToString();
+                lg.vorigen = sorigen;
+                await this.iLogErrorAplication.RegisterLogError(lg);
                 return BadRequest(res);
             }
         }
 
+        [HttpDelete]
+        //[Route("DeleteOpcion")]
+        public async Task<ActionResult> DeleteOpcion([FromQuery] int request)
+        {
+            ResultDTO<OpcionDTO> res = new ResultDTO<OpcionDTO>();
+            try
+            {
+                OpcionDTO item = new OpcionDTO();
+                item.iid_opcion = request;
+                item.iid_usuario_registra = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+                res = await this.iOpcionAplication.DeleteOpcion(item);
+                return Ok(res);
+            }
+            catch (Exception e)
+            {
+                res.InnerException = e.Message.ToString();
+
+                var sorigen = "";
+                foreach (object c in this.ControllerContext.RouteData.Values.Values)
+                {
+                    sorigen += c.ToString() + " | ";
+                }
+                LogErrorDTO lg = new LogErrorDTO();
+                lg.iid_usuario_registra = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+                lg.iid_opcion = 1;
+                lg.vdescripcion = e.Message.ToString();
+                lg.vcodigo_mensaje = e.Message.ToString();
+                lg.vorigen = sorigen;
+                await this.iLogErrorAplication.RegisterLogError(lg);
+                return BadRequest(res);
+            }
+        }
 
         #endregion
 
 
-       
+
     }
 }

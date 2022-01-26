@@ -53,6 +53,7 @@ namespace ReservaSitio.Repository.Log_Error
 
                         using (var lector = await cn.ExecuteReaderAsync("[dbo].[SP_LOG_ERROR_INSERTAR]", parameters, commandType: CommandType.StoredProcedure, transaction: mConnection.GetTransaction()))
                         {
+                            
                             while (lector.Read())
                             {
                                 res.Codigo = Convert.ToInt32(lector["id"].ToString());
@@ -61,6 +62,7 @@ namespace ReservaSitio.Repository.Log_Error
                             }
                         }
                         await mConnection.Complete();
+                       
                     }
 
 

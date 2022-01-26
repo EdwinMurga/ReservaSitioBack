@@ -35,7 +35,50 @@ namespace ReservaSitio.Repository.Usuario
         #region "usuario "
         public async Task<ResultDTO<UsuarioDTO>> DeleteUsuario(UsuarioDTO request)
         {
-            throw new NotImplementedException();
+            ResultDTO<UsuarioDTO> res = new ResultDTO<UsuarioDTO>();
+            using (TransactionScope scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
+            {
+                try
+                {
+
+                    using (var cn = await mConnection.BeginConnection(true))
+                    {
+                        var parameters = new DynamicParameters();
+                        parameters.Add("@p_iid_usuario", request.iid_usuario);     
+                        parameters.Add("@p_iid_estado_registro", request.iid_estado_registro);
+
+                        using (var lector = await cn.ExecuteReaderAsync("[dbo].[SP_USUARIO_DELETE]", parameters, commandType: CommandType.StoredProcedure, transaction: mConnection.GetTransaction()))
+                        {
+                            while (lector.Read())
+                            {
+                                res.Codigo = Convert.ToInt32(lector["id"].ToString());
+                                res.IsSuccess = true;
+                                res.Message = UtilMensajes.strInformnacionGrabada;
+                            }
+                        }
+                        await mConnection.Complete();
+                    }
+
+
+                    scope.Complete();
+                }
+                catch (Exception e)
+                {
+                    scope.Dispose();
+                    res.IsSuccess = false;
+                    res.Message = UtilMensajes.strInformnacionNoGrabada;
+                    res.InnerException = e.Message.ToString();
+
+                    LogErrorDTO lg = new LogErrorDTO();
+                    lg.iid_usuario_registra = request.iid_usuario_registra;
+                    lg.iid_opcion = 1;
+                    lg.vdescripcion = e.Message.ToString();
+                    lg.vcodigo_mensaje = e.Message.ToString();
+                    lg.vorigen = this.ToString();
+                    await this.iLogErrorRepository.RegisterLogError(lg);
+                }
+            }
+            return res;
         }
         public async Task<ResultDTO<UsuarioDTO>> GetListUsuario(UsuarioListDTO request)
         {
@@ -74,7 +117,8 @@ namespace ReservaSitio.Repository.Usuario
                 res.InnerException = e.Message.ToString();
 
                 LogErrorDTO lg = new LogErrorDTO();
-                lg.iid_usuario_registra = 0;
+                lg.iid_usuario_registra = request.iid_usuario_registra;
+                lg.iid_opcion = 1;
                 lg.vdescripcion = e.Message.ToString();
                 lg.vcodigo_mensaje = e.Message.ToString();
                 lg.vorigen = this.ToString();
@@ -111,6 +155,7 @@ namespace ReservaSitio.Repository.Usuario
 
                 LogErrorDTO lg = new LogErrorDTO();
                 lg.iid_usuario_registra = request.iid_usuario_registra;
+                lg.iid_opcion = 1;
                 lg.vdescripcion = e.Message.ToString();
                 lg.vcodigo_mensaje = e.Message.ToString();
                 lg.vorigen = this.ToString();
@@ -152,6 +197,7 @@ namespace ReservaSitio.Repository.Usuario
 
                 LogErrorDTO lg = new LogErrorDTO();
                 lg.iid_usuario_registra = request.iid_usuario_registra;
+                lg.iid_opcion = 1;
                 lg.vdescripcion = e.Message.ToString();
                 lg.vcodigo_mensaje = e.Message.ToString();
                 lg.vorigen = this.ToString();
@@ -218,6 +264,7 @@ namespace ReservaSitio.Repository.Usuario
 
                     LogErrorDTO lg = new LogErrorDTO();
                     lg.iid_usuario_registra = request.iid_usuario_registra;
+                    lg.iid_opcion = 1;
                     lg.vdescripcion = e.Message.ToString();
                     lg.vcodigo_mensaje = e.Message.ToString();
                     lg.vorigen = this.ToString();
