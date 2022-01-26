@@ -181,11 +181,11 @@ namespace ReservaSitio.Repository.Usuario
                         parameters.Add("@p_vcorreo_electronico", request.vcorreo_electronico);
                         parameters.Add("@p_vnumero_telefonico", request.vnumero_telefonico);
                         parameters.Add("@p_vclave", request.vclave);
-                        parameters.Add("@p_dfecha_caduca_clave", request.dfecha_caduca_clave);
-                        parameters.Add("@p_dfecha_cambio_clave", request.dfecha_cambio_clave);
+                       // parameters.Add("@p_dfecha_caduca_clave", request.dfecha_caduca_clave);
+                       // parameters.Add("@p_dfecha_cambio_clave", request.dfecha_cambio_clave);
                         parameters.Add("@p_cantidad_intentos", request.cantidad_intentos);
                         parameters.Add("@p_iid_indica_bloqueo", request.iid_indica_bloqueo);
-                        parameters.Add("@p_dfecha_ultimo_acceso", request.dfecha_ultimo_acceso);
+                       // parameters.Add("@p_dfecha_ultimo_acceso", request.dfecha_ultimo_acceso);
                         parameters.Add("@p_iid_empresa", request.iid_empresa);
 
 
