@@ -12,21 +12,11 @@ namespace ReservaSitio.Entities
         {
             restringido = 1,
             administrador = 2,
-            vendedor = 3,
-            soporteComercial = 4,
-            tesoreria = 5,
-            usuarioExterno = 6,
+       
 
         }
 
-        public enum Usuarios
-        {
-            interno = 1,
-            externo = 2,
-            soporteComercial = 3,
-            vendedor = 4,
-        }
-
+ 
         public static class UtilBE
         {
             public static string IndFechaVencida = "V";
@@ -44,6 +34,9 @@ namespace ReservaSitio.Entities
 
         public static class UtilMensajes
         {
+            public static string strInformnacionEliminada = "Datos Eliminados";
+            public static string strInformnacionNoElimina = "Error Datos no Eliminados";
+
             public static string strInformnacionGrabada = "Datos Registrados";
             public static string strInformnacionNoGrabada = "Error Datos no Registrados";
             public static string strInformnacionEncontrada = "Información Encontrada ";

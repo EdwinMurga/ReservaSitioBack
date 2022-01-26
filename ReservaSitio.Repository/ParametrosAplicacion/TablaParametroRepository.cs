@@ -88,7 +88,49 @@ namespace ReservaSitio.Repository.ParametrosAplicacion
 
         public async Task<ResultDTO<TablaParametroDTO>> DeleteTablaParametro(TablaParametroDTO request)
         {
-            throw new NotImplementedException();
+            ResultDTO<TablaParametroDTO> res = new ResultDTO<TablaParametroDTO>();
+            using (TransactionScope scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
+            {
+                try
+                {
+                    using (var cn = await mConnection.BeginConnection(true))
+                    {
+                        var parameters = new DynamicParameters();
+                        parameters.Add("@p_iid_tabla_auxiliar", request.iid_tabla_auxiliar);                        
+                        parameters.Add("@p_iid_usuario_registra", request.iid_usuario_registra);
+
+
+                        using (var lector = await cn.ExecuteReaderAsync("[dbo].[SP_TABLA_CABECERA_ELIMINAR]", parameters, commandType: CommandType.StoredProcedure, transaction: mConnection.GetTransaction()))
+                        {
+                            while (lector.Read())
+                            {
+                                res.Codigo = Convert.ToInt32(lector["id"].ToString());
+                                res.IsSuccess = true;
+                                res.Message = UtilMensajes.strInformnacionEliminada;
+                            }
+                        }
+                        await mConnection.Complete();
+                    }
+
+
+                    scope.Complete();
+                }
+                catch (Exception e)
+                {
+                    scope.Dispose();
+                    res.IsSuccess = false;
+                    res.Message = UtilMensajes.strInformnacionNoElimina;
+                    res.InnerException = e.Message.ToString();
+
+                    LogErrorDTO lg = new LogErrorDTO();
+                    lg.iid_usuario_registra = request.iid_usuario_registra;
+                    lg.vdescripcion = e.Message.ToString();
+                    lg.vcodigo_mensaje = e.Message.ToString();
+                    lg.vorigen = this.ToString();
+                    await this.iLogErrorRepository.RegisterLogError(lg);
+                }
+            }
+            return res;
         }
 
         public async Task<ResultDTO<TablaParametroDTO>> GetTablaParametro(TablaParametroDTO request)
@@ -239,7 +281,49 @@ namespace ReservaSitio.Repository.ParametrosAplicacion
 
         public async Task<ResultDTO<TablaDetalleParametroDTO>> DeleteTablaDetalleParametro(TablaDetalleParametroDTO request)
         {
-            throw new NotImplementedException();
+            ResultDTO<TablaDetalleParametroDTO> res = new ResultDTO<TablaDetalleParametroDTO>();
+            using (TransactionScope scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
+            {
+                try
+                {
+                    using (var cn = await mConnection.BeginConnection(true))
+                    {
+                        var parameters = new DynamicParameters();
+                        parameters.Add("@p_iid_tabla_detalle", request.iid_tabla_auxiliar);
+                        parameters.Add("@p_iid_usuario_registra", request.iid_usuario_registra);
+
+
+                        using (var lector = await cn.ExecuteReaderAsync("[dbo].[SP_TABLA_DETALLE_ELIMINAR]", parameters, commandType: CommandType.StoredProcedure, transaction: mConnection.GetTransaction()))
+                        {
+                            while (lector.Read())
+                            {
+                                res.Codigo = Convert.ToInt32(lector["id"].ToString());
+                                res.IsSuccess = true;
+                                res.Message = UtilMensajes.strInformnacionEliminada;
+                            }
+                        }
+                        await mConnection.Complete();
+                    }
+
+
+                    scope.Complete();
+                }
+                catch (Exception e)
+                {
+                    scope.Dispose();
+                    res.IsSuccess = false;
+                    res.Message = UtilMensajes.strInformnacionNoElimina;
+                    res.InnerException = e.Message.ToString();
+
+                    LogErrorDTO lg = new LogErrorDTO();
+                    lg.iid_usuario_registra = request.iid_usuario_registra;
+                    lg.vdescripcion = e.Message.ToString();
+                    lg.vcodigo_mensaje = e.Message.ToString();
+                    lg.vorigen = this.ToString();
+                    await this.iLogErrorRepository.RegisterLogError(lg);
+                }
+            }
+            return res;
         }
 
         public async Task<ResultDTO<TablaDetalleParametroDTO>> GetTablaDetalleParametro(TablaDetalleParametroDTO request)

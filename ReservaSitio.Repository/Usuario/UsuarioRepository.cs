@@ -45,15 +45,15 @@ namespace ReservaSitio.Repository.Usuario
                     {
                         var parameters = new DynamicParameters();
                         parameters.Add("@p_iid_usuario", request.iid_usuario);     
-                        parameters.Add("@p_iid_estado_registro", request.iid_estado_registro);
+                        parameters.Add("@p_iid_usuario_registra", request.iid_usuario_registra);
 
-                        using (var lector = await cn.ExecuteReaderAsync("[dbo].[SP_USUARIO_DELETE]", parameters, commandType: CommandType.StoredProcedure, transaction: mConnection.GetTransaction()))
+                        using (var lector = await cn.ExecuteReaderAsync("[dbo].[SP_USUARIO_ELIMINAR]", parameters, commandType: CommandType.StoredProcedure, transaction: mConnection.GetTransaction()))
                         {
                             while (lector.Read())
                             {
                                 res.Codigo = Convert.ToInt32(lector["id"].ToString());
                                 res.IsSuccess = true;
-                                res.Message = UtilMensajes.strInformnacionGrabada;
+                                res.Message = UtilMensajes.strInformnacionEliminada;
                             }
                         }
                         await mConnection.Complete();
@@ -66,7 +66,7 @@ namespace ReservaSitio.Repository.Usuario
                 {
                     scope.Dispose();
                     res.IsSuccess = false;
-                    res.Message = UtilMensajes.strInformnacionNoGrabada;
+                    res.Message = UtilMensajes.strInformnacionNoElimina;
                     res.InnerException = e.Message.ToString();
 
                     LogErrorDTO lg = new LogErrorDTO();
