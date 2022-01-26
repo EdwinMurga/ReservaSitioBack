@@ -97,13 +97,13 @@ namespace ReservaSitio.Repository.Opcion
                         parameters.Add("@p_vcodigo_cliente", request.iid_modulo);
 
 
-                        using (var lector = await cn.ExecuteReaderAsync("[dbo].[]", parameters, commandType: CommandType.StoredProcedure, transaction: mConnection.GetTransaction()))
+                        using (var lector = await cn.ExecuteReaderAsync("[dbo].[SP_MODULO_ELIMINAR]", parameters, commandType: CommandType.StoredProcedure, transaction: mConnection.GetTransaction()))
                         {
                             while (lector.Read())
                             {
-                                res.Codigo = Convert.ToInt32(lector["iid"].ToString());
-                                res.IsSuccess = true;
-                                res.Message = UtilMensajes.strInformnacionGrabada;
+                                res.Codigo = Convert.ToInt32(lector["id"].ToString());
+                                res.IsSuccess = (res.Codigo == 0 ? false : true);
+                                res.Message = (res.Codigo == 0 ? UtilMensajes.strInformnacionNoGrabada : UtilMensajes.strInformnacionGrabada);
                             }
                         }
                         await mConnection.Complete();

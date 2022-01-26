@@ -53,10 +53,10 @@ namespace ReservaSitio.Repository.ParametrosAplicacion
                             while (lector.Read())
                             {
                                 res.Codigo = Convert.ToInt32(lector["id"].ToString());
-                                res.IsSuccess = true;
-                                res.Message = UtilMensajes.strInformnacionGrabada;
                             }
                         }
+                        res.IsSuccess = (res.Codigo == 0 ? false : true);
+                        res.Message = (res.Codigo == 0 ? UtilMensajes.strInformnacionNoElimina : UtilMensajes.strInformnacionEliminada);
                         await mConnection.Complete();
                     }
 
