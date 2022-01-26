@@ -52,8 +52,8 @@ namespace ReservaSitio.Repository.Usuario
                 parameters.Add("@p_vapellido_paterno", request.vapellido_paterno);
                 parameters.Add("@p_vapellido_materno", request.vapellido_materno);
                 parameters.Add("@p_iid_estado_registro", request.iid_estado_registro);
-                parameters.Add("@p_dfecha_registra_ini", request.dfecha_registro_ini);
-                parameters.Add("@p_dfecha_registra_fin", request.dfecha_registro_fin);
+                parameters.Add("@p_dfecha_registra_ini", request.dfecha_registro_ini.ToString());
+                parameters.Add("@p_dfecha_registra_fin", request.dfecha_registro_fin.ToString());
 
                 parameters.Add("@p_indice", request.pageNum);
                 parameters.Add("@p_limit", request.pageSize);

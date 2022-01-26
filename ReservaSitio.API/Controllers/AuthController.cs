@@ -180,11 +180,7 @@ namespace ReservaSitio.API.Controllers
                 {
                     resLogin.IsSuccess = false;
                     resLogin.Message = "Usuario No Registrado";
-                    resLogin.Token = "";
-
-                    /** registra intento de logeo **/
-                   // resUser.iid_usuario = res.item.iid_usuario;
-                    //await this.iIUsuarioAplication.RegisterUsuarioIntentoLogeo(resUser);
+                    resLogin.Token = "";                  
 
                     return Ok(resLogin);
                 }
@@ -207,12 +203,7 @@ namespace ReservaSitio.API.Controllers
                     resLogin.Message = "Usuario, "+ res.item.vcorreo_electronico + " actualmente bloqueado";
                     resLogin.Token = "";
 
-                    /** registra intento de logeo **/
-                    //resUser.iid_usuario = res.item.iid_usuario;
-                    //await this.iIUsuarioAplication.RegisterUsuarioIntentoLogeo(resUser);
-
                     return Ok(resLogin);
-
                 }
 
                 else
@@ -263,12 +254,7 @@ namespace ReservaSitio.API.Controllers
 
                     resLogin.Token =   this.iITokenHandlerService.GenerateToken(tparm);
 
-                    /** registra intento de logeo **/
-                    //resUser.iid_usuario = res.item.iid_usuario;
-                    //await this.iIUsuarioAplication.RegisterUsuarioIntentoLogeo(resUser);
-
                     return Ok(resLogin);
-
                 }    
 
                

@@ -111,12 +111,12 @@ namespace ReservaSitio.API.Controllers.Perfiles
 
         [HttpPost]
         [Route("RegisterPerfilOpcion")]
-        public async Task<ActionResult> RegisterPerfilOpcion([FromBody] PerfilOpcionDTO request)
+        public async Task<ActionResult> RegisterPerfilOpcion([FromBody] List<PerfilOpcionDTO> request)
         {
             ResultDTO<PerfilOpcionDTO> res = new ResultDTO<PerfilOpcionDTO>();
             try
             {
-                request.iid_usuario_registra = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+              //  request.iid_usuario_registra = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
 
                 res = await this.iPerfilOpcionAplication.RegisterPerfilOpcion(request);
                 return Ok(res);

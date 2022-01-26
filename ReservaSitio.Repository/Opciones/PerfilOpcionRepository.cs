@@ -35,7 +35,7 @@ namespace ReservaSitio.Repository.Opcion
         }
 
 
-        public async Task<ResultDTO<PerfilOpcionDTO>> RegisterPerfilOpcion(PerfilOpcionDTO request)
+        public async Task<ResultDTO<PerfilOpcionDTO>> RegisterPerfilOpcion(List<PerfilOpcionDTO> request)
             {
             ResultDTO<PerfilOpcionDTO> res = new ResultDTO<PerfilOpcionDTO>();
             using (TransactionScope scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
@@ -45,26 +45,30 @@ namespace ReservaSitio.Repository.Opcion
 
                     using (var cn = await mConnection.BeginConnection(true))
                     {
-                        var parameters = new DynamicParameters();
-                        parameters.Add("@p_iid_perfil_opcion", request.iid_perfil_opcion);
-                        parameters.Add("@p_iid_perfil", request.iid_perfil);
-                        parameters.Add("@p_iid_opcion", request.iid_opcion); 
-                        parameters.Add("@p_iacceso_crear", request.iacceso_crear);
-                        parameters.Add("@p_iacceso_actualizar", request.iacceso_actualizar);
-                        parameters.Add("@p_iacceso_eliminar", request.iacceso_eliminar);
-                        parameters.Add("@p_iacceso_visualizar", request.iacceso_visualizar);
-                        parameters.Add("@p_iid_estado_registro", request.iid_estado_registro);
-                        parameters.Add("@p_iid_usuario_registra", request.iid_usuario_registra);
+                        foreach (PerfilOpcionDTO x in request) {
+                            var parameters = new DynamicParameters();
+                            parameters.Add("@p_iid_perfil_opcion", x.iid_perfil_opcion);
+                            parameters.Add("@p_iid_perfil", x.iid_perfil);
+                            parameters.Add("@p_iid_opcion", x.iid_opcion);
+                            parameters.Add("@p_iacceso_crear", x.iacceso_crear);
+                            parameters.Add("@p_iacceso_actualizar", x.iacceso_actualizar);
+                            parameters.Add("@p_iacceso_eliminar", x.iacceso_eliminar);
+                            parameters.Add("@p_iacceso_visualizar", x.iacceso_visualizar);
+                            parameters.Add("@p_iid_estado_registro", x.iid_estado_registro);
+                            parameters.Add("@p_iid_usuario_registra", x.iid_usuario_registra);
 
-                        using (var lector = await cn.ExecuteReaderAsync("[dbo].[SP_PERFIL_OPCION_REGISTAR]", parameters, commandType: CommandType.StoredProcedure, transaction: mConnection.GetTransaction()))
-                        {
-                            while (lector.Read())
+                            using (var lector = await cn.ExecuteReaderAsync("[dbo].[SP_PERFIL_OPCION_REGISTAR]", parameters, commandType: CommandType.StoredProcedure, transaction: mConnection.GetTransaction()))
                             {
-                                res.Codigo = Convert.ToInt32(lector["id"].ToString());
-                                res.IsSuccess = true;
-                                res.Message = UtilMensajes.strInformnacionGrabada;
+                                while (lector.Read())
+                                {
+                                    res.Codigo = Convert.ToInt32(lector["id"].ToString());
+                                    res.IsSuccess = true;
+                                    res.Message = UtilMensajes.strInformnacionGrabada;
+                                }
                             }
+
                         }
+                       
                         await mConnection.Complete();
                     }
 
