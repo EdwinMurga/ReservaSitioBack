@@ -5,6 +5,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="NPOI" Version="2.5.5" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\ReservaSitio.Abstraction\ReservaSitio.Abstraction.csproj" />
     <ProjectReference Include="..\ReservaSitio.DTOs\ReservaSitio.DTOs.csproj" />
     <ProjectReference Include="..\ReservaSitio.Entities\ReservaSitio.Entities.csproj" />
