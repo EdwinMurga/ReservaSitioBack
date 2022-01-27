@@ -29,6 +29,42 @@ namespace ReservaSitio.API.Controllers.Opciones
         }
 
 
+
+        [HttpDelete]
+       // [Route("DeleteModulo")]
+        public async Task<ActionResult> DeleteModulo([FromQuery] int request)
+        {
+            ResultDTO<ModuloDTO> res = new ResultDTO<ModuloDTO>();
+            try
+            {
+                ModuloDTO item = new ModuloDTO();
+                item.iid_modulo = request;
+                item.iid_usuario_registra = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+
+                res = await this.iModuloAplication.DeleteModulo(item);
+                return Ok(res);
+            }
+            catch (Exception e)
+            {
+                res.InnerException = e.Message.ToString();
+
+                var sorigen = "";
+                foreach (object c in this.ControllerContext.RouteData.Values.Values)
+                {
+                    sorigen += c.ToString() + " | ";
+                }
+                LogErrorDTO lg = new LogErrorDTO();
+                lg.iid_usuario_registra = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+                lg.iid_opcion = 1;
+                lg.vdescripcion = e.Message.ToString();
+                lg.vcodigo_mensaje = e.Message.ToString();
+                lg.vorigen = sorigen;
+                await this.iLogErrorAplication.RegisterLogError(lg);
+
+                return BadRequest(res);
+            }
+        }
+
         [HttpPost]
         [Route("RegisterModulo")]
         public async Task<ActionResult> RegisterModulo([FromBody] ModuloDTO request)

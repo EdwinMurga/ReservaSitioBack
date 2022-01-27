@@ -102,7 +102,7 @@ namespace ReservaSitio.Repository.Opcion
                         parameters.Add("@p_iid_usuario_registra", request.iid_usuario_registra);
 
 
-                        using (var lector = await cn.ExecuteReaderAsync("[dbo].[SP_OPCION_ELIMINAR]", parameters, commandType: CommandType.StoredProcedure, transaction: mConnection.GetTransaction()))
+                        using (var lector = await cn.ExecuteReaderAsync("[dbo].[SP_PLANTILLA_CORREO_ELIMINAR]", parameters, commandType: CommandType.StoredProcedure, transaction: mConnection.GetTransaction()))
                         {
                             while (lector.Read())
                             {

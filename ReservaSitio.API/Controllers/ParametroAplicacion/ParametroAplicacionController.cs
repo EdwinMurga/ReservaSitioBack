@@ -35,6 +35,41 @@ namespace ReservaSitio.API.Controllers.ParametroAplicacion
 
         #region "Parametro Globales"
 
+        [HttpDelete]
+        //[Route("DeleteParametro")]
+        public async Task<ActionResult> DeleteParametro([FromQuery] int request)
+        {
+            ResultDTO<ParametroAplicacionDTO> res = new ResultDTO<ParametroAplicacionDTO>();
+            try
+            {
+                ParametroAplicacionDTO item = new ParametroAplicacionDTO();
+                item.iid_parametro = request;
+                item.iid_usuario_registra = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+
+                res = await this.iParametroAplication.DeleteParametro(item);
+                return Ok(res);
+            }
+            catch (Exception e)
+            {
+                res.InnerException = e.Message.ToString();
+
+                var sorigen = "";
+                foreach (object c in this.ControllerContext.RouteData.Values.Values)
+                {
+                    sorigen += c.ToString() + " | ";
+                }
+                LogErrorDTO lg = new LogErrorDTO();
+                lg.iid_usuario_registra = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+                lg.iid_opcion = 1;
+                lg.vdescripcion = e.Message.ToString();
+                lg.vcodigo_mensaje = e.Message.ToString();
+                lg.vorigen = sorigen;
+                await this.iLogErrorAplication.RegisterLogError(lg);
+
+                return BadRequest(res);
+            }
+        }
+
         [HttpPost]
         [Route("RegisterParametro")]
         public async Task<ActionResult> RegisterParametro([FromBody] ParametroAplicacionDTO request)
@@ -138,6 +173,8 @@ namespace ReservaSitio.API.Controllers.ParametroAplicacion
         #endregion
 
         #region "tabla parametros Globales"
+       
+
         [HttpPost]
         [Route("RegisterTablaParametro")]
         public async Task<ActionResult> RegisterTablaParametro([FromBody] TablaParametroDTO request)
@@ -243,6 +280,42 @@ namespace ReservaSitio.API.Controllers.ParametroAplicacion
 
 
         #region "tabla detalle parametros Globales"
+
+        [HttpDelete]
+        [Route("DeleteTablaDetalleParametro")]
+        public async Task<ActionResult> DeleteTablaDetalleParametro([FromQuery] int request)
+        {
+            ResultDTO<TablaDetalleParametroDTO> res = new ResultDTO<TablaDetalleParametroDTO>();
+            try
+            {
+                TablaDetalleParametroDTO item = new TablaDetalleParametroDTO();
+                item.iid_tabla_auxiliar = request;
+                item.iid_usuario_registra = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+
+                res = await this.iITablaParametroAplication.DeleteTablaDetalleParametro(item);
+                return Ok(res);
+            }
+            catch (Exception e)
+            {
+                res.InnerException = e.Message.ToString();
+
+                var sorigen = "";
+                foreach (object c in this.ControllerContext.RouteData.Values.Values)
+                {
+                    sorigen += c.ToString() + " | ";
+                }
+                LogErrorDTO lg = new LogErrorDTO();
+                lg.iid_usuario_registra = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+                lg.iid_opcion = 1;
+                lg.vdescripcion = e.Message.ToString();
+                lg.vcodigo_mensaje = e.Message.ToString();
+                lg.vorigen = sorigen;
+                await this.iLogErrorAplication.RegisterLogError(lg);
+
+                return BadRequest(res);
+            }
+        }
+
         [HttpPost]
         [Route("RegisterTablaDetalleParametro")]
         public async Task<ActionResult> RegisterTablaDetalleParametro([FromBody] TablaDetalleParametroDTO request)
