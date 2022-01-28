@@ -18,4 +18,15 @@ namespace ReservaSitio.DTOs
 	public string vcodigo_mensaje { get; set; }
 	public string vorigen { get; set; }
 }
+
+
+	public class LogErrorTablaDTO : AuditoriaDTO
+	{
+
+		public int iid_log_tabla { get; set; }
+		public string vnombretabla { get; set; }
+		public string vaccion { get; set; }
+	}
+
+
 }
