@@ -26,6 +26,11 @@ namespace ReservaSitio.DTOs.Usuario
 		public int iid_empresa { get; set; }
 
 
+		public string vnombre_perfil { get; set; }
+		public string vestado { get; set; }
+		public string vtipodocumento { get; set; }
+
+
 	}
 
 	public class UsuarioListDTO : AuditoriaDTO

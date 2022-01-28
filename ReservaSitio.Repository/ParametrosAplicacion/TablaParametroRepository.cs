@@ -61,7 +61,7 @@ namespace ReservaSitio.Repository.ParametrosAplicacion
                             }
                         }
                         res.IsSuccess = (res.Codigo == 0 ? false : true);
-                        res.Message = (res.Codigo == 0 ? UtilMensajes.strInformnacionNoElimina : UtilMensajes.strInformnacionEliminada);
+                        res.Message = (res.Codigo == 0 ? UtilMensajes.strInformnacionEncontrada : UtilMensajes.strInformnacionNoEncontrada);
                         await mConnection.Complete();
                     }
 
