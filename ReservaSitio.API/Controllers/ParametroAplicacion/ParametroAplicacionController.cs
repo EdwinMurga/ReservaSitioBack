@@ -394,7 +394,7 @@ namespace ReservaSitio.API.Controllers.ParametroAplicacion
                 req.iid_usuario_registra = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
                 req.iid_tabla_auxiliar = requestAuxiliar;
                 req.pageNum = 1;
-                req.pageSize = 10;
+                req.pageSize = 10000;
                 req.iid_codigo_descripcion = "";
                 req.vvalor_texto_corto = "";
                 req.iid_usuario_registra = -1;
