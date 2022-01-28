@@ -3,8 +3,10 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using ReservaSitio.Abstraction.IApplication.LogError;
 using ReservaSitio.Abstraction.IApplication.ParametrosAplicacion;
+using ReservaSitio.API.DTO;
 using ReservaSitio.Application.ParametrosAplicacion;
 using ReservaSitio.DTOs;
+using ReservaSitio.DTOs.Opciones;
 using ReservaSitio.DTOs.ParametroAplicacion;
 using System;
 using System.Collections.Generic;
@@ -358,6 +360,63 @@ namespace ReservaSitio.API.Controllers.ParametroAplicacion
             {
                 request.iid_usuario_registra = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
                 res = await this.iITablaParametroAplication.GetListTablaDetalleParametro(request);
+                return Ok(res);
+            }
+            catch (Exception e)
+            {
+                res.InnerException = e.Message.ToString();
+
+                var sorigen = "";
+                foreach (object c in this.ControllerContext.RouteData.Values.Values)
+                {
+                    sorigen += c.ToString() + " | ";
+                }
+                LogErrorDTO lg = new LogErrorDTO();
+                lg.iid_usuario_registra = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+                lg.iid_opcion = 1;
+                lg.vdescripcion = e.Message.ToString();
+                lg.vcodigo_mensaje = e.Message.ToString();
+                lg.vorigen = sorigen;
+                await this.iLogErrorAplication.RegisterLogError(lg);
+
+                return BadRequest(res);
+            }
+        }
+
+        [HttpGet]
+        [Route("GetListCbTablaDetalleParametro")]
+        public async Task<ActionResult> GetListCbTablaDetalleParametro([FromQuery] int requestAuxiliar)
+        {
+            ResultDTO<ListCbDTO> res = new ResultDTO<ListCbDTO>();
+            try
+            {
+                TablaDetalleParametroDTO req = new TablaDetalleParametroDTO();
+                req.iid_usuario_registra = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+                req.iid_tabla_auxiliar = requestAuxiliar;
+                req.pageNum = 1;
+                req.pageSize = 10;
+                req.iid_codigo_descripcion = "";
+                req.vvalor_texto_corto = "";
+                req.iid_usuario_registra = -1;
+                req.iid_estado_registro = -1;
+
+                ResultDTO<TablaDetalleParametroDTO> restabl = await this.iITablaParametroAplication.GetListTablaDetalleParametro(req);
+
+                if (restabl.IsSuccess)
+                {
+                    List<ListCbDTO> list = new List<ListCbDTO>();
+                    foreach (TablaDetalleParametroDTO x in restabl.data)
+                    {
+                        ListCbDTO item = new ListCbDTO();
+                        item.id = x.nvalor_entero;
+                        item.value = x.vvalor_texto_corto;
+                        item.value2 = x.vvalor_texto_largo;
+                        list.Add(item);
+                    }
+                    res.data = list;
+                }
+
+
                 return Ok(res);
             }
             catch (Exception e)

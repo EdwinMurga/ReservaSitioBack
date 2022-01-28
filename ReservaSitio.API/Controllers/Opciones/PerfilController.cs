@@ -97,7 +97,7 @@ namespace ReservaSitio.API.Controllers.Perfiles
             }
         }
 
-        [HttpPost]
+        [HttpGet]
         [Route("GetListCbPerfil")]
         public async Task<ActionResult> GetListCbPerfil()
         {
