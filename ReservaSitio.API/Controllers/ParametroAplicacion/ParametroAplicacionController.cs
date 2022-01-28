@@ -414,6 +414,9 @@ namespace ReservaSitio.API.Controllers.ParametroAplicacion
                         list.Add(item);
                     }
                     res.data = list;
+                    res.IsSuccess = restabl.IsSuccess;
+                    res.Message = restabl.Message;
+                    res.InnerException = restabl.InnerException;
                 }
 
 

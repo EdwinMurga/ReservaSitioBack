@@ -124,6 +124,9 @@ namespace ReservaSitio.API.Controllers.Perfiles
                         list.Add(item);
                     }
                     res.data = list;
+                    res.IsSuccess = resper.IsSuccess;
+                    res.Message = resper.Message;
+                    res.InnerException = resper.InnerException;
                 }
               
 
