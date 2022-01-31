@@ -359,12 +359,13 @@ namespace ReservaSitio.API.Controllers.Perfiles
 
         #region "Perfil Opcion "
 
-        [HttpPost]
+        [HttpGet]
         [Route("GetPerfilOpcionUsuario")]
         public async Task<ActionResult> GetPerfilOpcionUsuario([FromQuery] int request)
         {
-            ResultDTO<PerfilUsuarioDTO> res = new ResultDTO<PerfilUsuarioDTO>();
-            PerfilUsuarioDTO pfusuario = new PerfilUsuarioDTO();
+            //Task<ResultDTO<PerfilUsuarioMenu>> GetPerfilOpcionUsuario(PerfilUsuarioMenu request)
+            ResultDTO<PerfilUsuarioMenu> res = new ResultDTO<PerfilUsuarioMenu>();
+            PerfilUsuarioMenu pfusuario = new PerfilUsuarioMenu();
             pfusuario.iid_usuario = request;
             try
             {
@@ -391,6 +392,127 @@ namespace ReservaSitio.API.Controllers.Perfiles
             }
         }
 
+        [HttpGet]
+        [Route("GetPerfilUsuario")]
+        public async Task<ActionResult> GetPerfilUsuario([FromQuery] int request)
+        {
+            //Task<ResultDTO<PerfilUsuarioMenu>> GetPerfilOpcionUsuario(PerfilUsuarioMenu request)
+            //ResultDTO<PerfilUsuarioMenu> res_perfil =new ResultDTO<PerfilUsuarioMenu>();
+            ResultDTO<List<Menu>> res = new ResultDTO<List<Menu>>();
+            PerfilUsuarioMenu pfusuario = new PerfilUsuarioMenu();
+            pfusuario.iid_usuario = request;
+            try
+            {
+                List<Menu> lsmodulo = new List<Menu>();
+                List<SubMenu> lsopcion = null;
+                Menu modulo = null;
+                ResultDTO<PerfilUsuarioMenu> res_perfil = await this.iPerfilOpcionAplication.GetPerfilOpcionUsuario(pfusuario);
+
+                foreach (Menu x in res_perfil.item.menu) {
+                    modulo = new Menu();
+                    lsopcion = new List<SubMenu>();
+                    modulo.iid_modulo = x.iid_modulo;
+                    // modulo.iorden = x.iorden_modulo;
+                    modulo.text = x.text;
+                    modulo.link = x.link;
+                    modulo.icon = x.icon;
+
+                    modulo.iindica_visible_modulo = x.iindica_visible_modulo;
+                    lsmodulo.Add(modulo);
+                }
+                res.item = lsmodulo;
+
+                return Ok(res);
+            }
+            catch (Exception e)
+            {
+                res.InnerException = e.Message.ToString();
+
+                var sorigen = "";
+                foreach (object c in this.ControllerContext.RouteData.Values.Values)
+                {
+                    sorigen += c.ToString() + " | ";
+                }
+                LogErrorDTO lg = new LogErrorDTO();
+                lg.iid_usuario_registra = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+                lg.iid_opcion = 1;
+                lg.vdescripcion = e.Message.ToString();
+                lg.vcodigo_mensaje = e.Message.ToString();
+                lg.vorigen = sorigen;
+                await this.iLogErrorAplication.RegisterLogError(lg);
+                return BadRequest(res);
+            }
+        }
+
+
+
+        [HttpGet]
+        [Route("GetOpcionUsuario")]
+        public async Task<ActionResult> GetOpcionUsuario([FromQuery] int request)
+        {
+            //Task<ResultDTO<PerfilUsuarioMenu>> GetPerfilOpcionUsuario(PerfilUsuarioMenu request)
+            //ResultDTO<PerfilUsuarioMenu> res = new ResultDTO<PerfilUsuarioMenu>();
+            ResultDTO<List<SubMenu>> res = new ResultDTO<List<SubMenu>>();
+            PerfilUsuarioMenu pfusuario = new PerfilUsuarioMenu();
+            pfusuario.iid_usuario = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value); ;
+            try
+            {
+               // List<Menu> lsmodulo = new List<Menu>();
+                List<SubMenu> lsopcion = null;
+            //    Menu modulo = null;
+                ResultDTO<PerfilUsuarioMenu> res_perfil = await this.iPerfilOpcionAplication.GetPerfilOpcionUsuario(pfusuario);
+
+                if (res_perfil.IsSuccess) {
+
+                    var menu = res_perfil.item.menu.Find(xx => xx.iid_modulo == request);
+
+                    foreach (SubMenu x in menu.submenu)
+                    {
+                        SubMenu opcion = new SubMenu();
+                        opcion.iid_modulo = x.iid_modulo;
+                        opcion.iid_opcion = x.iid_opcion;
+                        //opcion.iindica_visible = x.iid;
+                        //opcion.iorden = y.iorden_opcion;
+                        opcion.text = x.text;
+                        opcion.icon = x.icon;
+                        opcion.iindica_visible_opcion = x.iindica_visible_opcion;
+                        opcion.link = x.link;
+
+                        opcion.icrear = x.icrear;
+                        opcion.ivisualizar = x.ivisualizar;
+                        opcion.ieliminar = x.ieliminar;
+                        opcion.iactualizar = x.iactualizar;
+
+                        lsopcion.Add(opcion);
+                        // modulo.submenu = lsopcion;
+                    }
+                     res.item = lsopcion;
+
+                }
+
+                
+
+                return Ok(res);
+            }
+            catch (Exception e)
+            {
+                res.InnerException = e.Message.ToString();
+
+                var sorigen = "";
+                foreach (object c in this.ControllerContext.RouteData.Values.Values)
+                {
+                    sorigen += c.ToString() + " | ";
+                }
+                LogErrorDTO lg = new LogErrorDTO();
+                lg.iid_usuario_registra = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+                lg.iid_opcion = 1;
+                lg.vdescripcion = e.Message.ToString();
+                lg.vcodigo_mensaje = e.Message.ToString();
+                lg.vorigen = sorigen;
+                await this.iLogErrorAplication.RegisterLogError(lg);
+                return BadRequest(res);
+            }
+        }
         #endregion
 
     }

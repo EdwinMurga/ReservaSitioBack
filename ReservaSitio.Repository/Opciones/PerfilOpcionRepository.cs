@@ -216,11 +216,11 @@ namespace ReservaSitio.Repository.Opcion
             return res;
         }
 
-        public async Task<ResultDTO<PerfilUsuarioDTO>> GetPerfilOpcionUsuario(PerfilUsuarioDTO request)
+        public async Task<ResultDTO<PerfilUsuarioMenu>> GetPerfilOpcionUsuario(PerfilUsuarioMenu request)
         {
-            ResultDTO<PerfilUsuarioDTO> res = new ResultDTO<PerfilUsuarioDTO>();
-            PerfilUsuarioDTO item = new PerfilUsuarioDTO();
-           
+            ResultDTO<PerfilUsuarioMenu> res = new ResultDTO<PerfilUsuarioMenu>();
+            PerfilUsuarioMenu item = new PerfilUsuarioMenu();
+
             try
             {
                 var parameters = new DynamicParameters();
@@ -231,56 +231,78 @@ namespace ReservaSitio.Repository.Opcion
                     var query = await cn.QueryAsync<PerfilUsuarioResponseDTO>("[dbo].[SP_PERFIL_OPCION_USUARIO_BY_USUARIO_ID]", parameters, commandType: System.Data.CommandType.StoredProcedure);
                     var  resulquery = query.ToList();
                     res.IsSuccess = (query.Any() == true ? true : false);
+                    if (res.IsSuccess) {
+                        List<Menu> lsmodulo = new List<Menu>();
+                        List<PerfilOpcionDTO> lsPerOpcion = new List<PerfilOpcionDTO>();
+                        List<SubMenu> lsopcion = null;
+                        Menu modulo = null;
+                        // PerfilOpcionDTO PerOpcio = null;
+                        foreach (PerfilUsuarioResponseDTO x in resulquery)
+                        {
+                            // PerOpcio = new PerfilOpcionDTO();
+                            //.iid_opcion = x.iid_opcion;
+                            //PerOpcio.iid_perfil = x.iid_perfil;
+                            //PerOpcio.iid_perfil_opcion = x.iid_perfil_opcion;
 
-                    List<ModuloDTO> lsmodulo = new List<ModuloDTO>();
-                    List<PerfilOpcionDTO> lsPerOpcion = new List<PerfilOpcionDTO>();
-                    List<OpcionDTO> lsopcion = null;
-                    ModuloDTO modulo = null;
-                    PerfilOpcionDTO PerOpcio = null;
-                    foreach (PerfilUsuarioResponseDTO x in resulquery)
-                    {
-                         PerOpcio = new PerfilOpcionDTO();
-                        PerOpcio.iid_opcion = x.iid_opcion;
-                        PerOpcio.iid_perfil = x.iid_perfil;
-                        PerOpcio.iid_perfil_opcion = x.iid_perfil_opcion;
+                            //PerOpcio.iacceso_actualizar = x.iacceso_actualizar;
+                            //PerOpcio.iacceso_crear = x.iacceso_crear;
+                            //PerOpcio.iacceso_eliminar = x.iacceso_eliminar;
+                            //PerOpcio.iacceso_visualizar = x.iacceso_visualizar;
 
-                            PerOpcio.iacceso_actualizar = x.iacceso_actualizar;
-                            PerOpcio.iacceso_crear = x.iacceso_crear;
-                            PerOpcio.iacceso_eliminar = x.iacceso_eliminar;
-                            PerOpcio.iacceso_visualizar = x.iacceso_visualizar;
-
-                        if (lsmodulo.Find(xx => xx.iid_modulo == x.iid_modulo) == null) {
-                                modulo = new ModuloDTO();
-                                lsopcion = new List<OpcionDTO>();
-                                modulo.iid_modulo = x.iid_modulo;
-                                modulo.iorden = x.iorden_modulo;
-                                modulo.vtitulo = x.vtitulo_modulo;
-                                modulo.iindica_visible = x.iindica_visible_modulo;
-                                modulo.iid_sistema = x.iid_sistema;
-                            
-                            foreach (PerfilUsuarioResponseDTO y in resulquery)
+                            if (lsmodulo.Find(xx => xx.iid_modulo == x.iid_modulo) == null)
                             {
-                                if (lsopcion.Find(xx => xx.iid_opcion == y.iid_opcion && xx.iid_modulo == y.iid_modulo) == null)
-                                {
-                                    OpcionDTO opcion = new OpcionDTO();
-                                    opcion.iid_modulo = y.iid_modulo;
-                                    opcion.iid_opcion = y.iid_opcion;
-                                    //opcion.iindica_visible = x.iid;
-                                    opcion.iorden = y.iorden_opcion;
-                                    opcion.vtitulo = y.vtitulo_opcion;
-                                    opcion.vicono = y.vicono_opcion;
-                                    opcion.iindica_visible = y.iindica_visible_opcion;
-                                    opcion.vurl = y.vurl_opcion;
-                                    lsopcion.Add(opcion);
-                                    modulo.opcion = lsopcion;                                       
+                                modulo = new Menu();
+                                lsopcion = new List<SubMenu>();
+                                modulo.iid_modulo = x.iid_modulo;
+                                // modulo.iorden = x.iorden_modulo;
+                                modulo.text = x.vtitulo_modulo;
+                                modulo.link = x.vurl_modulo;
+                                modulo.icon = x.vicono_modulo;
+
+                                modulo.iindica_visible_modulo = x.iindica_visible_modulo;
+                                // modulo.iid_sistema = x.iid_sistema;
+                                if (modulo.iid_modulo == 0) 
+                                { 
+                                    lsmodulo.Add(modulo);
                                 }
+                                else { 
+                                      
+                                foreach (PerfilUsuarioResponseDTO y in resulquery)
+                                {
+                                    if (lsopcion.Find(xx => xx.iid_opcion == y.iid_opcion && xx.iid_modulo == y.iid_modulo) == null)
+                                    {
+                                        SubMenu opcion = new SubMenu();
+                                        opcion.iid_modulo = y.iid_modulo;
+                                        opcion.iid_opcion = y.iid_opcion;
+                                        //opcion.iindica_visible = x.iid;
+                                        //opcion.iorden = y.iorden_opcion;
+                                        opcion.text = y.vtitulo_opcion;
+                                        opcion.icon = y.vicono_opcion;
+                                        opcion.iindica_visible_opcion = y.iindica_visible_opcion;
+                                        opcion.link = y.vurl_opcion;
+
+                                        opcion.icrear = y.iacceso_crear;
+                                        opcion.ivisualizar = y.iacceso_visualizar;
+                                        opcion.ieliminar = y.iacceso_eliminar;
+                                        opcion.iactualizar = y.iacceso_actualizar;
+
+                                        lsopcion.Add(opcion);
+                                        modulo.submenu = lsopcion;
+                                    }
+                                }
+                                lsmodulo.Add(modulo);
+                                
+                                }
+                          
+
+                                
                             }
-                             lsmodulo.Add(modulo);
+                            // lsPerOpcion.Add(PerOpcio);
                         }
-                        lsPerOpcion.Add(PerOpcio);
+                        // item.perfilOpcion = lsPerOpcion;
+                        item.menu = lsmodulo;
                     }
-                    item.perfilOpcion = lsPerOpcion;
-                    item.modulo = lsmodulo;
+                   
                 }
                 //item
 
@@ -306,6 +328,8 @@ namespace ReservaSitio.Repository.Opcion
             }
             return res;
         }
+
+       
 
     }
 

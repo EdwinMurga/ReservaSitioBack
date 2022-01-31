@@ -20,16 +20,6 @@ namespace ReservaSitio.DTOs.Opciones
 
 	}
 
-	public class PerfilUsuarioDTO 
-	{
-		public int iid_usuario { get; set; }
-
-		public List<ModuloDTO> modulo { set; get; }
-	
-		public List<PerfilOpcionDTO> perfilOpcion { get; set; }
-
-	}
-
 	public class PerfilUsuarioResponseDTO
 	{
 		public int iid_usuario { get; set; }
@@ -50,6 +40,9 @@ namespace ReservaSitio.DTOs.Opciones
 		public int iorden_modulo { get; set; }
 		public int iindica_visible_modulo { get; set; }
 
+		public string vicono_modulo { get; set; }
+		public string vurl_modulo { get; set; }
+
 		public int iid_opcion { get; set; }
 		public string vtitulo_opcion { get; set; }
 		public int iindica_visible_opcion { get; set; }
@@ -57,5 +50,53 @@ namespace ReservaSitio.DTOs.Opciones
 		public string vicono_opcion { get; set; }
 		public string vurl_opcion { get; set; }
 	}
+	public class PerfilUsuarioDTO
+	{
+		public int iid_usuario { get; set; }
+
+		public List<ModuloDTO> modulo { set; get; }
+
+		public List<PerfilOpcionDTO> perfilOpcion { get; set; }
+
+	}
+
+	public class Menu {
+		public int iid_modulo { get; set; }
+
+		public string text { get; set; }
+		public string link { get; set; }
+		public string icon { get; set; }
+		public int iidIndicaSubMenu { get; set; }
+		public int iindica_visible_modulo { get; set; }
+		public List<SubMenu> submenu { get; set; }
+	}
+	public class SubMenu
+	{
+		public int iid_modulo { get; set; }
+		public int iid_opcion { get; set; }
+		public string text { get; set; }
+		public string link { get; set; }
+		public string icon { get; set; }
+
+		public int iidIndicaSubMenu { get; set; }
+		public int iindica_visible_opcion { get; set; }
+
+		//public int iorden_opcion { get; set; }
+
+		public int icrear { get; set; }
+		public int iactualizar { get; set; }
+		public int ieliminar { get; set; }
+		public int ivisualizar { get; set; }
+	}
+
+
+	public class PerfilUsuarioMenu
+	{
+		public int iid_usuario { get; set; }
+		public List<Menu> menu { set; get; }
+
+	}
+	
+
 
 }
