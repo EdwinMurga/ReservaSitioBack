@@ -13,8 +13,8 @@ using System.Threading.Tasks;
 
 namespace ReservaSitio.API.Controllers.Opciones
 {
-    [Route("api/[controller]")]
-    [ApiController]
+    //[Route("api/[controller]")]
+    //[ApiController]
     [Authorize]
     public class ModuloController : Controller
     {
@@ -30,8 +30,8 @@ namespace ReservaSitio.API.Controllers.Opciones
 
 
 
-        [HttpDelete]
-       // [Route("DeleteModulo")]
+        //[HttpDelete]
+        //[Route("DeleteModulo")]
         public async Task<ActionResult> DeleteModulo([FromQuery] int request)
         {
             ResultDTO<ModuloDTO> res = new ResultDTO<ModuloDTO>();
@@ -65,8 +65,8 @@ namespace ReservaSitio.API.Controllers.Opciones
             }
         }
 
-        [HttpPost]
-        [Route("RegisterModulo")]
+        //[HttpPost]
+        //[Route("RegisterModulo")]
         public async Task<ActionResult> RegisterModulo([FromBody] ModuloDTO request)
         {
             ResultDTO<ModuloDTO> res = new ResultDTO<ModuloDTO>();
@@ -98,8 +98,8 @@ namespace ReservaSitio.API.Controllers.Opciones
             }
         }
 
-        [HttpPost]
-        [Route("GetListModulo")]
+        //[HttpPost]
+        //[Route("GetListModulo")]
         public async Task<ActionResult> GetListModulo([FromBody] ModuloDTO request)
         {
             ResultDTO<ModuloDTO> res = new ResultDTO<ModuloDTO>();
@@ -130,8 +130,8 @@ namespace ReservaSitio.API.Controllers.Opciones
             }
         }
 
-        [HttpGet]
-        [Route("GetModulo")]
+        //[HttpGet]
+        //[Route("GetModulo")]
         public async Task<ActionResult> GetModulo([FromQuery] int request)
         {
             ResultDTO<ModuloDTO> res = new ResultDTO<ModuloDTO>();

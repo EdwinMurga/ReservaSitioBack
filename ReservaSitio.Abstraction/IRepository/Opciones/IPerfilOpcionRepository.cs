@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+
 namespace ReservaSitio.Abstraction.IRepository.Opciones
 {
     public interface IPerfilOpcionRepository

@@ -34,6 +34,7 @@ namespace ReservaSitio.API.Controllers.Perfiles
         }
 
         #region "Perfil"
+        /*
         [HttpPost]
         [Route("RegisterPerfil")]
         public async Task<ActionResult> RegisterPerfil([FromBody] PerfilDTO request)
@@ -65,6 +66,7 @@ namespace ReservaSitio.API.Controllers.Perfiles
                 return BadRequest(res);
             }
         }
+        */
 
         [HttpPost]
         [Route("GetListPerfil")]
@@ -152,6 +154,7 @@ namespace ReservaSitio.API.Controllers.Perfiles
             }
         }
 
+        /*
         [HttpGet]
         [Route("GetPerfil")]
         public async Task<ActionResult> GetPerfil([FromQuery] int request)
@@ -184,9 +187,10 @@ namespace ReservaSitio.API.Controllers.Perfiles
                 return BadRequest(res);
             }
         }
+        */
 
         [HttpDelete]
-        //[Route("DeletePerfil")]
+        [Route("DeletePerfil")]
         public async Task<ActionResult> DeletePerfil([FromQuery] int request)
         {
             ResultDTO<PerfilDTO> res = new ResultDTO<PerfilDTO>();
@@ -226,6 +230,9 @@ namespace ReservaSitio.API.Controllers.Perfiles
 
         #region "PerfilOpcion"
 
+
+
+
         [HttpGet]
         [Route("GetPerfilOpcion")]
         public async Task<ActionResult> GetPerfilOpcion([FromQuery] int request)
@@ -261,12 +268,15 @@ namespace ReservaSitio.API.Controllers.Perfiles
 
         [HttpPost]
         [Route("RegisterPerfilOpcion")]
-        public async Task<ActionResult> RegisterPerfilOpcion([FromBody] List<PerfilOpcionDTO> request)
+        public async Task<ActionResult> RegisterPerfilOpcion([FromBody] PerfilDTOResponse request)
         {
             ResultDTO<PerfilOpcionDTO> res = new ResultDTO<PerfilOpcionDTO>();
             try
             {
-              //  request.iid_usuario_registra = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+
+                // List<PerfilOpcionDTO> req = new List<PerfilOpcionDTO>();
+
+                request.perfil.iid_usuario_registra = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
 
                 res = await this.iPerfilOpcionAplication.RegisterPerfilOpcion(request);
                 return Ok(res);
@@ -357,7 +367,7 @@ namespace ReservaSitio.API.Controllers.Perfiles
 
         #endregion
 
-        #region "Perfil Opcion "
+        #region "Perfil Opcion Usuario"
 
         [HttpGet]
         [Route("GetPerfilOpcionUsuario")]
@@ -513,6 +523,10 @@ namespace ReservaSitio.API.Controllers.Perfiles
                 return BadRequest(res);
             }
         }
+        #endregion
+
+        #region" perfil opcion "
+
         #endregion
 
     }

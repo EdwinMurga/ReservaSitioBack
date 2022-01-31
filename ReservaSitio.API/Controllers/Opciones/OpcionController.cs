@@ -13,8 +13,8 @@ using System.Threading.Tasks;
 
 namespace ReservaSitio.API.Controllers.Opciones
 {
-     [Route("api/[controller]")]
-     [ApiController]
+    // [Route("api/[controller]")]
+    // [ApiController]
     [Authorize]
     public class OpcionController : Controller
     {
@@ -33,8 +33,8 @@ namespace ReservaSitio.API.Controllers.Opciones
         #region "Opcion"
 
 
-        [HttpPost]
-        [Route("RegisterOpcion")]
+        //[HttpPost]
+        //[Route("RegisterOpcion")]
         public async Task<ActionResult> RegisterOpcion([FromBody] OpcionDTO request)
         {
             ResultDTO<OpcionDTO> res = new ResultDTO<OpcionDTO>();
@@ -65,8 +65,8 @@ namespace ReservaSitio.API.Controllers.Opciones
             }
         }
 
-        [HttpPost]
-        [Route("GetListOpcion")]
+        //[HttpPost]
+        //[Route("GetListOpcion")]
         public async Task<ActionResult> GetListOpcion([FromBody] OpcionDTO request)
         {
             ResultDTO<OpcionDTO> res = new ResultDTO<OpcionDTO>();
@@ -96,8 +96,8 @@ namespace ReservaSitio.API.Controllers.Opciones
             }
         }
 
-        [HttpGet]
-        [Route("GetOpcion")]
+        //[HttpGet]
+        //[Route("GetOpcion")]
         public async Task<ActionResult> GetOpcion([FromQuery] int request)
         {
             ResultDTO<OpcionDTO> res = new ResultDTO<OpcionDTO>();
@@ -129,8 +129,8 @@ namespace ReservaSitio.API.Controllers.Opciones
             }
         }
 
-        [HttpDelete]
-        //[Route("DeleteOpcion")]
+        //[HttpDelete]
+            //[Route("DeleteOpcion")]
         public async Task<ActionResult> DeleteOpcion([FromQuery] int request)
         {
             ResultDTO<OpcionDTO> res = new ResultDTO<OpcionDTO>();

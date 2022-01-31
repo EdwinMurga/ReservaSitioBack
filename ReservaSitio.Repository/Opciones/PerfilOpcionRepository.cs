@@ -15,6 +15,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Transactions;
+
 using static ReservaSitio.Entities.Enum;
 
 namespace ReservaSitio.Repository.Opcion
@@ -33,7 +34,7 @@ namespace ReservaSitio.Repository.Opcion
             Configuration = configuration;
             _connectionString = Configuration.GetConnectionString("CS_ReservaSitio");
         }
-
+      
 
         public async Task<ResultDTO<PerfilOpcionDTO>> RegisterPerfilOpcion(List<PerfilOpcionDTO> request)
             {
