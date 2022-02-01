@@ -173,6 +173,7 @@ namespace ReservaSitio.API
             services.AddScoped<IUsuarioServices, UsuarioServices>();
             services.AddScoped<IUsuarioRepository, UsuarioRepository>();
 
+            services.AddScoped<ILogErrorTablaRepository, LogErrorTablaRepository>();
 
             services.AddScoped<ILogErrorAplication, LogErrorAplication>();
             services.AddScoped<ILogErrorServices, LogErrorServices>();

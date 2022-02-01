@@ -23,11 +23,14 @@ namespace ReservaSitio.Repository.ParametrosAplicacion
         private string _connectionString = "";
         private IConfiguration Configuration;
         private readonly ILogErrorRepository iLogErrorRepository;
+        private readonly ILogErrorTablaRepository iILogErrorTablaRepository;
         public ParametroRepository(ICustomConnection connection,
             IConfiguration configuration
-            , ILogErrorRepository ILogErrorRepository) : base(connection)
+            , ILogErrorRepository ILogErrorRepository
+            , ILogErrorTablaRepository ILogErrorTablaRepository) : base(connection)
         {
             this.iLogErrorRepository = ILogErrorRepository;
+            this.iILogErrorTablaRepository = ILogErrorTablaRepository;
             Configuration = configuration;
             _connectionString = Configuration.GetConnectionString("CS_ReservaSitio");
         }
@@ -61,6 +64,13 @@ namespace ReservaSitio.Repository.ParametrosAplicacion
 
 
                     scope.Complete();
+
+                    LogErrorTablaDTO req_log = new LogErrorTablaDTO();
+                    req_log.iid_usuario_registra = request.iid_usuario_registra;
+                    req_log.vaccion = "delete";
+                    req_log.vnombretabla = this.ToString();
+
+                    await this.iILogErrorTablaRepository.RegisterLogTablaError(req_log);
                 }
                 catch (Exception e)
                 {
@@ -199,6 +209,13 @@ namespace ReservaSitio.Repository.ParametrosAplicacion
 
 
                     scope.Complete();
+
+                    LogErrorTablaDTO req_log = new LogErrorTablaDTO();
+                    req_log.iid_usuario_registra = request.iid_usuario_registra;
+                    req_log.vaccion = "insert/udp";
+                    req_log.vnombretabla = this.ToString();
+
+                    await this.iILogErrorTablaRepository.RegisterLogTablaError(req_log);
                 }
                 catch (Exception e)
                 {
