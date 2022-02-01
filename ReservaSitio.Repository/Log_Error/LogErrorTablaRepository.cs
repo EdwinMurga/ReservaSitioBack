@@ -35,14 +35,14 @@ namespace ReservaSitio.Repository.Log_Error
                     using (var cn = await mConnection.BeginConnection(true))
                     {
                         var parameters = new DynamicParameters();
-                        parameters.Add("@p_iid_error", request.iid_log_tabla);
-                        parameters.Add("@p_iid_opcion", request.vnombretabla);
-                        parameters.Add("@p_ierror_number", request.vaccion);
+                        parameters.Add("@p_iid_log_tabla", request.iid_log_tabla);
+                        parameters.Add("@p_vnombretabla", request.vnombretabla);
+                        parameters.Add("@p_vaccion", request.vaccion);
                   
                      
                         parameters.Add("@p_iid_usuario_registra", request.iid_usuario_registra);
 
-                        using (var lector = await cn.ExecuteReaderAsync("[dbo].[SP_LOG_ERROR_INSERTAR]", parameters, commandType: CommandType.StoredProcedure, transaction: mConnection.GetTransaction()))
+                        using (var lector = await cn.ExecuteReaderAsync("[dbo].[SP_LOG_TABLA_INSERTAR]", parameters, commandType: CommandType.StoredProcedure, transaction: mConnection.GetTransaction()))
                         {
 
                             while (lector.Read())
