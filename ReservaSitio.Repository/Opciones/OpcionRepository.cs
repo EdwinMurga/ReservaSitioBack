@@ -35,7 +35,7 @@ namespace ReservaSitio.Repository.Opcion
             _connectionString = Configuration.GetConnectionString("CS_ReservaSitio");
         }
 
-        #region "usuario"
+        #region "opcion"
         public async Task<ResultDTO<OpcionDTO>> RegisterOpcion(OpcionDTO request) {
             ResultDTO<OpcionDTO> res = new ResultDTO<OpcionDTO>();
             using (TransactionScope scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))

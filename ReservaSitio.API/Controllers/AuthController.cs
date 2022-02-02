@@ -330,28 +330,61 @@ namespace ReservaSitio.API.Controllers
 
                     /***********generar token o coigo de reset contraseña**********/
                     // UsuarioDTO =new UsuarioDTO();
-                  /*  var res_recclv = await this.iIUsuarioAplication.GetUsuarioRecuperaClave(resUser);
-                    if (res_recclv.IsSuccess) 
-                    { 
-                    
-                    }
-
-                    if (res_recclv.item.dfec_envio_rec_clave.Subtract(DateTime.Now) == ) 
+                  /* */ 
+                    var res_recclv = await this.iIUsuarioAplication.GetUsuarioRecuperaClave(resUser);
+                    if (res_recclv.IsSuccess)
                     {
-                    
-                    }*/
-                    ResultDTO< UsuarioDTO > res_token = await this.iIUsuarioAplication.RegisterUsuarioRecuperaClave(res.item);
+                        var fec_clav = res_recclv.item.dfec_envio_rec_clave;
+                        var fec_ = new DateTime(fec_clav.Year, fec_clav.Month, fec_clav.Day);
+                        var fec_actual = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day);
+                        TimeSpan diffec = fec_ - fec_actual;
+                        if (diffec.Days == 0)
+                        {
+                            if (res_recclv.item.vtoken.Trim() == request.codigo.Trim())
+                            {
+                               // Console.WriteLine("");
 
-                    /***********enviar mail al usuario**********/
-                    int paramPlantilla = 1;
-                    //int[] idusers = new int[0];
-                  //  idusers[0]= res.item.iid_usuario;
+                                res.item.vclave = request.Password;
+                                var res_rest_clav =   await this.iIUsuarioAplication.RegisterUsuario(res.item);
 
-                    ResultDTO<bool> resmail = await  this.iIUtilAplication.envioMailPlantillaRClave(paramPlantilla, res.item, res_token.Informacion);                    
+                                resLogin.IsSuccess = res_rest_clav.IsSuccess;
+                                resLogin.Message = (res_rest_clav.IsSuccess ? "Su clave su restablecida , Intenta logearte" : " Error, Al actualizar su clave!" );
+                                resLogin.MessageExeption = res_rest_clav.MessageExeption;
+                            }
+                            else 
+                            {
 
-                    resLogin.IsSuccess = resmail.IsSuccess;
-                    resLogin.Message = resmail.Message;
-                    resLogin.MessageExeption = resmail.MessageExeption;
+                                resLogin.IsSuccess = false;
+                                resLogin.Message = "Usuario, código enviado no es correcto ";
+                               resLogin.MessageExeption = res_recclv.MessageExeption;
+
+                            }
+                        }
+                        else
+                        {
+
+                            ResultDTO<UsuarioDTO> res_token = await this.iIUsuarioAplication.RegisterUsuarioRecuperaClave(res.item);
+                            resLogin.Message = "Usuario, código expirado! ... se envio Nuevo código a su correo ";
+                            /***********enviar mail al usuario**********/
+                            int paramPlantilla = 1;
+                            ResultDTO<bool> resmail = await this.iIUtilAplication.envioMailPlantillaRClave(paramPlantilla, res.item, res_token.Informacion);
+
+                            resLogin.IsSuccess = resmail.IsSuccess;
+                            //resLogin.Message = resmail.Message;
+                            resLogin.MessageExeption = resmail.MessageExeption;
+
+                        }
+                    }
+                    else 
+                    {
+                        ResultDTO<UsuarioDTO> res_token = await this.iIUsuarioAplication.RegisterUsuarioRecuperaClave(res.item);                       
+                        /***********enviar mail al usuario**********/
+                        int paramPlantilla = 1;
+                        ResultDTO<bool> resmail = await this.iIUtilAplication.envioMailPlantillaRClave(paramPlantilla, res.item, res_token.Informacion);
+                        resLogin.IsSuccess = resmail.IsSuccess;
+                        resLogin.Message = resmail.Message;
+                        resLogin.MessageExeption = resmail.MessageExeption;
+                    }
 
                     return Ok(resLogin);
                 }              

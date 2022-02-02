@@ -525,9 +525,7 @@ namespace ReservaSitio.API.Controllers.Perfiles
         }
         #endregion
 
-        #region" perfil opcion "
-
-        #endregion
+  
 
     }
 }
