@@ -37,6 +37,8 @@ namespace ReservaSitio.Services.Usuario
             return this.iUsuarioRespository.GetUsuarioParameter(request);
         }
 
+       
+
         public Task<ResultDTO<UsuarioDTO>> RegisterUsuario(UsuarioDTO request)
         {
             return this.iUsuarioRespository.RegisterUsuario(request);
@@ -51,6 +53,19 @@ namespace ReservaSitio.Services.Usuario
         public Task<ResultDTO<UsuarioDTO>> RegisterUsuarioIntentoLogeo(UsuarioDTO request)
         {
             return this.iUsuarioRespository.RegisterUsuarioIntentoLogeo(request);
+        }
+
+        public Task<ResultDTO<UsuarioDTO>> RegisterUsuarioRecuperaClave(UsuarioDTO request)
+        {
+            return this.iUsuarioRespository.RegisterUsuarioRecuperaClave(request);
+        }
+        public Task<ResultDTO<UsuarioRecuperarClave>> GetUsuarioRecuperaClave(UsuarioDTO request)
+        {
+            return this.iUsuarioRespository.GetUsuarioRecuperaClave(request);
+        }
+        public Task<ResultDTO<UsuarioDTO>> RegisterUsuarioSeguridadInserta(UsuarioDTO request)
+        {
+            return this.iUsuarioRespository.RegisterUsuarioSeguridadInserta(request);
         }
     }
 }

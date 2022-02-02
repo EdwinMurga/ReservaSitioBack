@@ -12,7 +12,7 @@ namespace ReservaSitio.DTOs.Auth
 		public int iid_perfil { get; set; }
 		public string perfil { get; set; }
 		public int iid_tipo_documento { get; set; }
-		public string tipo_documento { get; set; }
+		public string vtipo_documento { get; set; }
 		public string vnro_documento { get; set; }
 		public string vnombres { get; set; }
 		public string vapellido_paterno { get; set; }

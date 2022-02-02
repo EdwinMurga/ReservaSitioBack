@@ -30,7 +30,7 @@ namespace ReservaSitio.DTOs.Usuario
 		public string vestado { get; set; }
 		public string vtipodocumento { get; set; }
 
-
+		public string vcodToken { get; set; }
 	}
 
 	public class UsuarioListDTO : AuditoriaDTO
@@ -54,5 +54,18 @@ namespace ReservaSitio.DTOs.Usuario
 		public int iid_empresa { get; set; }
 
 
+	}
+
+
+	public class UsuarioRecuperarClave : AuditoriaDTO 
+	{
+	public int iidrecuperarclave { set; get; }
+		public int iid_usuario { set; get; }
+		public DateTime dfec_envio_rec_clave { set; get; }
+		public DateTime dfec_caduc_recup_clave { set; get; }
+		public int iind_estado_recupera_clave { set; get; }
+		public DateTime dfec_recupera_clave  { set; get; }
+		public string  vtoken { set; get; }
+	
 	}
 }

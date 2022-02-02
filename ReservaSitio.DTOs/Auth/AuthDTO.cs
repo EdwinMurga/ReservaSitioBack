@@ -27,7 +27,7 @@ namespace ReservaSitio.API.DTOs
         [Required]
         public string Password { get; set; }
 
-       // public string codigo { get; set; }
+        public string codigo { get; set; }
 
     }
 

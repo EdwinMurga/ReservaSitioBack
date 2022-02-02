@@ -6,6 +6,7 @@ using ReservaSitio.Abstraction.IService.LogError;
 using ReservaSitio.Abstraction.IService.ParametrosAplicacion;
 using ReservaSitio.DTOs;
 using ReservaSitio.DTOs.ParametroAplicacion;
+using ReservaSitio.DTOs.Usuario;
 using ReservaSitio.DTOs.Util;
 using System;
 using System.Collections.Generic;
@@ -34,7 +35,7 @@ namespace ReservaSitio.Application.Util
             this.iIConfiguration = IConfiguration;
 
            
-            smtp.CredencialesPorDefecto = true;
+            smtp.CredencialesPorDefecto = Convert.ToBoolean(this.iIConfiguration["CredencialesSTMPPorDefecto"].ToString());
             smtp.Puerto = Convert.ToInt32( this.iIConfiguration["PuertoSMTP"].ToString() );
             smtp.Servidor = this.iIConfiguration["ServidorSMTP"].ToString();
             smtp.Usuario = this.iIConfiguration["ServidorSMTPUsuario"].ToString();
@@ -77,11 +78,18 @@ namespace ReservaSitio.Application.Util
                 client.Port = smtp.Puerto;
                 client.DeliveryMethod = SmtpDeliveryMethod.Network;
 
-                if (smtp.CredencialesPorDefecto)
+
+
+                if (smtp.CredencialesPorDefecto) 
+                {
+
                     client.UseDefaultCredentials = true;
+                    client.EnableSsl = true;
+                }
                 else
                 {
                     client.UseDefaultCredentials = false;
+                    client.EnableSsl = true;
                     client.Credentials = new System.Net.NetworkCredential(smtp.Usuario, smtp.Password);
                 }
              
@@ -149,6 +157,7 @@ namespace ReservaSitio.Application.Util
 
                 LogErrorDTO lg = new LogErrorDTO();
                 lg.iid_usuario_registra = email.iid_usuario_registra;
+                lg.iid_opcion = 1;
                 lg.vdescripcion = e.Message.ToString();
                 lg.vcodigo_mensaje = e.Message.ToString();
                 lg.vorigen = this.ToString();
@@ -361,6 +370,37 @@ namespace ReservaSitio.Application.Util
             */
 
             return memoryStream;
+        }
+
+        public async Task<ResultDTO<bool>> envioMailPlantillaRClave(int idplantilla, UsuarioDTO usuario, string token)
+        {
+            ResultDTO<bool> res = new ResultDTO<bool>();
+
+            EmailDTO email = new EmailDTO();
+            PlantillaCorreoDTO plantilla = new PlantillaCorreoDTO();
+            // plantilla.iid_empresa =
+            plantilla.iid_plantilla_correo = idplantilla;
+
+            ResultDTO<PlantillaCorreoDTO> resplantilla = await this.iIPlantillaCorreoServices.GetPlantillaCorreo(plantilla);
+
+            var msjcuerpo =  resplantilla.item.vcuerpo_correo.Replace("[usuario]", usuario.vnombres + " " + usuario.vapellido_paterno + " " + usuario.vapellido_materno);
+            msjcuerpo = msjcuerpo.Replace("[codigo]", token);
+
+            email.Mensaje = msjcuerpo; 
+
+            email.Titulo = resplantilla.item.vtitulo_correo;
+
+            var lstemail = new List<string>();
+            lstemail.Add(usuario.vcorreo_electronico);
+
+            email.Para = lstemail;
+
+
+
+            res = await envioMail(email);
+
+
+            return res;
         }
     }
 }

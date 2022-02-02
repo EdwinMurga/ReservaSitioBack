@@ -176,7 +176,7 @@ namespace ReservaSitio.API.Controllers
 
             try
             {
-                var validCaptcha = iIAuthenticationApplication.validarGoogleCaptcha(resquest);
+                //var validCaptcha = iIAuthenticationApplication.validarGoogleCaptcha(resquest);
                 res = await this.iIUsuarioAplication.GetUsuarioParameter(resUser);
 
                 /*if (!validCaptcha)
@@ -242,6 +242,7 @@ namespace ReservaSitio.API.Controllers
                     usrRespon.iid_perfil = res.item.iid_perfil;
                     usrRespon.perfil = resperf.item.vnombre_perfil;
                     usrRespon.iid_tipo_documento = res.item.iid_tipo_documento;
+                    //usrRespon.vtipo_documento = res.item.vtipo_documento;
                     usrRespon.vnumero_telefonico = res.item.vnumero_telefonico;
                     usrRespon.vnombres = res.item.vnombres;
                     usrRespon.vnro_documento = res.item.vnro_documento;
@@ -302,16 +303,19 @@ namespace ReservaSitio.API.Controllers
                 LoginDTO lgdto = new LoginDTO();
                 lgdto.GoogleToken = request.GoogleToken;
                 resUser.vcorreo_electronico = request.UserName;
-                //resUser.vclave = request.Password;
-                var validCaptcha = iIAuthenticationApplication.validarGoogleCaptcha(lgdto);
+                resUser.vclave = request.Password;
+               // var validCaptcha = iIAuthenticationApplication.validarGoogleCaptcha(lgdto);
                 res = await this.iIUsuarioAplication.GetUsuarioParameter(resUser);
+
+               
                 /*if (!validCaptcha)
                 {
                     resLogin.IsSuccess = false;
                     resLogin.Message = "Error : token Recatcha!";
                     return Ok(resLogin);
                 }               
-                else*/  if (!res.IsSuccess && res.item == null)
+                else*/
+                if (!res.IsSuccess && res.item == null)
                 {
                     resLogin.IsSuccess = false;
                     resLogin.Message = "Usuario No Registrado";
@@ -321,25 +325,36 @@ namespace ReservaSitio.API.Controllers
                 else {
 
                     resLogin.IsSuccess = true;
-                    resLogin.Message = "Usuario, su clave fue recuperada ";
+                    resLogin.Message = "Usuario, se envio código a su correo ";
                     resLogin.Token = "";
 
                     /***********generar token o coigo de reset contraseña**********/
+                    // UsuarioDTO =new UsuarioDTO();
+                  /*  var res_recclv = await this.iIUsuarioAplication.GetUsuarioRecuperaClave(resUser);
+                    if (res_recclv.IsSuccess) 
+                    { 
+                    
+                    }
 
+                    if (res_recclv.item.dfec_envio_rec_clave.Subtract(DateTime.Now) == ) 
+                    {
+                    
+                    }*/
+                    ResultDTO< UsuarioDTO > res_token = await this.iIUsuarioAplication.RegisterUsuarioRecuperaClave(res.item);
 
                     /***********enviar mail al usuario**********/
                     int paramPlantilla = 1;
-                    ResultDTO<bool> resmail = await  this.iIUtilAplication.envioMailPlantilla(paramPlantilla, new int[res.item.iid_usuario]);
+                    //int[] idusers = new int[0];
+                  //  idusers[0]= res.item.iid_usuario;
+
+                    ResultDTO<bool> resmail = await  this.iIUtilAplication.envioMailPlantillaRClave(paramPlantilla, res.item, res_token.Informacion);                    
 
                     resLogin.IsSuccess = resmail.IsSuccess;
                     resLogin.Message = resmail.Message;
                     resLogin.MessageExeption = resmail.MessageExeption;
 
                     return Ok(resLogin);
-
-                }
-
-              
+                }              
             }
             catch(Exception e) 
             {

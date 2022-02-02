@@ -153,7 +153,7 @@ namespace ReservaSitio.Repository.Usuario
                     res.IsSuccess = (query.Any() == true ? true : false);
                 }
                 // await mConnection.Complete();
-                res.Message = (res.IsSuccess ? UtilMensajes.strInformnacionGrabada : UtilMensajes.strInformnacionNoEncontrada);             
+                res.Message = (res.IsSuccess ? UtilMensajes.strInformnacionEncontrada : UtilMensajes.strInformnacionNoEncontrada);             
                 res.item = item;
             }
             catch (Exception e)
@@ -314,6 +314,7 @@ namespace ReservaSitio.Repository.Usuario
                             while (lector.Read())
                             {
                                 res.Codigo = Convert.ToInt32(lector["id"].ToString());
+                              
                                 res.IsSuccess = true;
                                 res.Message = UtilMensajes.strInformnacionGrabada;
                             }
@@ -475,7 +476,7 @@ namespace ReservaSitio.Repository.Usuario
                     {
                         var parameters = new DynamicParameters();
                         parameters.Add("@p_iid_usuario", request.iid_usuario);
-                        parameters.Add("@p_vtoken", request.iid_usuario);
+                        parameters.Add("@p_vtoken", request.vcodToken);
                         parameters.Add("@p_iid_usuario_registra", request.iid_usuario_registra);
 
                         using (var lector = await cn.ExecuteReaderAsync("[dbo].[SP_USUARIO_RECUPERA_CLAVE_INSERTAR]", parameters, commandType: CommandType.StoredProcedure, transaction: mConnection.GetTransaction()))
@@ -483,6 +484,7 @@ namespace ReservaSitio.Repository.Usuario
                             while (lector.Read())
                             {
                                 res.Codigo = Convert.ToInt32(lector["id"].ToString());
+                                res.Informacion = lector["token"].ToString();
                                 res.IsSuccess = true;
                                 res.Message = UtilMensajes.strInformnacionGrabada;
                             }
@@ -517,6 +519,45 @@ namespace ReservaSitio.Repository.Usuario
             }
             return res;
         }
+
+        public async Task<ResultDTO<UsuarioRecuperarClave>> GetUsuarioRecuperaClave(UsuarioDTO request)
+        {
+            ResultDTO<UsuarioRecuperarClave> res = new ResultDTO<UsuarioRecuperarClave>();
+            UsuarioRecuperarClave item = new UsuarioRecuperarClave();
+
+            try
+            {
+                var parameters = new DynamicParameters();
+                parameters.Add("@p_iid_usuario", request.iid_usuario);
+                using (var cn = new SqlConnection(_connectionString))
+                {
+
+                    var query = await cn.QueryAsync<UsuarioRecuperarClave>("[dbo].[SP_USUARIO_BY_ID]", parameters, commandType: System.Data.CommandType.StoredProcedure);
+                    item = (UsuarioRecuperarClave)query.FirstOrDefault();
+                    res.IsSuccess = (query.Any() == true ? true : false);
+                }
+                // await mConnection.Complete();
+                res.Message = (res.IsSuccess ? UtilMensajes.strInformnacionEncontrada : UtilMensajes.strInformnacionNoEncontrada);
+                res.item = item;
+            }
+            catch (Exception e)
+            {
+
+                res.IsSuccess = false;
+                res.Message = UtilMensajes.strInformnacionNoGrabada;
+                res.InnerException = e.Message.ToString();
+
+                LogErrorDTO lg = new LogErrorDTO();
+                lg.iid_usuario_registra = request.iid_usuario_registra;
+                lg.iid_opcion = 1;
+                lg.vdescripcion = e.Message.ToString();
+                lg.vcodigo_mensaje = e.Message.ToString();
+                lg.vorigen = this.ToString();
+                await this.iLogErrorRepository.RegisterLogError(lg);
+            }
+            return res;
+        }
+
         #endregion
     }
 }
