@@ -454,8 +454,6 @@ namespace ReservaSitio.API.Controllers.Perfiles
             }
         }
 
-
-
         [HttpGet]
         [Route("GetOpcionUsuario")]
         public async Task<ActionResult> GetOpcionUsuario([FromQuery] int request)
