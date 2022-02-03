@@ -11,5 +11,6 @@ namespace ReservaSitio.DTOs.ParametroAplicacion
         public int iid_tabla_auxiliar { get; set; }
 	public string vdescripcion { get; set; }
         public int iindica_agregacion { get; set; }
+        public string vestado { get; set; }
     }
 }

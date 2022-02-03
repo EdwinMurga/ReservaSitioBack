@@ -79,7 +79,7 @@ namespace ReservaSitio.API.Controllers.ParametroAplicacion
             ResultDTO<ParametroAplicacionDTO> res = new ResultDTO<ParametroAplicacionDTO>();
             try
             {
-                request.iid_usuario_registra = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+                request.iid_usuario_registra = 1;// Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
 
                 res = await this.iParametroAplication.RegisterParametro(request);
                 return Ok(res);
@@ -184,7 +184,7 @@ namespace ReservaSitio.API.Controllers.ParametroAplicacion
             ResultDTO<TablaParametroDTO> res = new ResultDTO<TablaParametroDTO>();
             try
             {
-                request.iid_usuario_registra = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+                request.iid_usuario_registra = 1;// Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
 
                 res = await this.iITablaParametroAplication.RegisterTablaParametro(request);
                 return Ok(res);

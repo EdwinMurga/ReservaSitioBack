@@ -210,12 +210,12 @@ namespace ReservaSitio.Repository.ParametrosAplicacion
 
                     scope.Complete();
 
-                    LogErrorTablaDTO req_log = new LogErrorTablaDTO();
-                    req_log.iid_usuario_registra = request.iid_usuario_registra;
-                    req_log.vaccion = "insert/udp";
-                    req_log.vnombretabla = this.ToString();
+                    //LogErrorTablaDTO req_log = new LogErrorTablaDTO();
+                    //req_log.iid_usuario_registra = request.iid_usuario_registra;
+                    //req_log.vaccion = "insert/udp";
+                    //req_log.vnombretabla = this.ToString();
 
-                    await this.iILogErrorTablaRepository.RegisterLogTablaError(req_log);
+                    //await this.iILogErrorTablaRepository.RegisterLogTablaError(req_log);
                 }
                 catch (Exception e)
                 {
