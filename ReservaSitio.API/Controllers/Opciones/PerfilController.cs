@@ -17,7 +17,7 @@ namespace ReservaSitio.API.Controllers.Perfiles
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
+  //  [Authorize]
     public class PerfilController : Controller
     {
         private readonly IPerfilAplication iIPerfilAplication;

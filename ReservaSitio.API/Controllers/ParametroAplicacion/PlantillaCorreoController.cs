@@ -15,7 +15,7 @@ namespace ReservaSitio.API.Controllers.ParametroAplicacion
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
+   // [Authorize]
     public class PlantillaCorreoController : Controller
     {
         // GET: PlantillaCorreoController

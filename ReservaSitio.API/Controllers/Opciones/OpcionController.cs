@@ -15,7 +15,7 @@ namespace ReservaSitio.API.Controllers.Opciones
 {
     // [Route("api/[controller]")]
     // [ApiController]
-    [Authorize]
+    //[Authorize]
     public class OpcionController : Controller
     {
         // GET: OpcionController

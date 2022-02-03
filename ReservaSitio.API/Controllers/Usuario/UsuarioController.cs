@@ -15,7 +15,7 @@ namespace ReservaSitio.API.Controllers.Usuario
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
+   // [Authorize]
     public class UsuarioController : Controller
     {
         private readonly IUsuarioAplication iUsuarioAplication;
