@@ -58,6 +58,7 @@ namespace ReservaSitio.Services.Opciones
                     }
                     foreach (PerfilOpcionDTO x in request.perfilOpcion  ) {
                         x.iid_perfil = res_perf.Codigo;
+                        x.iid_perfil_opcion = (x.flg_accesos == true? 0:x.iid_perfil_opcion);
                         x.iid_usuario_registra = request.perfil.iid_usuario_registra;
                     }
 
