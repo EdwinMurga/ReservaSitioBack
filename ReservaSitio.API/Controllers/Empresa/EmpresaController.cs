@@ -15,7 +15,7 @@ namespace ReservaSitio.API.Controllers.Empresa
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
+    //[Authorize]
     public class EmpresaController : Controller
     {
         private readonly IEmpresaAplication iEmpresaAplication;

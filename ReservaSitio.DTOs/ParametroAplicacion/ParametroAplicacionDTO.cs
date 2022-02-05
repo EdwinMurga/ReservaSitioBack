@@ -14,6 +14,7 @@ namespace ReservaSitio.DTOs.ParametroAplicacion
 		public string ivalor_entero { get; set; }
 		public decimal  nvalor_decimal { get; set; }
 		public int  iid_empresa { get; set; }
+        public string vestado { get; set; }
 
-	}
+    }
 }
