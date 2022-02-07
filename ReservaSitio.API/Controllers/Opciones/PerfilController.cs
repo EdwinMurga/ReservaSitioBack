@@ -319,8 +319,7 @@ namespace ReservaSitio.API.Controllers.Perfiles
                         x.ieliminar = false;
                         x.ivisualizar = false;
                     }
-                }
-             
+                }             
 
                 return Ok(res);
             }
