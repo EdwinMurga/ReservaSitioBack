@@ -26,7 +26,10 @@ namespace ReservaSitio.DTOs.Opciones
 		public bool iactualizar { get; set; }
 		public bool ieliminar { get; set; }
 		public bool ivisualizar { get; set; }
+
+		public bool flg_accesos { get; set; }
 	}
+
 		public class PerfilDTOResponse
 		{
 			public PerfilDTO perfil { get; set; }
