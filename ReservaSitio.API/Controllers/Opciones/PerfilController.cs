@@ -276,7 +276,7 @@ namespace ReservaSitio.API.Controllers.Perfiles
 
                 // List<PerfilOpcionDTO> req = new List<PerfilOpcionDTO>();
 
-                request.perfil.iid_usuario_registra = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+                //request.perfil.iid_usuario_registra = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
 
                 res = await this.iPerfilOpcionAplication.RegisterPerfilOpcion(request);
                 return Ok(res);
@@ -309,6 +309,18 @@ namespace ReservaSitio.API.Controllers.Perfiles
             try
             {
                 res = await this.iPerfilOpcionAplication.GetListPerfilOpcion(request);
+
+                if (request.flg_accesos == true) 
+                {
+                    foreach (PerfilOpcionDTO x in res.data)
+                    {
+                        x.icrear = false;
+                        x.iactualizar = false;
+                        x.ieliminar = false;
+                        x.ivisualizar = false;
+                    }
+                }             
+
                 return Ok(res);
             }
             catch (Exception e)

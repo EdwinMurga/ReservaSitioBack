@@ -229,8 +229,47 @@ namespace ReservaSitio.Repository.Opcion
             return res;
         }
 
+        public async Task<ResultDTO<OpcionPerfilDTO>> GetListOpcionByModulo(ModuloDTO request)
+        {
+            ResultDTO<OpcionPerfilDTO> res = new ResultDTO<OpcionPerfilDTO>();
+            List<OpcionPerfilDTO> list = new List<OpcionPerfilDTO>();
+            try
+            {
+                var parameters = new DynamicParameters();
+                parameters.Add("@p_vtitulo_modulo", request.vtitulo);
+                parameters.Add("@p_iid_modulo", request.iid_modulo);
+                parameters.Add("@p_iid_estado_registro", request.iid_estado_registro);
+                parameters.Add("@p_iid_usuario_registra", request.iid_usuario_registra);
+             
+                parameters.Add("@p_indice", request.pageNum);
+                parameters.Add("@p_limit", request.pageSize);
+                using (var cn = new SqlConnection(_connectionString))
+                {
+                    list = (List<OpcionPerfilDTO>)cn.Query<OpcionPerfilDTO>("[dbo].[SP_OPCION_BY_MODULO_ID]", parameters, commandType: System.Data.CommandType.StoredProcedure);
+                }
+                res.IsSuccess = (list.ToList().Count > 0 ? true : false);
+                res.totalregistro = (int)(list.ToList().Count > 0 ? list[0].totalrecord : 0);
+                res.Message = (list.ToList().Count > 0 ? UtilMensajes.strInformnacionEncontrada : UtilMensajes.strInformnacionNoEncontrada);
+                res.data = list.ToList();
+            }
+            catch (Exception e)
+            {
+                res.IsSuccess = false;
+                res.Message = UtilMensajes.strInformnacionNoGrabada;
+                res.InnerException = e.Message.ToString();
+
+                LogErrorDTO lg = new LogErrorDTO();
+                lg.iid_usuario_registra = 0;
+                lg.vdescripcion = e.Message.ToString();
+                lg.vcodigo_mensaje = e.Message.ToString();
+                lg.vorigen = this.ToString();
+                await this.iLogErrorRepository.RegisterLogError(lg);
+            }
+            return res;
+        }
+
         #endregion
 
-      
+
     }
 }

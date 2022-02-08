@@ -14,5 +14,7 @@ namespace ReservaSitio.Abstraction.IApplication.Opciones
         public Task<ResultDTO<OpcionDTO>> DeleteOpcion(OpcionDTO request);
         public Task<ResultDTO<OpcionDTO>> GetOpcion(OpcionDTO request);
         public Task<ResultDTO<OpcionDTO>> GetListOpcion(OpcionDTO request);
+
+        public Task<ResultDTO<OpcionPerfilDTO>> GetListOpcionByModulo(ModuloDTO request);
     }
 }

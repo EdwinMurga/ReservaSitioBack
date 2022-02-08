@@ -30,6 +30,11 @@ namespace ReservaSitio.Services.Opciones
             return this.iOpcionRespository.GetListOpcion(request);
         }
 
+        public Task<ResultDTO<OpcionPerfilDTO>> GetListOpcionByModulo(ModuloDTO request)
+        {
+            return this.iOpcionRespository.GetListOpcionByModulo(request);
+        }
+
         public Task<ResultDTO<OpcionDTO>> GetOpcion(OpcionDTO request)
         {
             return this.iOpcionRespository.GetOpcion(request);

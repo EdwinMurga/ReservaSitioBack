@@ -7,9 +7,10 @@ using System.Threading.Tasks;
 
 namespace ReservaSitio.DTOs.Opciones
 {
-		public class PerfilOpcionDTO : AuditoriaDTO
+	public class OpcionPerfilDTO  
 	{
 		public int iid_perfil_opcion { get; set; }
+		public int iid_modulo { get; set; }
 		public int iid_perfil { get; set; }
 		public int iid_opcion { get; set; }
 		public string vperfil { get; set; }
@@ -26,7 +27,37 @@ namespace ReservaSitio.DTOs.Opciones
 		public bool iactualizar { get; set; }
 		public bool ieliminar { get; set; }
 		public bool ivisualizar { get; set; }
+
+		public bool flg_accesos { get; set; }
+
+		public int totalrecord { get; set; }
+		
 	}
+
+	public class PerfilOpcionDTO : AuditoriaDTO
+	{
+		public int iid_perfil_opcion { get; set; }
+		public int iid_perfil { get; set; }
+		public int iid_modulo { get; set; }
+		public int iid_opcion { get; set; }
+		public string vperfil { get; set; }
+		public string vopcion { get; set; }
+		public string vmodulo { get; set; }
+
+		public int iacceso_crear { get; set; }
+		public int iacceso_actualizar { get; set; }
+		public int iacceso_eliminar { get; set; }
+		public int iacceso_visualizar { get; set; }
+
+
+		public bool icrear { get; set; }
+		public bool iactualizar { get; set; }
+		public bool ieliminar { get; set; }
+		public bool ivisualizar { get; set; }
+
+		public bool flg_accesos { get; set; }
+	}
+
 		public class PerfilDTOResponse
 		{
 			public PerfilDTO perfil { get; set; }

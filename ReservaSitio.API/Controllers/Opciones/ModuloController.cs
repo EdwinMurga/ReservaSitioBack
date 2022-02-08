@@ -30,74 +30,6 @@ namespace ReservaSitio.API.Controllers.Opciones
 
 
 
-        //[HttpDelete]
-        //[Route("DeleteModulo")]
-        public async Task<ActionResult> DeleteModulo([FromQuery] int request)
-        {
-            ResultDTO<ModuloDTO> res = new ResultDTO<ModuloDTO>();
-            try
-            {
-                ModuloDTO item = new ModuloDTO();
-                item.iid_modulo = request;
-                item.iid_usuario_registra = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
-
-                res = await this.iModuloAplication.DeleteModulo(item);
-                return Ok(res);
-            }
-            catch (Exception e)
-            {
-                res.InnerException = e.Message.ToString();
-
-                var sorigen = "";
-                foreach (object c in this.ControllerContext.RouteData.Values.Values)
-                {
-                    sorigen += c.ToString() + " | ";
-                }
-                LogErrorDTO lg = new LogErrorDTO();
-                lg.iid_usuario_registra = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
-                lg.iid_opcion = 1;
-                lg.vdescripcion = e.Message.ToString();
-                lg.vcodigo_mensaje = e.Message.ToString();
-                lg.vorigen = sorigen;
-                await this.iLogErrorAplication.RegisterLogError(lg);
-
-                return BadRequest(res);
-            }
-        }
-
-        //[HttpPost]
-        //[Route("RegisterModulo")]
-        public async Task<ActionResult> RegisterModulo([FromBody] ModuloDTO request)
-        {
-            ResultDTO<ModuloDTO> res = new ResultDTO<ModuloDTO>();
-            try
-            {
-                request.iid_usuario_registra = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
-
-                res = await this.iModuloAplication.RegisterModulo(request);
-                return Ok(res);
-            }
-            catch (Exception e)
-            {
-                res.InnerException = e.Message.ToString();
-
-                var sorigen = "";
-                foreach (object c in this.ControllerContext.RouteData.Values.Values)
-                {
-                    sorigen += c.ToString() + " | ";
-                }
-                LogErrorDTO lg = new LogErrorDTO();
-                lg.iid_usuario_registra = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
-                lg.iid_opcion = 1;
-                lg.vdescripcion = e.Message.ToString();
-                lg.vcodigo_mensaje = e.Message.ToString();
-                lg.vorigen = sorigen;
-                await this.iLogErrorAplication.RegisterLogError(lg);
-
-                return BadRequest(res);
-            }
-        }
-
         //[HttpPost]
         //[Route("GetListModulo")]
         public async Task<ActionResult> GetListModulo([FromBody] ModuloDTO request)
@@ -130,17 +62,52 @@ namespace ReservaSitio.API.Controllers.Opciones
             }
         }
 
-        //[HttpGet]
-        //[Route("GetModulo")]
-        public async Task<ActionResult> GetModulo([FromQuery] int request)
+
+        //[HttpDelete]
+        //[Route("DeleteModulo")]
+        /* public async Task<ActionResult> DeleteModulo([FromQuery] int request)
+         {
+             ResultDTO<ModuloDTO> res = new ResultDTO<ModuloDTO>();
+             try
+             {
+                 ModuloDTO item = new ModuloDTO();
+                 item.iid_modulo = request;
+                 item.iid_usuario_registra = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+
+                 res = await this.iModuloAplication.DeleteModulo(item);
+                 return Ok(res);
+             }
+             catch (Exception e)
+             {
+                 res.InnerException = e.Message.ToString();
+
+                 var sorigen = "";
+                 foreach (object c in this.ControllerContext.RouteData.Values.Values)
+                 {
+                     sorigen += c.ToString() + " | ";
+                 }
+                 LogErrorDTO lg = new LogErrorDTO();
+                 lg.iid_usuario_registra = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+                 lg.iid_opcion = 1;
+                 lg.vdescripcion = e.Message.ToString();
+                 lg.vcodigo_mensaje = e.Message.ToString();
+                 lg.vorigen = sorigen;
+                 await this.iLogErrorAplication.RegisterLogError(lg);
+
+                 return BadRequest(res);
+             }
+         }*/
+
+        //[HttpPost]
+        //[Route("RegisterModulo")]
+        /*public async Task<ActionResult> RegisterModulo([FromBody] ModuloDTO request)
         {
             ResultDTO<ModuloDTO> res = new ResultDTO<ModuloDTO>();
             try
             {
-                ModuloDTO item = new ModuloDTO();
-                item.iid_modulo = request;
-                item.iid_usuario_registra = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
-                res = await this.iModuloAplication.GetModulo(item);
+                request.iid_usuario_registra = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+
+                res = await this.iModuloAplication.RegisterModulo(request);
                 return Ok(res);
             }
             catch (Exception e)
@@ -162,7 +129,73 @@ namespace ReservaSitio.API.Controllers.Opciones
 
                 return BadRequest(res);
             }
+        }*/
 
-        }
+        //[HttpPost]
+        //[Route("GetListModulo")]
+        /* public async Task<ActionResult> GetListModulo([FromBody] ModuloDTO request)
+         {
+             ResultDTO<ModuloDTO> res = new ResultDTO<ModuloDTO>();
+             try
+             {
+                 request.iid_usuario_registra = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+                 res = await this.iModuloAplication.GetListModulo(request);
+                 return Ok(res);
+             }
+             catch (Exception e)
+             {
+                 res.InnerException = e.Message.ToString();
+
+                 var sorigen = "";
+                 foreach (object c in this.ControllerContext.RouteData.Values.Values)
+                 {
+                     sorigen += c.ToString() + " | ";
+                 }
+                 LogErrorDTO lg = new LogErrorDTO();
+                 lg.iid_usuario_registra = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+                 lg.iid_opcion = 1;
+                 lg.vdescripcion = e.Message.ToString();
+                 lg.vcodigo_mensaje = e.Message.ToString();
+                 lg.vorigen = sorigen;
+                 await this.iLogErrorAplication.RegisterLogError(lg);
+
+                 return BadRequest(res);
+             }
+         }*/
+
+        //[HttpGet]
+        //[Route("GetModulo")]
+        /*  public async Task<ActionResult> GetModulo([FromQuery] int request)
+          {
+              ResultDTO<ModuloDTO> res = new ResultDTO<ModuloDTO>();
+              try
+              {
+                  ModuloDTO item = new ModuloDTO();
+                  item.iid_modulo = request;
+                  item.iid_usuario_registra = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+                  res = await this.iModuloAplication.GetModulo(item);
+                  return Ok(res);
+              }
+              catch (Exception e)
+              {
+                  res.InnerException = e.Message.ToString();
+
+                  var sorigen = "";
+                  foreach (object c in this.ControllerContext.RouteData.Values.Values)
+                  {
+                      sorigen += c.ToString() + " | ";
+                  }
+                  LogErrorDTO lg = new LogErrorDTO();
+                  lg.iid_usuario_registra = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+                  lg.iid_opcion = 1;
+                  lg.vdescripcion = e.Message.ToString();
+                  lg.vcodigo_mensaje = e.Message.ToString();
+                  lg.vorigen = sorigen;
+                  await this.iLogErrorAplication.RegisterLogError(lg);
+
+                  return BadRequest(res);
+              }
+
+          }*/
     }
 }

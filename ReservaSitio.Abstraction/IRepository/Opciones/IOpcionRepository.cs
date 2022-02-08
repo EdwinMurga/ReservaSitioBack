@@ -16,5 +16,7 @@ namespace ReservaSitio.Abstraction.IRepository.Opciones
         public Task<ResultDTO<OpcionDTO>> GetOpcion(OpcionDTO request);
         public Task<ResultDTO<OpcionDTO>> GetListOpcion(OpcionDTO request);
 
+        public Task<ResultDTO<OpcionPerfilDTO>> GetListOpcionByModulo(ModuloDTO request);
+
     }
 }

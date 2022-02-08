@@ -84,7 +84,7 @@ namespace ReservaSitio.Repository.Opcion
                     req_log.vaccion = "inset/upd";
                     req_log.vnombretabla = this.ToString();
 
-                    await this.iILogErrorTablaRepository.RegisterLogTablaError(req_log);
+                    //await this.iILogErrorTablaRepository.RegisterLogTablaError(req_log);
                 }
                 catch (Exception e)
                 {
