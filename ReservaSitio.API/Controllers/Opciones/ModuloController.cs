@@ -13,19 +13,22 @@ using System.Threading.Tasks;
 
 namespace ReservaSitio.API.Controllers.Opciones
 {
-    //[Route("api/[controller]")]
-    //[ApiController]
+    [Route("api/[controller]")]
+    [ApiController]
   //  [Authorize]
     public class ModuloController : Controller
     {
         // GET: ModuloController
         private readonly IModuloAplication iModuloAplication;
         private readonly ILogErrorAplication iLogErrorAplication;
+        private readonly IPerfilOpcionAplication iPerfilOpcionAplication;
         public ModuloController(IModuloAplication _iIPerfilAplication
-            , ILogErrorAplication ILogErrorAplication)
+            , ILogErrorAplication ILogErrorAplication
+            , IPerfilOpcionAplication _iPerfilOpcionAplication)
         {
             this.iModuloAplication = _iIPerfilAplication;
             this.iLogErrorAplication = ILogErrorAplication;
+            this.iPerfilOpcionAplication = _iPerfilOpcionAplication;
         }
 
 
@@ -58,6 +61,36 @@ namespace ReservaSitio.API.Controllers.Opciones
                 lg.vorigen = sorigen;
                 await this.iLogErrorAplication.RegisterLogError(lg);
 
+                return BadRequest(res);
+            }
+        }
+
+        [HttpGet]
+        [Route("GetMenu/{IdPerfil}")]
+        public async Task<ActionResult> GetListOpcionByModulo(int IdPerfil)
+        {
+            ResultDTO<ModuloDTO> res = new ResultDTO<ModuloDTO>();
+            try
+            {
+                var result = await this.iPerfilOpcionAplication.GetMenuOpcion(IdPerfil);
+                return Ok(result);
+            }
+            catch (Exception e)
+            {
+                res.InnerException = e.Message.ToString();
+
+                var sorigen = "";
+                foreach (object c in this.ControllerContext.RouteData.Values.Values)
+                {
+                    sorigen += c.ToString() + " | ";
+                }
+                LogErrorDTO lg = new LogErrorDTO();
+                lg.iid_usuario_registra = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+                lg.iid_opcion = 1;
+                lg.vdescripcion = e.Message.ToString();
+                lg.vcodigo_mensaje = e.Message.ToString();
+                lg.vorigen = sorigen;
+                await this.iLogErrorAplication.RegisterLogError(lg);
                 return BadRequest(res);
             }
         }

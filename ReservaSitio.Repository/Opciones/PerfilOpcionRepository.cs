@@ -20,14 +20,14 @@ using static ReservaSitio.Entities.Enum;
 
 namespace ReservaSitio.Repository.Opcion
 {
-   public  class PerfilOpcionRepository: BaseRepository, IPerfilOpcionRepository
+    public class PerfilOpcionRepository : BaseRepository, IPerfilOpcionRepository
     {
 
         private string _connectionString = "";
         private IConfiguration Configuration;
         private readonly ILogErrorRepository iLogErrorRepository;
         private readonly ILogErrorTablaRepository iILogErrorTablaRepository;
-        public  PerfilOpcionRepository(ICustomConnection connection
+        public PerfilOpcionRepository(ICustomConnection connection
             , IConfiguration configuration
                , ILogErrorRepository ILogErrorRepository
             , ILogErrorTablaRepository ILogErrorTablaRepository) : base(connection)
@@ -37,10 +37,10 @@ namespace ReservaSitio.Repository.Opcion
             Configuration = configuration;
             _connectionString = Configuration.GetConnectionString("CS_ReservaSitio");
         }
-      
+
 
         public async Task<ResultDTO<PerfilOpcionDTO>> RegisterPerfilOpcion(List<PerfilOpcionDTO> request)
-            {
+        {
             ResultDTO<PerfilOpcionDTO> res = new ResultDTO<PerfilOpcionDTO>();
             using (TransactionScope scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
             {
@@ -49,7 +49,8 @@ namespace ReservaSitio.Repository.Opcion
 
                     using (var cn = await mConnection.BeginConnection(true))
                     {
-                        foreach (PerfilOpcionDTO x in request) {
+                        foreach (PerfilOpcionDTO x in request)
+                        {
                             var parameters = new DynamicParameters();
                             parameters.Add("@p_iid_perfil_opcion", x.iid_perfil_opcion);
                             parameters.Add("@p_iid_perfil", x.iid_perfil);
@@ -72,7 +73,7 @@ namespace ReservaSitio.Repository.Opcion
                             }
 
                         }
-                       
+
                         await mConnection.Complete();
                     }
 
@@ -102,10 +103,10 @@ namespace ReservaSitio.Repository.Opcion
                 }
             }
             return res;
-            }
+        }
         public async Task<ResultDTO<PerfilOpcionDTO>> DeletePerfilOpcion(PerfilOpcionDTO request)
-            {
-                ResultDTO<PerfilOpcionDTO> res = new ResultDTO<PerfilOpcionDTO>();
+        {
+            ResultDTO<PerfilOpcionDTO> res = new ResultDTO<PerfilOpcionDTO>();
             using (TransactionScope scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
             {
                 try
@@ -156,7 +157,7 @@ namespace ReservaSitio.Repository.Opcion
                 }
             }
             return res;
-            }
+        }
         public async Task<ResultDTO<PerfilOpcionDTO>> GetPerfilOpcion(PerfilOpcionDTO request)
         {
             ResultDTO<PerfilOpcionDTO> res = new ResultDTO<PerfilOpcionDTO>();
@@ -242,14 +243,15 @@ namespace ReservaSitio.Repository.Opcion
             try
             {
                 var parameters = new DynamicParameters();
-                parameters.Add("@p_iid_perfil", request.iid_usuario);
+                parameters.Add("@p_iid_usuario", request.iid_usuario);
                 using (var cn = new SqlConnection(_connectionString))
                 {
 
                     var query = await cn.QueryAsync<PerfilUsuarioResponseDTO>("[dbo].[SP_PERFIL_OPCION_USUARIO_BY_USUARIO_ID]", parameters, commandType: System.Data.CommandType.StoredProcedure);
-                    var  resulquery = query.ToList();
+                    var resulquery = query.ToList();
                     res.IsSuccess = (query.Any() == true ? true : false);
-                    if (res.IsSuccess) {
+                    if (res.IsSuccess)
+                    {
                         List<Menu> lsmodulo = new List<Menu>();
                         List<PerfilOpcionDTO> lsPerOpcion = new List<PerfilOpcionDTO>();
                         List<SubMenu> lsopcion = null;
@@ -279,52 +281,53 @@ namespace ReservaSitio.Repository.Opcion
 
                                 modulo.iindica_visible_modulo = x.iindica_visible_modulo;
                                 // modulo.iid_sistema = x.iid_sistema;
-                                if (modulo.iid_modulo == 0) 
-                                { 
+                                if (modulo.iid_modulo == 0)
+                                {
                                     lsmodulo.Add(modulo);
                                 }
-                                else { 
-                                      
-                                foreach (PerfilUsuarioResponseDTO y in resulquery)
+                                else
                                 {
-                                    if (lsopcion.Find(xx => xx.iid_opcion == y.iid_opcion && xx.iid_modulo == y.iid_modulo) == null)
+
+                                    foreach (PerfilUsuarioResponseDTO y in resulquery)
                                     {
-                                        SubMenu opcion = new SubMenu();
-                                        opcion.iid_modulo = y.iid_modulo;
-                                        opcion.iid_opcion = y.iid_opcion;
-                                        //opcion.iindica_visible = x.iid;
-                                        //opcion.iorden = y.iorden_opcion;
-                                        opcion.text = y.vtitulo_opcion;
-                                        opcion.icon = y.vicono_opcion;
-                                        opcion.iindica_visible_opcion = y.iindica_visible_opcion;
-                                        opcion.link = y.vurl_opcion;
+                                        if (lsopcion.Find(xx => xx.iid_opcion == y.iid_opcion && xx.iid_modulo == y.iid_modulo) == null)
+                                        {
+                                            SubMenu opcion = new SubMenu();
+                                            opcion.iid_modulo = y.iid_modulo;
+                                            opcion.iid_opcion = y.iid_opcion;
+                                            //opcion.iindica_visible = x.iid;
+                                            //opcion.iorden = y.iorden_opcion;
+                                            opcion.text = y.vtitulo_opcion;
+                                            opcion.icon = y.vicono_opcion;
+                                            opcion.iindica_visible_opcion = y.iindica_visible_opcion;
+                                            opcion.link = y.vurl_opcion;
 
-                                        opcion.icrear = y.iacceso_crear;
-                                        opcion.ivisualizar = y.iacceso_visualizar;
-                                        opcion.ieliminar = y.iacceso_eliminar;
-                                        opcion.iactualizar = y.iacceso_actualizar;
+                                            opcion.icrear = y.iacceso_crear;
+                                            opcion.ivisualizar = y.iacceso_visualizar;
+                                            opcion.ieliminar = y.iacceso_eliminar;
+                                            opcion.iactualizar = y.iacceso_actualizar;
 
-                                        lsopcion.Add(opcion);
-                                        modulo.submenu = lsopcion;
+                                            lsopcion.Add(opcion);
+                                            modulo.submenu = lsopcion;
+                                        }
                                     }
-                                }
-                                lsmodulo.Add(modulo);
-                                
-                                }
-                          
+                                    lsmodulo.Add(modulo);
 
-                                
+                                }
+
+
+
                             }
                             // lsPerOpcion.Add(PerOpcio);
                         }
                         // item.perfilOpcion = lsPerOpcion;
                         item.menu = lsmodulo;
                     }
-                   
+
                 }
                 //item
 
-               
+
 
                 // await mConnection.Complete();
                 res.Message = (res.IsSuccess ? UtilMensajes.strInformnacionGrabada : UtilMensajes.strInformnacionNoEncontrada);
@@ -347,9 +350,160 @@ namespace ReservaSitio.Repository.Opcion
             return res;
         }
 
-       
+        public async Task<ResultDTO<List<object>>> GetMenuOpcion(int idPerfil)
+        {
+            ResultDTO<List<object>> res = new ResultDTO<List<object>>();
+            List<object> menu = new List<object>();
+            try
+            {
+                var parameters = new DynamicParameters();
+                parameters.Add("@p_iid_perfil", idPerfil);
+                using (var connection = new SqlConnection(_connectionString))
+                {
+                    List<menu_Obj> menuCabecera = (List<menu_Obj>)connection.Query<menu_Obj>("[dbo].[SP_OPCION_MENU_LISTAR]", parameters, commandType: System.Data.CommandType.StoredProcedure);
+                    res.IsSuccess = (menuCabecera.Any() == true ? true : false);
+                    if (res.IsSuccess)
+                    {
+                        foreach (menu_Obj menuC in menuCabecera)
+                        {
+                            menu.Add(new
+                            {
+                                iid_modulo = menuC.iidModulo,
+                                text = menuC.text,
+                                link = menuC.link,
+                                icon = menuC.icon
+                            });
+                        }
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                res.IsSuccess = false;
+                res.Message = UtilMensajes.strInformnacionNoGrabada;
+                res.InnerException = e.Message.ToString();
+
+                LogErrorDTO lg = new LogErrorDTO();
+                lg.iid_usuario_registra = 0;
+                lg.vdescripcion = e.Message.ToString();
+                lg.vcodigo_mensaje = e.Message.ToString();
+                lg.vorigen = this.ToString();
+                await this.iLogErrorRepository.RegisterLogError(lg);
+            }
+            res.Message = (res.IsSuccess ? UtilMensajes.strInformnacionGrabada : UtilMensajes.strInformnacionNoEncontrada);
+            res.item = menu;
+            return res;
+        }
+
+        public async Task<ResultDTO<List<object>>> GetSubMenuOpcion(int idPerfil, int idModulo)
+        {
+            ResultDTO<List<object>> res = new ResultDTO<List<object>>();
+            List<object> subMenu = new List<object>();
+            try
+            {
+                var parameters = new DynamicParameters();
+                parameters.Add("@idPerfil", idPerfil);
+                parameters.Add("@iidModulo", idModulo);
+                using (var connection = new SqlConnection(_connectionString))
+                {
+                    List<subMenu> menuDetalle = (List<subMenu>)connection.Query<subMenu>("[dbo].[SP_OPCION_SUBMENU_LISTAR]", parameters, commandType: System.Data.CommandType.StoredProcedure);
+                    res.IsSuccess = (menuDetalle.Any() == true ? true : false);
+                    if (res.IsSuccess)
+                    {
+                        foreach (subMenu smenu in menuDetalle)
+                        {
+                            subMenu.Add(new
+                            {
+                                text = smenu.text,
+                                descripcion = smenu.descripcion,
+                                link = smenu.link,
+                                icon = smenu.icon
+                            });
+                        }
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                res.IsSuccess = false;
+                res.Message = UtilMensajes.strInformnacionNoGrabada;
+                res.InnerException = e.Message.ToString();
+
+                LogErrorDTO lg = new LogErrorDTO();
+                lg.iid_usuario_registra = 0;
+                lg.vdescripcion = e.Message.ToString();
+                lg.vcodigo_mensaje = e.Message.ToString();
+                lg.vorigen = this.ToString();
+                await this.iLogErrorRepository.RegisterLogError(lg);
+            }
+            res.Message = (res.IsSuccess ? UtilMensajes.strInformnacionGrabada : UtilMensajes.strInformnacionNoEncontrada);
+            res.item = subMenu;
+            return res;
+        }
+
+        public async Task<List<object>> GetMenu(int idPerfil)
+        {
+            List<object> menu = new List<object>();
+            List<menuOpcions_Obj> menuOpcions = new List<menuOpcions_Obj>();
+            var parameters = new DynamicParameters();
+            parameters.Add("@p_iid_perfil", idPerfil);
+            using (var connection = new SqlConnection(_connectionString))
+            {
+                List<menuObj> menuCabecera = (List<menuObj>)connection.Query<menuObj>("[dbo].[SP_OPCION_MENU_LISTAR]", parameters, commandType: System.Data.CommandType.StoredProcedure);
+                foreach (menuObj menuC in menuCabecera)
+                {
+                    if (menuC.iidIndicaSubMenu == 1)
+                    {
+                        //foreach (var menuOpc in menuOpcions)
+                        //{
+                        var parameters2 = new DynamicParameters();
+                        parameters2.Add("@idPerfil", menuC.iidModulo);
+                        parameters2.Add("@iidModulo", menuC.iidModulo);
+                        var ListaMenu = (List<subMenu>)connection.Query<subMenu>("[dbo].[SP_OPCION_SUBMENU_LISTAR]", parameters2, commandType: System.Data.CommandType.StoredProcedure);
+
+                        menu.Add(new
+                        {
+                            text = menuC.text,
+                            descripcion = menuC.descripcion,
+                            link = menuC.link,
+                            icon = menuC.icon,
+                            submenu = AddSubMenuItem((int)menuC.iidModulo, ListaMenu.AsEnumerable())
+                        });
+                        //}
+                    }
+                    else
+                    {
+                        menu.Add(new
+                        {
+                            iid_modulo = menuC.iidModulo,
+                            text = menuC.text,
+                            link = menuC.link,
+                            icon = menuC.icon
+                        });
+                    }
+                }
+                return menu;
+            }
+        }
+
+        public List<object> AddSubMenuItem(int moduloId, IEnumerable<subMenu> LMenu)
+        {
+            List<object> hijo = null;
+            hijo = new List<object>();
+            for (int j = 0; j <= LMenu.Count() - 1; j++)
+            {
+                if (moduloId == LMenu.ElementAt(j).iidModulo)
+                {
+                    hijo.Add(new
+                    {
+                        text = LMenu.ElementAt(j).text,
+                        link = LMenu.ElementAt(j).link,
+                        icon = LMenu.ElementAt(j).icon
+                    });
+                }
+            }
+            return hijo;
+        }
 
     }
-
-
 }

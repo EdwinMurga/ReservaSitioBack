@@ -17,5 +17,9 @@ namespace ReservaSitio.Abstraction.IRepository.Opciones
         public Task<ResultDTO<PerfilOpcionDTO>> GetListPerfilOpcion(PerfilOpcionDTO request);
 
         public Task<ResultDTO<PerfilUsuarioMenu>> GetPerfilOpcionUsuario(PerfilUsuarioMenu request);
+
+        public Task<ResultDTO<List<object>>> GetMenuOpcion(int idPerfil);
+        public Task<ResultDTO<List<object>>> GetSubMenuOpcion(int idPerfil,int idModulo);
+        public Task<List<object>> GetMenu(int idPerfil);
     }
 }

@@ -45,6 +45,19 @@ namespace ReservaSitio.Application.Opciones
             return this.iPerfilOpcionServices.RegisterPerfilOpcion(request);
         }
 
-        
+        public Task<ResultDTO<List<object>>> GetMenuOpcion(int IdPerfil)
+        {
+            return this.iPerfilOpcionServices.GetMenuOpcion(IdPerfil);
+        }
+
+        public Task<ResultDTO<List<object>>> GetSubMenuOpcion(int IdPerfil, int IdModulo)
+        {
+            return this.iPerfilOpcionServices.GetSubMenuOpcion(IdPerfil, IdModulo);
+        }
+
+        public async Task<List<object>> GetMenu(int IdPerfil)
+        {
+            return await this.iPerfilOpcionServices.GetMenu(IdPerfil);
+        }
     }
 }

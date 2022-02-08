@@ -26,6 +26,7 @@ namespace ReservaSitio.DTOs.Auth
 		//public int iid_indica_bloqueo { get; set; }
 		public DateTime dfecha_ultimo_acceso { get; set; }
 		public int iid_empresa { get; set; }
-		public string empresa { get; set; }
-	}
+        public string empresa { get; set; }
+        public object menu { get; set; }
+    }
 }

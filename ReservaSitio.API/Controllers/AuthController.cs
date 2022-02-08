@@ -35,6 +35,7 @@ using ReservaSitio.Abstraction.IApplication.Perfiles;
 using ReservaSitio.Abstraction.IApplication.Empresa;
 using System.Security.Claims;
 using ReservaSitio.Abstraction.IApplication.Util;
+using ReservaSitio.Abstraction.IApplication.Opciones;
 
 namespace ReservaSitio.API.Controllers
 {
@@ -56,6 +57,7 @@ namespace ReservaSitio.API.Controllers
         private readonly IEmpresaAplication iIEmpresaAplicacion;
 
         private readonly IUtilAplication iIUtilAplication;
+        private readonly IPerfilOpcionAplication iIperfilOpcionAplication;
 
         //   private static HttpClient client = new HttpClient();
         //  private AuthenticationResponse existingUser = new AuthenticationResponse();
@@ -76,7 +78,8 @@ namespace ReservaSitio.API.Controllers
             IPerfilAplication IPerfilAplication,
             IEmpresaAplication IEmpresaAplication,
 
-            IUtilAplication IUtilAplication
+            IUtilAplication IUtilAplication,
+            IPerfilOpcionAplication IperfilOpcionAplication
             // UserManager<IdentityUser> userManager, 
             // IAuthenticationService authService, 
             )
@@ -92,6 +95,7 @@ namespace ReservaSitio.API.Controllers
             this.iIEmpresaAplicacion = IEmpresaAplication;
 
             this.iIUtilAplication = IUtilAplication;
+            this.iIperfilOpcionAplication = IperfilOpcionAplication;
             // _userManager = userManager;
             // _autenticacion = autenticacion;
             // _authService = authService;
@@ -250,7 +254,7 @@ namespace ReservaSitio.API.Controllers
                     usrRespon.dfecha_ultimo_acceso = res.item.dfecha_ultimo_acceso;
                     usrRespon.iid_empresa = res.item.iid_empresa;
                     usrRespon.empresa = resempr.item.vnombre_completo;
-
+                    usrRespon.menu = await this.iIperfilOpcionAplication.GetMenu(res.item.iid_perfil);
 
                     resLogin.data = usrRespon;
                     /********* info usuario ************/

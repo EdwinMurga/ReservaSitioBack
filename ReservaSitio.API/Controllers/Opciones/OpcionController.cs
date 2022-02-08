@@ -22,12 +22,14 @@ namespace ReservaSitio.API.Controllers.Opciones
 
         private readonly IOpcionAplication iOpcionAplication;
         private readonly ILogErrorAplication iLogErrorAplication;
+        private readonly IPerfilOpcionAplication iPerfilOpcionAplication;
         public OpcionController(IOpcionAplication IOpcionAplication
             , IPerfilOpcionAplication IPerfilOpcionAplication
                , ILogErrorAplication ILogErrorAplication)
         {
             this.iOpcionAplication = IOpcionAplication;
             this.iLogErrorAplication = ILogErrorAplication;
+             this.iPerfilOpcionAplication = IPerfilOpcionAplication;
         }
 
         #region "Opcion"
@@ -109,6 +111,36 @@ namespace ReservaSitio.API.Controllers.Opciones
                 request.iid_usuario_registra = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
                 res = await this.iOpcionAplication.GetListOpcionByModulo(request);
                 return Ok(res);
+            }
+            catch (Exception e)
+            {
+                res.InnerException = e.Message.ToString();
+
+                var sorigen = "";
+                foreach (object c in this.ControllerContext.RouteData.Values.Values)
+                {
+                    sorigen += c.ToString() + " | ";
+                }
+                LogErrorDTO lg = new LogErrorDTO();
+                lg.iid_usuario_registra = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+                lg.iid_opcion = 1;
+                lg.vdescripcion = e.Message.ToString();
+                lg.vcodigo_mensaje = e.Message.ToString();
+                lg.vorigen = sorigen;
+                await this.iLogErrorAplication.RegisterLogError(lg);
+                return BadRequest(res);
+            }
+        }
+
+        [HttpGet]
+        [Route("GetSubMenu/{IdPerfil}/{IdModulo}")]
+        public async Task<ActionResult> GetListOpcionByModulo(int IdPerfil, int IdModulo)
+        {
+            ResultDTO<ModuloDTO> res = new ResultDTO<ModuloDTO>();
+            try
+            {
+                var result = await this.iPerfilOpcionAplication.GetSubMenuOpcion(IdPerfil, IdModulo);
+                return Ok(result);
             }
             catch (Exception e)
             {
