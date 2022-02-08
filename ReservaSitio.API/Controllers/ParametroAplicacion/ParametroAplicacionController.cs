@@ -391,7 +391,7 @@ namespace ReservaSitio.API.Controllers.ParametroAplicacion
             try
             {
                 TablaDetalleParametroDTO req = new TablaDetalleParametroDTO();
-                req.iid_usuario_registra = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+                req.iid_usuario_registra = 1;// Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
                 req.iid_tabla_auxiliar = requestAuxiliar;
                 req.pageNum = 0;
                 req.pageSize = 10000;

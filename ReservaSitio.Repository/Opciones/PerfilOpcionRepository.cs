@@ -242,7 +242,7 @@ namespace ReservaSitio.Repository.Opcion
             try
             {
                 var parameters = new DynamicParameters();
-                parameters.Add("@p_iid_usuario", request.iid_usuario);
+                parameters.Add("@p_iid_perfil", request.iid_usuario);
                 using (var cn = new SqlConnection(_connectionString))
                 {
 
